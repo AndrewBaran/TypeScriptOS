@@ -1,4 +1,4 @@
-TSOS-2014
+cOSmOs - Operating System
 ============
 
 This is my Fall 2014 Operating Systems class project.
@@ -42,10 +42,10 @@ Project 2 Checklist
 - [ ] Implement line-wrap in the CLI (no longer optional)
 - [ ] **Optional**: Provide the ability to single-step execution
 
-- [ ] Develop a PCB prototype and implement it in the client OS
-- [ ] Develop a memory manager and implement it in the client OS
-- [ ] Develop a core memory prototype and implement it in the host OS
-- [ ] Develop a CPU prototype and implement it in the host OS
+- [ ] Develop a PCB prototype and implement it in the **client OS**
+- [ ] Develop a memory manager and implement it in the **client OS**
+- [ ] Develop a core memory prototype and implement it in the **host OS**
+- [ ] Develop a CPU prototype and implement it in the **host OS**
 
 Project 3 Checklist
 ===================
