@@ -1,0 +1,30 @@
+Process for starting:
+
+host/control.ts:
+	Disable start button
+	Enable halt and reset buttons
+	Set focus on OS console display
+	Initialize CPU
+	Set clock pulse
+		Devices.hostClockPulse (host/devices.ts)
+			Increments clock
+			Calls krnOnCPUClockPulse (os/kernel.ts)
+	Start kernel bootstrap (OS/kernel.ts)
+		Creates interrupt queues and buffers
+		Initializes console
+		Creates stdin and stdout
+		Loads device driver
+		Enables interrupts
+			Adds eventlisteners (host/devices.ts)
+		Creates shell
+			Loads command list (ver, help, ...)
+
+Things of note:
+
+	To create new shell commands
+		os/shell.ts: init()
+			newCommand = new ShellCommand(this.newCommand, "newCommand", "Help message");
+
+	Global variables kept in: scripts/global.ts
+		Clock rate
+
