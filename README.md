@@ -9,7 +9,7 @@ Project 1 Checklist
 
 - [x] Alter the ver command to display your own data
 - [ ] Add some new shell commands
-	- [ ] date - display the current date and time
+	- [x] date - display the current date and time
 	- [x] whereami - display current users location (be creative)
 	- [ ] One more command of your choosing
 - [ ] Enhance the host display with a graphical task bar 
