@@ -61,6 +61,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellWhereAreI, "whereami", " - Displays your current location.");
             this.commandList[this.commandList.length] = sc;
 
+            // 007: bonus command
+            sc = new TSOS.ShellCommand(this.shell007, "007", " - Displays what you want to hear.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -282,6 +286,10 @@ var TSOS;
 
         Shell.prototype.shellWhereAreI = function () {
             _StdOut.putText("You are probably in Pouhgkeepsie, NY, at Marist College. Or not if you are a job recruiter...");
+        };
+
+        Shell.prototype.shell007 = function () {
+            _StdOut.putText("The best James Bond is Sean Connery.");
         };
         return Shell;
     })();

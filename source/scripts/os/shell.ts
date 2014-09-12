@@ -83,6 +83,10 @@ module TSOS {
             sc = new ShellCommand(this.shellWhereAreI, "whereami", " - Displays your current location.");
             this.commandList[this.commandList.length] = sc;
 
+            // 007: bonus command
+            sc = new ShellCommand(this.shell007, "007", " - Displays what you want to hear.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -298,6 +302,10 @@ module TSOS {
 
         public shellWhereAreI() {
             _StdOut.putText("You are probably in Pouhgkeepsie, NY, at Marist College. Or not if you are a job recruiter...");
+        }
+
+        public shell007() {
+            _StdOut.putText("The best James Bond is Sean Connery.");
         }
 
     }
