@@ -287,13 +287,13 @@ module TSOS {
             }
         }
 
-        // TODO Implement date command
+        // TODO Add AM/PM
         public shellDate() {
-            _StdOut.putText("The date is: today.");
             var date = new Date();
-            var dateString : string = date.getMonth() + " " + date.getDate() + ", " + date.getFullYear() + " | " + 
+            var dateString : string = MONTH_NAMES[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + " | " + 
                                         date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
-            console.log(dateString); 
+
+            _StdOut.putText("The current date is: " + dateString);
         }
 
         public shellWhereAreI() {

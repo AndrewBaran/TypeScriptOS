@@ -1,4 +1,4 @@
-cOSmOs - Operating System
+cOSmOS - Operating System
 ============
 
 This is my Fall 2014 Operating Systems class project.
