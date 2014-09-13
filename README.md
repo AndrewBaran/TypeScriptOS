@@ -20,8 +20,8 @@ Project 1 Checklist
 	- [ ] Handle backspace appropriately
 	- [ ] Implement command completion with the tab key
 	- [ ] Provide command history recall via the up and down arrow keys
-- [ ] Display a BSOD message (on the CLI) when the kernel traps an OS error
-	- [ ] Add a shell command to test this
+- [x] Display a BSOD message (on the CLI) when the kernel traps an OS error
+	- [x] Add a shell command to test this
 - [ ] Add a shell command called load to validate the user code in the HTML 5 text area (id="taProgramInput"). Only hex digits and spaces are valid
 - [ ] **Optional**: Implement line-wrap in the CLI
 

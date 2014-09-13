@@ -86,5 +86,15 @@ module TSOS {
 
             // TODO: Handle scrolling. (Project 1)
         }
+
+        // Moves up one line in the console
+        public retreatLine(): void {
+            this.currentXPosition = 0;
+
+            this.currentYPosition -= _DefaultFontSize + 
+                            _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                            _FontHeightMargin;
+
+        }
     }
  }

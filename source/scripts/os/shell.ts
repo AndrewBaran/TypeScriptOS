@@ -87,6 +87,10 @@ module TSOS {
             sc = new ShellCommand(this.shell007, "007", " - Displays what you want to hear.");
             this.commandList[this.commandList.length] = sc;
 
+            // bsod: for testing purposes
+            sc = new ShellCommand(this.shellBSOD, "bsod", " - Displays the BSOD screen when trapping an OS error.")
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -306,6 +310,17 @@ module TSOS {
 
         public shell007() {
             _StdOut.putText("The best James Bond is Sean Connery.");
+        }
+
+        public shellBSOD() {
+            // Change canvas background color to Microsoft Approved Blue (TM)
+            document.getElementById("display").style.backgroundColor = "#2067B2";
+
+            _StdOut.clearScreen();
+            _StdOut.resetXY();
+
+            // Display BSOD message
+            _StdOut.putText("Attention! An unexpected error has occurred and the system must be reset.");
         }
 
     }
