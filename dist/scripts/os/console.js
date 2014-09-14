@@ -170,13 +170,14 @@ var TSOS;
         };
 
         // TODO Do I need this anymore?
-        // Moves up one line in the console
+        // Moves up one line in the console and move the cursor back to the start
         Console.prototype.retreatLine = function () {
             this.currentXPosition = 0;
 
             this.currentYPosition -= _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
         };
 
+        // Erases the contents of the current line in the console and moves the cursor back to the beginning
         Console.prototype.clearLine = function () {
             var newY = this.currentYPosition - this.currentFontSize;
             var newHeight = this.currentFontSize + _FontHeightMargin + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);

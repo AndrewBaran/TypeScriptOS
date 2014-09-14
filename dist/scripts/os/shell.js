@@ -6,6 +6,7 @@ Shell.ts
 The OS Shell - The "command line interface" (CLI) for the console.
 ------------ */
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
+// TODO Remove curses (for the children)
 var TSOS;
 (function (TSOS) {
     var Shell = (function () {
@@ -208,6 +209,7 @@ var TSOS;
         //
         // Shell Command Functions.  Again, not part of Shell() class per se', just called from there.
         //
+        // TODO Remove curses (for the children)
         Shell.prototype.shellInvalidCommand = function () {
             _StdOut.putText("Invalid Command. ");
             if (_SarcasticMode) {

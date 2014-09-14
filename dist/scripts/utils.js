@@ -43,6 +43,7 @@ var TSOS;
             return retVal;
         };
 
+        // TODO Improve so that we can display 12
         Utils.getFormattedDate = function () {
             var date = new Date();
 

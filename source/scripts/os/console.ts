@@ -200,7 +200,7 @@ module TSOS {
         }
 
         // TODO Do I need this anymore?
-        // Moves up one line in the console
+        // Moves up one line in the console and move the cursor back to the start
         public retreatLine(): void {
             this.currentXPosition = 0;
 
@@ -210,6 +210,7 @@ module TSOS {
 
         }
 
+        // Erases the contents of the current line in the console and moves the cursor back to the beginning
         public clearLine(): void {
             var newY : number = this.currentYPosition - this.currentFontSize;
             var newHeight : number = this.currentFontSize + _FontHeightMargin + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);

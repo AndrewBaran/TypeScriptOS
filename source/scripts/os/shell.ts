@@ -9,7 +9,7 @@
    ------------ */
 
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
-
+// TODO Remove curses (for the children)
 module TSOS {
     export class Shell {
         // Properties
@@ -143,7 +143,10 @@ module TSOS {
             }
             if (found) {
                 this.execute(fn, args);
-            } else {
+            }
+
+            // TODO Remove curses (for the children)
+            else {
                 // It's not found, so check for curses and apologies before declaring the command invalid.
                 if (this.curses.indexOf("[" + Utils.rot13(cmd) + "]") >= 0) {     // Check for curses. {
                     this.execute(this.shellCurse);
@@ -229,6 +232,8 @@ module TSOS {
         //
         // Shell Command Functions.  Again, not part of Shell() class per se', just called from there.
         //
+        
+        // TODO Remove curses (for the children)
         public shellInvalidCommand() {
             _StdOut.putText("Invalid Command. ");
             if (_SarcasticMode) {
