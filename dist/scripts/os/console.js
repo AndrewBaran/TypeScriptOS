@@ -119,6 +119,7 @@ var TSOS;
                 } else if (chr === String.fromCharCode(9)) {
                     var suggestedCommand = _OsShell.findMatch(this.buffer);
 
+                    // Check if a match was found
                     if (suggestedCommand !== null) {
                         // Print out rest of the suggested command
                         var remainingText = suggestedCommand.substring(this.buffer.length);

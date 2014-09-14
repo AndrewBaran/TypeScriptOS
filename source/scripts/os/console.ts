@@ -85,6 +85,7 @@ module TSOS {
                     }
                 }
 
+                // TODO Going from up arrow to down arrow causes same command to appear. Fix
                 // Up arrow
                 else if(chr == String.fromCharCode(38)) {
 
@@ -138,11 +139,11 @@ module TSOS {
                 }
 
                 // Tab character
-                // TODO Do I want to stop at the first suggestion?
                 else if(chr === String.fromCharCode(9)) {
 
                 	var suggestedCommand: string = _OsShell.findMatch(this.buffer);
 
+                	// Check if a match was found
                 	if(suggestedCommand !== null) {
 
                 		// Print out rest of the suggested command

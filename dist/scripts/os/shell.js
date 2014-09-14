@@ -329,8 +329,7 @@ var TSOS;
             _StdOut.putText("The best James Bond is Sean Connery.");
         };
 
-        // TODO Improve by making text display in white
-        // TODO Improve by calling halt
+        // TODO Improve by removing prompt the follows error message
         Shell.prototype.shellBSOD = function () {
             // Change canvas background color to Microsoft Approved Blue (TM)
             document.getElementById("display").style.backgroundColor = "#2067B2";
@@ -340,6 +339,8 @@ var TSOS;
 
             // Display BSOD message
             _StdOut.putText("Attention! An unexpected error has occurred and the system must be reset.");
+            _Kernel.krnShutdown();
+            clearInterval(_hardwareClockID);
         };
 
         Shell.prototype.shellLoad = function () {
