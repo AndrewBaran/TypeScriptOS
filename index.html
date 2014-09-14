@@ -5,7 +5,7 @@
    <meta name="author"             content="Andrew J. Baran / Alan G. Labouseur" />
    <link rel="stylesheet" href="dist/styles/tsos.css" type="text/css" media="screen" />
    <title>
-      cOSmOS - A Browser-based Virtual Operating System in TypeScript
+	  cOSmOS - A Browser-based Virtual Operating System in TypeScript
    </title>
 
    <!-- Globals CONSTANTS and _Variables. Must included be first. -->
@@ -39,63 +39,66 @@
 <div id="divMain" style="width:100%;">
 
    <div id="divButtonBar" style="margin:4px;">
-      <input type="button"
-             id = "btnStartOS"
-             name="brnStartOS"
-             class="normal_button"
-             value="Start"
-             tabindex="0"
-             onclick="TSOS.Control.hostBtnStartOS_click(this);">
+	  <input type="button"
+			 id = "btnStartOS"
+			 name="brnStartOS"
+			 class="normal_button"
+			 value="Start"
+			 tabindex="0"
+			 onclick="TSOS.Control.hostBtnStartOS_click(this);">
 
-      <input type="button"
-             id = "btnHaltOS"
-             name="brnHaltOS"
-             class="normal_button"
-             disabled="disabled"
-             value="Halt"
-             tabindex="1"
-             onclick="TSOS.Control.hostBtnHaltOS_click(this);">
+	  <input type="button"
+			 id = "btnHaltOS"
+			 name="brnHaltOS"
+			 class="normal_button"
+			 disabled="disabled"
+			 value="Halt"
+			 tabindex="1"
+			 onclick="TSOS.Control.hostBtnHaltOS_click(this);">
 
-      <input type="button"
-             id = "btnReset"
-             name="brnReset"
-             class="normal_button"
-             disabled="disabled"
-             value="Reset"
-             tabindex="2"
-             onclick="TSOS.Control.hostBtnReset_click(this);">
+	  <input type="button"
+			 id = "btnReset"
+			 name="brnReset"
+			 class="normal_button"
+			 disabled="disabled"
+			 value="Reset"
+			 tabindex="2"
+			 onclick="TSOS.Control.hostBtnReset_click(this);">
    </div>
 
    <div id="divConsole" style="margin:4px; width:500px; height:500px; float:left;">
-      <canvas id="display"
-              width="500px"
-              height="500px"
-              tabindex="3">
-      </canvas>
+	  <canvas id="display"
+			  width="500px"
+			  height="500px"
+			  tabindex="3">
+	  </canvas>
    </div>
 
    <div id="divLog" style="margin-left:520px;">
-      <label>
-         Host Log
-         <br>
-         <textarea name="taHostLog"
-                   id  ="taHostLog"
-                   rows="26"
-                   cols="48"
-         ></textarea>
-      </label>
+	  <label>
+		Host Log:<br />
+		<span id="status">
+			<!-- Display date and time here -->
+		</span>
+		<br>
+		<textarea name="taHostLog"
+					id  ="taHostLog"
+				   	rows="26"
+				   	cols="48">
+		</textarea>
+	  </label>
    </div>
 
    <div id="divUserProgramInput" style="margin-left:520px;">
-      <label>
-         User Program Input
-         <br>
-         <textarea name="taProgramInput"
-                   id  ="taProgramInput"
-                   rows="8"
-                   cols="48"
-         ></textarea>
-      </label>
+	  <label>
+		 User Program Input
+		 <br>
+		 <textarea name="taProgramInput"
+				   id  ="taProgramInput"
+				   rows="8"
+				   cols="48"
+		 ></textarea>
+	  </label>
    </div>
 
 </div>

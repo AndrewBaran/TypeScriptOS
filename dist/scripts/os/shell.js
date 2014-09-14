@@ -314,8 +314,7 @@ var TSOS;
 
         // TODO Add AM/PM
         Shell.prototype.shellDate = function () {
-            var date = new Date();
-            var dateString = _MONTH_NAMES[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + " | " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
+            var dateString = TSOS.Utils.getFormattedDate();
 
             _StdOut.putText("The current date is: " + dateString);
         };

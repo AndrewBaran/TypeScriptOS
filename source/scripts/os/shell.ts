@@ -334,9 +334,7 @@ module TSOS {
 
         // TODO Add AM/PM
         public shellDate() {
-            var date = new Date();
-            var dateString : string = _MONTH_NAMES[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + " | " + 
-                                        date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
+            var dateString : string = Utils.getFormattedDate();
 
             _StdOut.putText("The current date is: " + dateString);
         }

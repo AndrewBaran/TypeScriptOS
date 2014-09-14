@@ -43,5 +43,32 @@ module TSOS {
             }
             return retVal;
         }
+
+        public static getFormattedDate() : string {
+
+            var date = new Date();
+
+            var AMPM : string = (date.getHours() < 12) ? "AM" : "PM";
+            var properHours : number = date.getHours() % 12;
+            
+            var dateString : string = _MONTH_NAMES[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + " | ";
+
+            if(properHours < 10) {
+                dateString += "0";
+            }
+            dateString +=  properHours + ":";
+
+            if(date.getMinutes() < 10) {
+                dateString += "0";
+            }
+            dateString += date.getMinutes() + ":";
+
+            if(date.getSeconds() < 10) {
+                dateString += "0";
+            }
+            dateString += date.getSeconds() + " " + AMPM;
+
+            return dateString;
+        }
     }
 }

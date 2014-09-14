@@ -150,6 +150,10 @@ var TSOS;
                         // Check the CPU_CLOCK_INTERVAL in globals.ts for an
                         // idea of the tick rate and adjust this line accordingly.
                         TSOS.Control.hostLog(msg, "OS");
+
+                        // Update time every second
+                        var dateString = TSOS.Utils.getFormattedDate();
+                        document.getElementById("status").innerHTML = dateString;
                     }
                 } else {
                     TSOS.Control.hostLog(msg, "OS");

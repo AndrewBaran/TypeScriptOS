@@ -42,6 +42,32 @@ var TSOS;
             }
             return retVal;
         };
+
+        Utils.getFormattedDate = function () {
+            var date = new Date();
+
+            var AMPM = (date.getHours() < 12) ? "AM" : "PM";
+            var properHours = date.getHours() % 12;
+
+            var dateString = _MONTH_NAMES[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + " | ";
+
+            if (properHours < 10) {
+                dateString += "0";
+            }
+            dateString += properHours + ":";
+
+            if (date.getMinutes() < 10) {
+                dateString += "0";
+            }
+            dateString += date.getMinutes() + ":";
+
+            if (date.getSeconds() < 10) {
+                dateString += "0";
+            }
+            dateString += date.getSeconds() + " " + AMPM;
+
+            return dateString;
+        };
         return Utils;
     })();
     TSOS.Utils = Utils;
