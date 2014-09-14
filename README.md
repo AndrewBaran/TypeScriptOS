@@ -13,7 +13,7 @@ Project 1 Checklist
 	- [x] whereami - display current users location (be creative)
 	- [x] One more command of your choosing (007)
 - [ ] Enhance the host display with a graphical task bar 
-	- [ ] Current time and date
+	- [x] Current time and date
 	- [ ] Status messages as specified by the user with a new shell command: status <string>
 - [ ] Other console / CLI enhancements 
 	- [ ] Accept and display punctuation characters and symbols

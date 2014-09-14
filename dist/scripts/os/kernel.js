@@ -47,6 +47,11 @@ var TSOS;
             _OsShell = new TSOS.Shell();
             _OsShell.init();
 
+            // Add timer to the host log
+            this.krnTrace("Enabling host display clock.");
+            var dateString = TSOS.Utils.getFormattedDate();
+            document.getElementById("status").innerHTML = dateString;
+
             // Finally, initiate testing.
             if (_GLaDOS) {
                 _GLaDOS.afterStartup();
