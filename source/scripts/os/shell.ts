@@ -85,8 +85,7 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
             // 007: bonus command
-            // TODO Change description to Display a movie suggestion
-            sc = new ShellCommand(this.shell007, "007", " - Displays what you want to hear.");
+            sc = new ShellCommand(this.shell007, "007", " - Displays a suggested James Bond film to watch.");
             this.commandList[this.commandList.length] = sc;
 
             // bsod: for testing purposes
@@ -95,6 +94,10 @@ module TSOS {
 
             // load
             sc = new ShellCommand(this.shellLoad, "load", " - Validates the code in the User Program Input box.");
+            this.commandList[this.commandList.length] = sc;
+
+            // status <string>
+            sc = new ShellCommand(this.shellStatus, "status", " - Display the status message of <string>.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -332,7 +335,6 @@ module TSOS {
             }
         }
 
-        // TODO Add AM/PM
         public shellDate() {
             var dateString : string = Utils.getFormattedDate();
 
@@ -343,12 +345,31 @@ module TSOS {
             _StdOut.putText("You are probably in Pouhgkeepsie, NY, at Marist College. Or not if you are a job recruiter...");
         }
 
-        // TODO Make it so it randomly selects a movie to watch. Say shouldn't watch if its a Daniel Craig movie
         public shell007() {
-            _StdOut.putText("The best James Bond is Sean Connery.");
+
+        	var movies = [
+        		{title: "Dr. No", bondActor: "Sean Connery"},
+        		{title: "From Russia with Love", bondActor: "Sean Connery"},
+        		{title: "Goldfinger", bondActor: "Sean Connery"},
+        		{title: "Casino Royale", bondActor: "Daniel Craig"},
+        		{title: "Quantum of Solace", bondActor: "Daniel Craig"},
+        		{title: "Skyfall", bondActor: "Daniel Craig"}
+        	];
+
+        	// Randomly pick a movie to watch
+        	var index = Math.floor(Math.random() * (movies.length));
+        	var selectedMovie = movies[index];
+
+        	_StdOut.putText("You should");
+
+        	if(selectedMovie.bondActor === "Daniel Craig") {
+        		_StdOut.putText(" not");
+        	}
+
+        	_StdOut.putText(" watch " + selectedMovie.title + ", which stars actor " + selectedMovie.bondActor + ".");
         }
 
-        // TODO Improve by removing prompt the follows error message
+        // TODO Improve by removing prompt that follows error message
         public shellBSOD() {
 
             // Change canvas background color to Microsoft Approved Blue (TM)
@@ -387,6 +408,11 @@ module TSOS {
                 _StdOut.putText("Error: Invalid program input.");
             }
 
+        }
+
+        // TODO Implement shellStatus()
+        public shellStatus(value : string) {
+            _StdOut.putText("In shellStatus()");
         }
 
     }

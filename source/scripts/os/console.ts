@@ -85,7 +85,8 @@ module TSOS {
                     }
                 }
 
-                // TODO Going from up arrow to down arrow causes same command to appear. Fix
+                // TODO Going from up arrow to down arrow causes same command to appear.
+                // TODO Fix by starting search from history.numItems (1 beyond) and look backwards/forwarding before decrementing/incrementing currentCommand, then get the command
                 // Up arrow
                 else if(chr == String.fromCharCode(38)) {
 

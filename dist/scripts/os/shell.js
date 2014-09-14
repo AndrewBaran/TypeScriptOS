@@ -63,8 +63,7 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
 
             // 007: bonus command
-            // TODO Change description to Display a movie suggestion
-            sc = new TSOS.ShellCommand(this.shell007, "007", " - Displays what you want to hear.");
+            sc = new TSOS.ShellCommand(this.shell007, "007", " - Displays a suggested James Bond film to watch.");
             this.commandList[this.commandList.length] = sc;
 
             // bsod: for testing purposes
@@ -73,6 +72,10 @@ var TSOS;
 
             // load
             sc = new TSOS.ShellCommand(this.shellLoad, "load", " - Validates the code in the User Program Input box.");
+            this.commandList[this.commandList.length] = sc;
+
+            // status <string>
+            sc = new TSOS.ShellCommand(this.shellStatus, "status", " - Display the status message of <string>.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -312,7 +315,6 @@ var TSOS;
             }
         };
 
-        // TODO Add AM/PM
         Shell.prototype.shellDate = function () {
             var dateString = TSOS.Utils.getFormattedDate();
 
@@ -323,12 +325,30 @@ var TSOS;
             _StdOut.putText("You are probably in Pouhgkeepsie, NY, at Marist College. Or not if you are a job recruiter...");
         };
 
-        // TODO Make it so it randomly selects a movie to watch. Say shouldn't watch if its a Daniel Craig movie
         Shell.prototype.shell007 = function () {
-            _StdOut.putText("The best James Bond is Sean Connery.");
+            var movies = [
+                { title: "Dr. No", bondActor: "Sean Connery" },
+                { title: "From Russia with Love", bondActor: "Sean Connery" },
+                { title: "Goldfinger", bondActor: "Sean Connery" },
+                { title: "Casino Royale", bondActor: "Daniel Craig" },
+                { title: "Quantum of Solace", bondActor: "Daniel Craig" },
+                { title: "Skyfall", bondActor: "Daniel Craig" }
+            ];
+
+            // Randomly pick a movie to watch
+            var index = Math.floor(Math.random() * (movies.length));
+            var selectedMovie = movies[index];
+
+            _StdOut.putText("You should");
+
+            if (selectedMovie.bondActor === "Daniel Craig") {
+                _StdOut.putText(" not");
+            }
+
+            _StdOut.putText(" watch " + selectedMovie.title + ", which stars actor " + selectedMovie.bondActor + ".");
         };
 
-        // TODO Improve by removing prompt the follows error message
+        // TODO Improve by removing prompt that follows error message
         Shell.prototype.shellBSOD = function () {
             // Change canvas background color to Microsoft Approved Blue (TM)
             document.getElementById("display").style.backgroundColor = "#2067B2";
@@ -362,6 +382,11 @@ var TSOS;
             } else {
                 _StdOut.putText("Error: Invalid program input.");
             }
+        };
+
+        // TODO Implement shellStatus()
+        Shell.prototype.shellStatus = function (value) {
+            _StdOut.putText("In shellStatus()");
         };
         return Shell;
     })();
