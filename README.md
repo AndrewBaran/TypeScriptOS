@@ -12,9 +12,10 @@ Project 1 Checklist
 	- [x] date - display the current date and time
 	- [x] whereami - display current users location (be creative)
 	- [x] One more command of your choosing (007)
-- [ ] Enhance the host display with a graphical task bar 
+- [ ] Enhance the *host* display with a graphical task bar 
 	- [x] Current time and date
 	- [ ] Status messages as specified by the user with a new shell command: status <string>
+- [ ] Implement scrolling in the *client OS* console/CLI
 - [ ] Other console / CLI enhancements 
 	- [ ] Accept and display punctuation characters and symbols
 	- [x] Handle backspace appropriately
