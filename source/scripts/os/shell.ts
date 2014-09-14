@@ -197,13 +197,30 @@ module TSOS {
 
         // Adds a command to the history
         public addHistory(buffer) : void {
-            
+
             // Add the current command to the history
             this.history.list.push(buffer);
             this.history.numItems++;
 
             // Move current command cursor to latest item
             this.history.currentCommand = this.history.list.length - 1;
+        }
+
+        // Finds a potential match for the current string in the buffer
+        public findMatch(buffer) : string {
+            for(var i = 0; i < this.commandList.length; i++) {
+
+                var currentCommand : string = this.commandList[i].command;
+                var substring : string = currentCommand.substring(0, buffer.length);
+
+                // Match found
+                if(substring === buffer) {
+                    return currentCommand;
+                }
+            }
+
+            // No match found
+            return null;
         }
 
         //

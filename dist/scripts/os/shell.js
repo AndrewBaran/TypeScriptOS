@@ -186,6 +186,22 @@ var TSOS;
             this.history.currentCommand = this.history.list.length - 1;
         };
 
+        // Finds a potential match for the current string in the buffer
+        Shell.prototype.findMatch = function (buffer) {
+            for (var i = 0; i < this.commandList.length; i++) {
+                var currentCommand = this.commandList[i].command;
+                var substring = currentCommand.substring(0, buffer.length);
+
+                // Match found
+                if (substring === buffer) {
+                    return currentCommand;
+                }
+            }
+
+            // No match found
+            return null;
+        };
+
         //
         // Shell Command Functions.  Again, not part of Shell() class per se', just called from there.
         //

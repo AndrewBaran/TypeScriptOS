@@ -45,7 +45,7 @@ var TSOS;
 
                 // TODO: Check for caps-lock and handle as shifted if so.
                 _KernelInputQueue.enqueue(chr);
-            } else if (((keyCode >= 48) && (keyCode <= 57)) || (keyCode == 32) || (keyCode == 13) || (keyCode == 8)) {
+            } else if (((keyCode >= 48) && (keyCode <= 57)) || (keyCode == 32) || (keyCode == 13) || (keyCode == 9) || (keyCode == 8)) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             } else if ((keyCode == 38) || (keyCode == 40)) {

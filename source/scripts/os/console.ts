@@ -37,10 +37,14 @@ module TSOS {
 
         public handleInput(): void {
             while (_KernelInputQueue.getSize() > 0) {
+
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
+
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
-                if (chr === String.fromCharCode(13)) { //     Enter key
+
+                // Enter key
+                if (chr === String.fromCharCode(13)) {
 
                     // Don't add enter key to history
                     if(this.buffer.length > 0) {
@@ -55,7 +59,8 @@ module TSOS {
                     this.buffer = "";
                 }
 
-                else if(chr == String.fromCharCode(8)) { // Backspace
+                // Backspace
+                else if(chr == String.fromCharCode(8)) {
 
                     // Backspace if the buffer is not empty
                     if(this.buffer.length > 0) {
@@ -80,7 +85,8 @@ module TSOS {
                     }
                 }
 
-                else if(chr == String.fromCharCode(38)) { // up arrow
+                // Up arrow
+                else if(chr == String.fromCharCode(38)) {
 
                     // Check if there are any more commands in history to recall
                     if(_OsShell.history.numItems > 0) {
@@ -104,7 +110,8 @@ module TSOS {
                     }
                 }
 
-                else if(chr == String.fromCharCode(40)) { // down arrow
+                // Down arrow
+                else if(chr == String.fromCharCode(40)) {
 
                     // Check if there are any more commands in history to recall
                     if(_OsShell.history.numItems > 0) {
@@ -130,6 +137,25 @@ module TSOS {
                 	}
                 }
 
+                // Tab character
+                // TODO Do I want to stop at the first suggestion?
+                else if(chr === String.fromCharCode(9)) {
+
+                	var suggestedCommand: string = _OsShell.findMatch(this.buffer);
+
+                	if(suggestedCommand !== null) {
+
+                		// Print out rest of the suggested command
+                		var remainingText : string = suggestedCommand.substring(this.buffer.length);
+                		this.putText(remainingText);
+
+                		// Change buffer to the suggested command
+                		this.buffer = suggestedCommand;
+                	}
+
+                }
+
+                // "Normal" character
                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...

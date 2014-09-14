@@ -18,7 +18,7 @@ Project 1 Checklist
 - [ ] Other console / CLI enhancements 
 	- [ ] Accept and display punctuation characters and symbols
 	- [x] Handle backspace appropriately
-	- [ ] Implement command completion with the tab key
+	- [x] Implement command completion with the tab key
 	- [x] Provide command history recall via the up and down arrow keys
 - [x] Display a BSOD message (on the CLI) when the kernel traps an OS error
 	- [x] Add a shell command to test this

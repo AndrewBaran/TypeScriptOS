@@ -40,6 +40,7 @@ var TSOS;
                 var chr = _KernelInputQueue.dequeue();
 
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
+                // Enter key
                 if (chr === String.fromCharCode(13)) {
                     // Don't add enter key to history
                     if (this.buffer.length > 0) {
@@ -114,6 +115,17 @@ var TSOS;
                             // Make buffer hold the history command
                             this.buffer = historyCommand;
                         }
+                    }
+                } else if (chr === String.fromCharCode(9)) {
+                    var suggestedCommand = _OsShell.findMatch(this.buffer);
+
+                    if (suggestedCommand !== null) {
+                        // Print out rest of the suggested command
+                        var remainingText = suggestedCommand.substring(this.buffer.length);
+                        this.putText(remainingText);
+
+                        // Change buffer to the suggested command
+                        this.buffer = suggestedCommand;
                     }
                 } else {
                     // This is a "normal" character, so ...
