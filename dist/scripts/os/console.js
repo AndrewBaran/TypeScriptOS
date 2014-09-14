@@ -58,16 +58,17 @@ var TSOS;
                         this.currentXPosition -= offset;
 
                         var newY = this.currentYPosition - this.currentFontSize;
-                        var newHeight = this.currentFontSize + _FontHeightMargin;
+                        var newHeight = this.currentFontSize + _FontHeightMargin + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
 
                         // Draw a rectangle over the character that is being deleted
                         // TODO Improve by removing magic number
                         _DrawingContext.fillStyle = "#DFDBC3"; // Color of the canvas
-                        _DrawingContext.fillRect(this.currentXPosition, newY, this.currentFontSize, newHeight);
+
+                        // X, Y, Width, Height
+                        _DrawingContext.fillRect(this.currentXPosition, newY, offset, newHeight);
 
                         // Remove lastCharacter from the buffer
                         this.buffer = this.buffer.substring(0, this.buffer.length - 1);
-                        console.log(this.buffer);
                     }
                 } else {
                     // This is a "normal" character, so ...

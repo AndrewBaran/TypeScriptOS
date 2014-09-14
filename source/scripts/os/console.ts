@@ -48,7 +48,6 @@ module TSOS {
                     this.buffer = "";
                 }
 
-                // TODO Lowercase m or g do not erase entirely
                 else if(chr == String.fromCharCode(8)) { // Backspace
 
                     // Backspace if the buffer is not empty
@@ -61,16 +60,17 @@ module TSOS {
                         this.currentXPosition -= offset;
 
                         var newY : number = this.currentYPosition - this.currentFontSize;
-                        var newHeight: number = this.currentFontSize + _FontHeightMargin;
+                        var newHeight: number = this.currentFontSize + _FontHeightMargin + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
 
                         // Draw a rectangle over the character that is being deleted
                         // TODO Improve by removing magic number
                         _DrawingContext.fillStyle = "#DFDBC3"; // Color of the canvas
-                        _DrawingContext.fillRect(this.currentXPosition, newY, this.currentFontSize, newHeight);
+                        
+                        // X, Y, Width, Height
+                        _DrawingContext.fillRect(this.currentXPosition, newY, offset, newHeight);
 
                         // Remove lastCharacter from the buffer
                         this.buffer = this.buffer.substring(0, this.buffer.length - 1);
-                        console.log(this.buffer);
                     }
                 }
 
