@@ -15,6 +15,7 @@ module TSOS {
         // Properties
         public promptStr = ">";
         public commandList = [];
+        public history = {list: [], currentCommand: 0, numItems: 0};
         public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
         public apologies = "[sorry]";
 
@@ -84,6 +85,7 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
             // 007: bonus command
+            // TODO Change description to Display a movie suggestion
             sc = new ShellCommand(this.shell007, "007", " - Displays what you want to hear.");
             this.commandList[this.commandList.length] = sc;
 
@@ -114,9 +116,12 @@ module TSOS {
             //
             var userCommand = new UserCommand();
             userCommand = this.parseInput(buffer);
+
             // ... and assign the command and args to local variables.
             var cmd = userCommand.command;
             var args = userCommand.args;
+
+
             //
             // Determine the command and execute it.
             //
@@ -188,6 +193,17 @@ module TSOS {
                 }
             }
             return retVal;
+        }
+
+        // Adds a command to the history
+        public addHistory(buffer) : void {
+            
+            // Add the current command to the history
+            this.history.list.push(buffer);
+            this.history.numItems++;
+
+            // Move current command cursor to latest item
+            this.history.currentCommand = this.history.list.length - 1;
         }
 
         //

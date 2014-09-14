@@ -13,6 +13,7 @@ var TSOS;
             // Properties
             this.promptStr = ">";
             this.commandList = [];
+            this.history = { list: [], currentCommand: 0, numItems: 0 };
             this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
             this.apologies = "[sorry]";
         }
@@ -62,6 +63,7 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
 
             // 007: bonus command
+            // TODO Change description to Display a movie suggestion
             sc = new TSOS.ShellCommand(this.shell007, "007", " - Displays what you want to hear.");
             this.commandList[this.commandList.length] = sc;
 
@@ -172,6 +174,16 @@ var TSOS;
                 }
             }
             return retVal;
+        };
+
+        // Adds a command to the history
+        Shell.prototype.addHistory = function (buffer) {
+            // Add the current command to the history
+            this.history.list.push(buffer);
+            this.history.numItems++;
+
+            // Move current command cursor to latest item
+            this.history.currentCommand = this.history.list.length - 1;
         };
 
         //

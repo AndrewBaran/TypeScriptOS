@@ -11,6 +11,8 @@ var _Constants = { APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 
 // My Globals
 var _MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
+var _CANVAS_COLOR = "#DFDBC3";
+
 //
 // Global Variables
 //

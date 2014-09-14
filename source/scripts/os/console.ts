@@ -41,6 +41,13 @@ module TSOS {
                 var chr = _KernelInputQueue.dequeue();
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
                 if (chr === String.fromCharCode(13)) { //     Enter key
+
+                    // Don't add enter key to history
+                    if(this.buffer.length > 0) {
+                        // Add command to history
+                        _OsShell.addHistory(this.buffer);
+                    }
+
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
@@ -63,8 +70,7 @@ module TSOS {
                         var newHeight: number = this.currentFontSize + _FontHeightMargin + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
 
                         // Draw a rectangle over the character that is being deleted
-                        // TODO Improve by removing magic number
-                        _DrawingContext.fillStyle = "#DFDBC3"; // Color of the canvas
+                        _DrawingContext.fillStyle = _CANVAS_COLOR; // Color of the canvas
 
                         // X, Y, Width, Height
                         _DrawingContext.fillRect(this.currentXPosition, newY, offset, newHeight);
@@ -74,7 +80,57 @@ module TSOS {
                     }
                 }
 
-                 else {
+                else if(chr == String.fromCharCode(38)) { // up arrow
+
+                    // Check if there are any more commands in history to recall
+                    if(_OsShell.history.numItems > 0) {
+
+                        if(_OsShell.history.currentCommand >= 0 && _OsShell.history.currentCommand < _OsShell.history.numItems) {
+
+                        	// Clear line and put prompt
+                            this.clearLine();
+                            _OsShell.putPrompt();
+
+                            // Get previous command from history and print it
+                            var historyCommand : string = _OsShell.history.list[_OsShell.history.currentCommand];
+                            this.putText(historyCommand);
+
+                            // Move to previous command
+                            _OsShell.history.currentCommand--;
+
+                            // Make buffer hold the history command
+                            this.buffer = historyCommand;
+                        }
+                    }
+                }
+
+                else if(chr == String.fromCharCode(40)) { // down arrow
+
+                    // Check if there are any more commands in history to recall
+                    if(_OsShell.history.numItems > 0) {
+
+                    	var nextCommand : number = _OsShell.history.currentCommand + 1;
+
+                        if(nextCommand >= 0 && nextCommand < _OsShell.history.numItems) {
+
+                        	// Clear line and put prompt
+                        	this.clearLine();
+                        	_OsShell.putPrompt();
+
+                        	// Get next command from history and print it
+                        	var historyCommand : string = _OsShell.history.list[nextCommand];
+                        	this.putText(historyCommand);
+
+                        	// Move to next command
+                        	_OsShell.history.currentCommand++;
+
+                        	// Make buffer hold the history command
+                        	this.buffer = historyCommand;
+                        }
+                	}
+                }
+
+                else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
@@ -124,6 +180,21 @@ module TSOS {
                             _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                             _FontHeightMargin;
 
+        }
+
+        public clearLine(): void {
+            var newY : number = this.currentYPosition - this.currentFontSize;
+            var newHeight : number = this.currentFontSize + _FontHeightMargin + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
+            var canvasWidth : number = _Canvas.width;
+
+            _DrawingContext.fillStyle = _CANVAS_COLOR;
+
+            // Draw rectangle the color of the canvas across entire line
+            // X, Y, Width, Height
+            _DrawingContext.fillRect(0, newY, canvasWidth, newHeight);
+
+            // Move currentXPosition back to start
+            this.currentXPosition = 0;
         }
     }
  }
