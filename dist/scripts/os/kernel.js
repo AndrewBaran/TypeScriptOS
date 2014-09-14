@@ -107,10 +107,10 @@ var TSOS;
             this.krnTrace("Handling IRQ~" + irq);
 
             switch (irq) {
-                case TIMER_IRQ:
+                case _Constants.TIMER_IRQ:
                     this.krnTimerISR(); // Kernel built-in routine for timers (not the clock).
                     break;
-                case KEYBOARD_IRQ:
+                case _Constants.KEYBOARD_IRQ:
                     _krnKeyboardDriver.isr(params); // Kernel mode device driver
                     _StdIn.handleInput();
                     break;

@@ -83,7 +83,7 @@ var TSOS;
             _CPU.init();
 
             // ... then set the host clock pulse ...
-            _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
+            _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, _Constants.CPU_CLOCK_INTERVAL);
 
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new TSOS.Kernel();

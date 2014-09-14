@@ -5,21 +5,8 @@ Global CONSTANTS and _Variables.
 This code references page numbers in the text book:
 Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
 ------------ */
-//
-// Global "CONSTANTS" (There is currently no const or final or readonly type annotation in TypeScript.)
-// TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.
-//
-var Constants;
 
-var APP_NAME = "cOSmOS";
-var APP_VERSION = "3.14";
-
-var CPU_CLOCK_INTERVAL = 100;
-
-var TIMER_IRQ = 0;
-
-// NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
-var KEYBOARD_IRQ = 1;
+var _Constants = { APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1 };
 
 // My Globals
 var MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

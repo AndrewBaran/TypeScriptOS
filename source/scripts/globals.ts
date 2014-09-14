@@ -10,25 +10,17 @@
 
 //
 // Global "CONSTANTS" (There is currently no const or final or readonly type annotation in TypeScript.)
-// TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.
 //
-var Constants: {
+interface Constants {
 	APP_NAME: string;
 	APP_VERSION: string;
 
-	CPU_CLOCK_INTERVAL: number;
-	TIMER_IRQ: number;
+	CPU_CLOCK_INTERVAL: number; // This is in ms, so 1000 = 1 second.
+	TIMER_IRQ: number; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 	KEYBOARD_IRQ: number;
-};
+}
 
-var APP_NAME: string    = "cOSmOS";   // The creative side of me has failed
-var APP_VERSION: string = "3.14";   // Math is cool
-
-var CPU_CLOCK_INTERVAL: number = 100;   // This is in ms, or milliseconds, so 1000 = 1 second.
-
-var TIMER_IRQ: number = 0;  // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
-                            // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
-var KEYBOARD_IRQ: number = 1;
+var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1};
 
 // My Globals
 var MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
