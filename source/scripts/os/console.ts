@@ -142,7 +142,10 @@ module TSOS {
                 // Tab character
                 else if(chr === String.fromCharCode(9)) {
 
-                	var suggestedCommand: string = _OsShell.findMatch(this.buffer);
+                    // Don't autocomplete for an empty buffer
+                    if(this.buffer.length > 0) {
+                	   var suggestedCommand: string = _OsShell.findMatch(this.buffer);
+                    }
 
                 	// Check if a match was found
                 	if(suggestedCommand !== null) {

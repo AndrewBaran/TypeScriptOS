@@ -117,7 +117,10 @@ var TSOS;
                         }
                     }
                 } else if (chr === String.fromCharCode(9)) {
-                    var suggestedCommand = _OsShell.findMatch(this.buffer);
+                    // Don't autocomplete for an empty buffer
+                    if (this.buffer.length > 0) {
+                        var suggestedCommand = _OsShell.findMatch(this.buffer);
+                    }
 
                     // Check if a match was found
                     if (suggestedCommand !== null) {
