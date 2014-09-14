@@ -88,7 +88,11 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
             // bsod: for testing purposes
-            sc = new ShellCommand(this.shellBSOD, "bsod", " - Displays the BSOD screen when trapping an OS error.")
+            sc = new ShellCommand(this.shellBSOD, "bsod", " - Displays the BSOD screen when trapping an OS error.");
+            this.commandList[this.commandList.length] = sc;
+
+            // load
+            sc = new ShellCommand(this.shellLoad, "load", " - Validates the code in the User Program Input box.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -308,6 +312,7 @@ module TSOS {
             _StdOut.putText("You are probably in Pouhgkeepsie, NY, at Marist College. Or not if you are a job recruiter...");
         }
 
+        // TODO Make it so it randomly selects a movie to watch. Say shouldn't watch if its a Daniel Craig movie
         public shell007() {
             _StdOut.putText("The best James Bond is Sean Connery.");
         }
@@ -323,6 +328,32 @@ module TSOS {
 
             // Display BSOD message
             _StdOut.putText("Attention! An unexpected error has occurred and the system must be reset.");
+        }
+
+        public shellLoad() {
+            // Get text from the User Program Input textbox
+            var textInput = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
+
+            // Validate that the text input contains only hex characters and/or spaces
+            var regExpPattern = /[a-f|A-F|0-9|\s]/;
+            var validInput : boolean = true;
+
+            // Loop through input, testing regExpPattern against each character
+            for(var i = 0; i < textInput.length; i++) {
+                if(!regExpPattern.test(textInput[i])) {
+                    validInput = false;
+                    break;
+                }
+            }
+
+            if(validInput) {
+                _StdOut.putText("Valid program input.");
+            }
+
+            else {
+                _StdOut.putText("Error: Invalid program input.");
+            }
+
         }
 
     }

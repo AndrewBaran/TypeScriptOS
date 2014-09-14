@@ -22,7 +22,7 @@ Project 1 Checklist
 	- [ ] Provide command history recall via the up and down arrow keys
 - [x] Display a BSOD message (on the CLI) when the kernel traps an OS error
 	- [x] Add a shell command to test this
-- [ ] Add a shell command called load to validate the user code in the HTML 5 text area (id="taProgramInput"). Only hex digits and spaces are valid
+- [x] Add a shell command called load to validate the user code in the HTML 5 text area (id="taProgramInput"). Only hex digits and spaces are valid
 - [ ] **Optional**: Implement line-wrap in the CLI
 
 Project 2 Checklist

@@ -69,6 +69,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellBSOD, "bsod", " - Displays the BSOD screen when trapping an OS error.");
             this.commandList[this.commandList.length] = sc;
 
+            // load
+            sc = new TSOS.ShellCommand(this.shellLoad, "load", " - Validates the code in the User Program Input box.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -292,6 +296,7 @@ var TSOS;
             _StdOut.putText("You are probably in Pouhgkeepsie, NY, at Marist College. Or not if you are a job recruiter...");
         };
 
+        // TODO Make it so it randomly selects a movie to watch. Say shouldn't watch if its a Daniel Craig movie
         Shell.prototype.shell007 = function () {
             _StdOut.putText("The best James Bond is Sean Connery.");
         };
@@ -307,6 +312,28 @@ var TSOS;
 
             // Display BSOD message
             _StdOut.putText("Attention! An unexpected error has occurred and the system must be reset.");
+        };
+
+        Shell.prototype.shellLoad = function () {
+            // Get text from the User Program Input textbox
+            var textInput = document.getElementById("taProgramInput").value;
+
+            // Validate that the text input contains only hex characters and/or spaces
+            var regExpPattern = /[a-f|A-F|0-9|\s]/;
+            var validInput = true;
+
+            for (var i = 0; i < textInput.length; i++) {
+                if (!regExpPattern.test(textInput[i])) {
+                    validInput = false;
+                    break;
+                }
+            }
+
+            if (validInput) {
+                _StdOut.putText("Valid program input.");
+            } else {
+                _StdOut.putText("Error: Invalid program input.");
+            }
         };
         return Shell;
     })();

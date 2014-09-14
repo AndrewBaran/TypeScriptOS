@@ -65,7 +65,7 @@ module TSOS {
                         // Draw a rectangle over the character that is being deleted
                         // TODO Improve by removing magic number
                         _DrawingContext.fillStyle = "#DFDBC3"; // Color of the canvas
-                        
+
                         // X, Y, Width, Height
                         _DrawingContext.fillRect(this.currentXPosition, newY, offset, newHeight);
 
@@ -115,6 +115,7 @@ module TSOS {
             // TODO: Handle scrolling. (Project 1)
         }
 
+        // TODO Do I need this anymore?
         // Moves up one line in the console
         public retreatLine(): void {
             this.currentXPosition = 0;

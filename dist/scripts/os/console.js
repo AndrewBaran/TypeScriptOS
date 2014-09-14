@@ -111,6 +111,7 @@ var TSOS;
             // TODO: Handle scrolling. (Project 1)
         };
 
+        // TODO Do I need this anymore?
         // Moves up one line in the console
         Console.prototype.retreatLine = function () {
             this.currentXPosition = 0;
