@@ -46,7 +46,35 @@ module TSOS {
                     _OsShell.handleInput(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
-                } else {
+                }
+
+                // TODO Lowercase m or g do not erase entirely
+                else if(chr == String.fromCharCode(8)) { // Backspace
+
+                    // Backspace if the buffer is not empty
+                    if(this.buffer.length > 0) {
+                        var lastCharacter : string = this.buffer[this.buffer.length - 1];
+
+                        var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastCharacter);
+                       
+                        // Move cursor back one character
+                        this.currentXPosition -= offset;
+
+                        var newY : number = this.currentYPosition - this.currentFontSize;
+                        var newHeight: number = this.currentFontSize + _FontHeightMargin;
+
+                        // Draw a rectangle over the character that is being deleted
+                        // TODO Improve by removing magic number
+                        _DrawingContext.fillStyle = "#DFDBC3"; // Color of the canvas
+                        _DrawingContext.fillRect(this.currentXPosition, newY, this.currentFontSize, newHeight);
+
+                        // Remove lastCharacter from the buffer
+                        this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+                        console.log(this.buffer);
+                    }
+                }
+
+                 else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);

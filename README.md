@@ -17,7 +17,7 @@ Project 1 Checklist
 	- [ ] Status messages as specified by the user with a new shell command: status <string>
 - [ ] Other console / CLI enhancements 
 	- [ ] Accept and display punctuation characters and symbols
-	- [ ] Handle backspace appropriately
+	- [x] Handle backspace appropriately
 	- [ ] Implement command completion with the tab key
 	- [ ] Provide command history recall via the up and down arrow keys
 - [x] Display a BSOD message (on the CLI) when the kernel traps an OS error

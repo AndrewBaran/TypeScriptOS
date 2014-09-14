@@ -178,7 +178,7 @@ var TSOS;
             if (_SarcasticMode) {
                 _StdOut.putText("Duh. Go back to your Speak & Spell.");
             } else {
-                _StdOut.putText("Type 'help' for, well... help.");
+                _StdOut.putText("Type 'help' for a list of available commands.");
             }
         };
 
@@ -283,7 +283,7 @@ var TSOS;
         // TODO Add AM/PM
         Shell.prototype.shellDate = function () {
             var date = new Date();
-            var dateString = MONTH_NAMES[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + " | " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
+            var dateString = _MONTH_NAMES[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + " | " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
 
             _StdOut.putText("The current date is: " + dateString);
         };
@@ -296,6 +296,8 @@ var TSOS;
             _StdOut.putText("The best James Bond is Sean Connery.");
         };
 
+        // TODO Improve by making text display in white
+        // TODO Improve by calling halt
         Shell.prototype.shellBSOD = function () {
             // Change canvas background color to Microsoft Approved Blue (TM)
             document.getElementById("display").style.backgroundColor = "#2067B2";

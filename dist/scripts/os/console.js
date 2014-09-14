@@ -47,6 +47,28 @@ var TSOS;
 
                     // ... and reset our buffer.
                     this.buffer = "";
+                } else if (chr == String.fromCharCode(8)) {
+                    // Backspace if the buffer is not empty
+                    if (this.buffer.length > 0) {
+                        var lastCharacter = this.buffer[this.buffer.length - 1];
+
+                        var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastCharacter);
+
+                        // Move cursor back one character
+                        this.currentXPosition -= offset;
+
+                        var newY = this.currentYPosition - this.currentFontSize;
+                        var newHeight = this.currentFontSize + _FontHeightMargin;
+
+                        // Draw a rectangle over the character that is being deleted
+                        // TODO Improve by removing magic number
+                        _DrawingContext.fillStyle = "#DFDBC3"; // Color of the canvas
+                        _DrawingContext.fillRect(this.currentXPosition, newY, this.currentFontSize, newHeight);
+
+                        // Remove lastCharacter from the buffer
+                        this.buffer = this.buffer.substring(0, this.buffer.length - 1);
+                        console.log(this.buffer);
+                    }
                 } else {
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...

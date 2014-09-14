@@ -23,7 +23,8 @@ interface Constants {
 var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1};
 
 // My Globals
-var MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+var _MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 
 //
 // Global Variables
