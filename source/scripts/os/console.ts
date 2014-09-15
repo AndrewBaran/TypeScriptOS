@@ -180,7 +180,7 @@ module TSOS {
             // do the same thing, thereby encouraging confusion and decreasing readability, I
             // decided to write one function and use the term "text" to connote string or char.
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
-            
+
             if (text !== "") {
 
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
@@ -220,30 +220,39 @@ module TSOS {
          }
 
         public advanceLine(): void {
+
             this.currentXPosition = 0;
+
             /*
              * Font size measures from the baseline to the highest point in the font.
              * Font descent measures from the baseline to the lowest point in the font.
              * Font height margin is extra spacing between the lines.
              */
-            this.currentYPosition += _DefaultFontSize + 
-                                     _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                                     _FontHeightMargin;
+            var newLineHeight : number = _DefaultFontSize + 
+                                _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                   				_FontHeightMargin;
 
-            // TODO: Handle scrolling. (Project 1)
+            this.currentYPosition += newLineHeight;
+
+            // Scrolling handled (like a boss)
+            if(this.currentYPosition > _Canvas.height) {
+
+            	// Copy old canvas data into a temporary variable
+            	var oldCanvasData = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
+
+            	// Erase old canvas data
+            	this.clearScreen();
+
+            	// Paste old canvas display 1 line above current line
+            	_DrawingContext.putImageData(oldCanvasData, 0, -newLineHeight);
+
+            	// Move prompt up 1 line
+            	this.currentYPosition -= newLineHeight;
+            }
+
         }
 
-        // TODO Do I need this anymore?
-        // Moves up one line in the console and move the cursor back to the start
-        public retreatLine(): void {
-            this.currentXPosition = 0;
-
-            this.currentYPosition -= _DefaultFontSize + 
-                            _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
-                            _FontHeightMargin;
-
-        }
-
+        // TODO Make this work with multiple lines
         // Erases the contents of the current line in the console and moves the cursor back to the beginning
         public clearLine(): void {
             var newY : number = this.currentYPosition - this.currentFontSize;

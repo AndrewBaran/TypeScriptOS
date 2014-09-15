@@ -1,5 +1,5 @@
 cOSmOS - Operating System
-============
+=========================
 
 This is my Fall 2014 Operating Systems class project.
 See http://www.labouseur.com/courses/os/ for details.
@@ -15,7 +15,7 @@ Project 1 Checklist
 - [ ] Enhance the *host* display with a graphical task bar 
 	- [x] Current time and date
 	- [ ] Status messages as specified by the user with a new shell command: status <string>
-- [ ] Implement scrolling in the *client OS* console/CLI
+- [x] Implement scrolling in the *client OS* console/CLI
 - [ ] Other console / CLI enhancements 
 	- [ ] Accept and display punctuation characters and symbols
 	- [x] Handle backspace appropriately

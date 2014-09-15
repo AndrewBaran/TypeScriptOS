@@ -190,18 +190,27 @@ var TSOS;
             * Font descent measures from the baseline to the lowest point in the font.
             * Font height margin is extra spacing between the lines.
             */
-            this.currentYPosition += _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
-            // TODO: Handle scrolling. (Project 1)
+            var newLineHeight = _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
+
+            this.currentYPosition += newLineHeight;
+
+            // Scrolling handled (like a boss)
+            if (this.currentYPosition > _Canvas.height) {
+                // Copy old canvas data into a temporary variable
+                var oldCanvasData = _DrawingContext.getImageData(0, 0, _Canvas.width, _Canvas.height);
+
+                // Erase old canvas data
+                this.clearScreen();
+
+                // Paste old canvas display 1 line above current line
+                _DrawingContext.putImageData(oldCanvasData, 0, -newLineHeight);
+
+                // Move prompt up 1 line
+                this.currentYPosition -= newLineHeight;
+            }
         };
 
-        // TODO Do I need this anymore?
-        // Moves up one line in the console and move the cursor back to the start
-        Console.prototype.retreatLine = function () {
-            this.currentXPosition = 0;
-
-            this.currentYPosition -= _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
-        };
-
+        // TODO Make this work with multiple lines
         // Erases the contents of the current line in the console and moves the cursor back to the beginning
         Console.prototype.clearLine = function () {
             var newY = this.currentYPosition - this.currentFontSize;
