@@ -173,12 +173,14 @@ module TSOS {
         }
 
         public putText(text): void {
+
             // My first inclination here was to write two functions: putChar() and putString().
             // Then I remembered that JavaScript is (sadly) untyped and it won't differentiate
             // between the two.  So rather than be like PHP and write two (or more) functions that
             // do the same thing, thereby encouraging confusion and decreasing readability, I
             // decided to write one function and use the term "text" to connote string or char.
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
+            
             if (text !== "") {
 
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
@@ -192,33 +194,28 @@ module TSOS {
                 	this.currentXPosition = this.currentXPosition + offset;
                 }
 
-                // Text stretches beyond canvas
+                // Text stretches beyond canvas, print characters until necessary to go to next line
                 else {
-                	console.log("Text extends beyond screen.");
 
-                	// Split into words
+                	// Split into individual characters
                 	var textInput: string[] = text.split("");
-                	console.log("Words to be written: " + textInput);
 
                 	for(var i = 0; i < textInput.length; i++) {
-                		
-                		// Check if word extends beyond
-                		var newOffset : number = _DrawingContext.measureText(this.currentFont, this.currentFontSize, textInput[i]);
-                		console.log("Writting: " + textInput[i]);
+
+                		var currentChar : string = textInput[i];
+
+                		// Check if character extends beyond the canvas
+                		var newOffset : number = _DrawingContext.measureText(this.currentFont, this.currentFontSize, currentChar);
                 		if((this.currentXPosition + newOffset) > _Canvas.width) {
                 			// Move to next line
                 			this.advanceLine();
                 		}
 
-                		// Print the word
-                		_DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, textInput[i]);
+                		// Print the character
+                		_DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, currentChar);
                 		this.currentXPosition = this.currentXPosition + newOffset;
                 	}
                 }
-
-                console.log("Canvas width: " + _Canvas.width);
-                console.log("Sum: " + (this.currentXPosition + offset + "\n"));
-                
             }
          }
 

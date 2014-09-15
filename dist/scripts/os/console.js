@@ -161,29 +161,24 @@ var TSOS;
                     // Move the current X position.
                     this.currentXPosition = this.currentXPosition + offset;
                 } else {
-                    console.log("Text extends beyond screen.");
-
-                    // Split into words
+                    // Split into individual characters
                     var textInput = text.split("");
-                    console.log("Words to be written: " + textInput);
 
                     for (var i = 0; i < textInput.length; i++) {
-                        // Check if word extends beyond
-                        var newOffset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, textInput[i]);
-                        console.log("Writting: " + textInput[i]);
+                        var currentChar = textInput[i];
+
+                        // Check if character extends beyond the canvas
+                        var newOffset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, currentChar);
                         if ((this.currentXPosition + newOffset) > _Canvas.width) {
                             // Move to next line
                             this.advanceLine();
                         }
 
-                        // Print the word
-                        _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, textInput[i]);
+                        // Print the character
+                        _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, currentChar);
                         this.currentXPosition = this.currentXPosition + newOffset;
                     }
                 }
-
-                console.log("Canvas width: " + _Canvas.width);
-                console.log("Sum: " + (this.currentXPosition + offset + "\n"));
             }
         };
 
