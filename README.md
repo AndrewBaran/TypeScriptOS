@@ -24,7 +24,8 @@ Project 1 Checklist
 - [x] Display a BSOD message (on the CLI) when the kernel traps an OS error
 	- [x] Add a shell command to test this
 - [x] Add a shell command called load to validate the user code in the HTML 5 text area (id="taProgramInput"). Only hex digits and spaces are valid
-- [x] **Optional**: Implement line-wrap in the CLI **PRIMITIVE IMPLEMENTATION, WILL IMPROVE**
+- [x] **Optional**: Implement line-wrap in the CLI 
+	- [x] **Primitive implementation, will improve**
 
 Project 2 Checklist
 ===================
