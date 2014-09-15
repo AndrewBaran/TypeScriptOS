@@ -388,9 +388,17 @@ var TSOS;
             }
         };
 
-        // TODO Implement shellStatus()
-        Shell.prototype.shellStatus = function (value) {
-            _StdOut.putText("In shellStatus()");
+        Shell.prototype.shellStatus = function (args) {
+            // Invalid number of arguments
+            if (args.length < 1) {
+                _StdOut.putText("Usage: status <string> Please supply a string.");
+            } else {
+                // Combine all passed in arguments into a single string
+                var statusString = args.join(" ");
+
+                // Update display with new status value
+                document.getElementById("statusDisplay").innerHTML = statusString;
+            }
         };
         return Shell;
     })();

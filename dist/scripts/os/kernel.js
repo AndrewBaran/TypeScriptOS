@@ -50,7 +50,7 @@ var TSOS;
             // Add timer to the host log
             this.krnTrace("Enabling host display clock.");
             var dateString = TSOS.Utils.getFormattedDate();
-            document.getElementById("status").innerHTML = dateString;
+            document.getElementById("statusTimer").innerHTML = dateString;
 
             // Finally, initiate testing.
             if (_GLaDOS) {
@@ -158,7 +158,7 @@ var TSOS;
 
                         // Update time every second
                         var dateString = TSOS.Utils.getFormattedDate();
-                        document.getElementById("status").innerHTML = dateString;
+                        document.getElementById("statusTimer").innerHTML = dateString;
                     }
                 } else {
                     TSOS.Control.hostLog(msg, "OS");

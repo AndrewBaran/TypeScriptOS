@@ -417,9 +417,21 @@ module TSOS {
 
         }
 
-        // TODO Implement shellStatus()
-        public shellStatus(value : string) {
-            _StdOut.putText("In shellStatus()");
+        public shellStatus(args : string[]) {
+            
+            // Invalid number of arguments
+            if(args.length < 1) {
+                _StdOut.putText("Usage: status <string> Please supply a string.");
+            }
+
+            else {
+                // Combine all passed in arguments into a single string
+                var statusString : string = args.join(" ");
+
+                // Update display with new status value
+                document.getElementById("statusDisplay").innerHTML = statusString;
+            }
+
         }
 
     }

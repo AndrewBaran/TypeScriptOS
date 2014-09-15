@@ -53,7 +53,7 @@ module TSOS {
             // Add timer to the host log
             this.krnTrace("Enabling host display clock.");
             var dateString : string = Utils.getFormattedDate();
-			document.getElementById("status").innerHTML = dateString;
+			document.getElementById("statusTimer").innerHTML = dateString;
 
             // Finally, initiate testing.
             if (_GLaDOS) {
@@ -168,7 +168,7 @@ module TSOS {
 
                     	// Update time every second
 		            	var dateString : string = Utils.getFormattedDate();
-			            document.getElementById("status").innerHTML = dateString;
+			            document.getElementById("statusTimer").innerHTML = dateString;
                     }
                 } 
 
