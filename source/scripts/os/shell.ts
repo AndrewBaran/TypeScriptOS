@@ -232,7 +232,7 @@ module TSOS {
         //
         // Shell Command Functions.  Again, not part of Shell() class per se', just called from there.
         //
-        
+
         // TODO Remove curses (for the children)
         public shellInvalidCommand() {
             _StdOut.putText("Invalid Command. ");
@@ -374,7 +374,7 @@ module TSOS {
         	_StdOut.putText(" watch " + selectedMovie.title + ", which stars actor " + selectedMovie.bondActor + ".");
         }
 
-        // TODO Improve by removing prompt that follows error message
+        // TODO Improve by removing prompt that follows error message (same issue as in shellShutdown())
         public shellBSOD() {
 
             // Change canvas background color to Microsoft Approved Blue (TM)
@@ -385,6 +385,8 @@ module TSOS {
 
             // Display BSOD message
             _StdOut.putText("Attention! An unexpected error has occurred and the system must be reset.");
+
+            // TODO Should I shut down here? Or leave this for the krnTrapError()?
             _Kernel.krnShutdown();
             clearInterval(_hardwareClockID);
         }

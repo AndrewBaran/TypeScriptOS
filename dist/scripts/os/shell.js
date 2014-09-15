@@ -350,7 +350,7 @@ var TSOS;
             _StdOut.putText(" watch " + selectedMovie.title + ", which stars actor " + selectedMovie.bondActor + ".");
         };
 
-        // TODO Improve by removing prompt that follows error message
+        // TODO Improve by removing prompt that follows error message (same issue as in shellShutdown())
         Shell.prototype.shellBSOD = function () {
             // Change canvas background color to Microsoft Approved Blue (TM)
             document.getElementById("display").style.backgroundColor = "#2067B2";
@@ -360,6 +360,8 @@ var TSOS;
 
             // Display BSOD message
             _StdOut.putText("Attention! An unexpected error has occurred and the system must be reset.");
+
+            // TODO Should I shut down here? Or leave this for the krnTrapError()?
             _Kernel.krnShutdown();
             clearInterval(_hardwareClockID);
         };

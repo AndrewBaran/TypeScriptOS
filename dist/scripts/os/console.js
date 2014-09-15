@@ -151,12 +151,39 @@ var TSOS;
             // decided to write one function and use the term "text" to connote string or char.
             // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             if (text !== "") {
-                // Draw the text at the current X and Y coordinates.
-                _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
-
-                // Move the current X position.
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
-                this.currentXPosition = this.currentXPosition + offset;
+
+                // Text does not stretch beyond canvas
+                if ((this.currentXPosition + offset) < _Canvas.width) {
+                    // Draw the text at the current X and Y coordinates.
+                    _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);
+
+                    // Move the current X position.
+                    this.currentXPosition = this.currentXPosition + offset;
+                } else {
+                    console.log("Text extends beyond screen.");
+
+                    // Split into words
+                    var textInput = text.split("");
+                    console.log("Words to be written: " + textInput);
+
+                    for (var i = 0; i < textInput.length; i++) {
+                        // Check if word extends beyond
+                        var newOffset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, textInput[i]);
+                        console.log("Writting: " + textInput[i]);
+                        if ((this.currentXPosition + newOffset) > _Canvas.width) {
+                            // Move to next line
+                            this.advanceLine();
+                        }
+
+                        // Print the word
+                        _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, textInput[i]);
+                        this.currentXPosition = this.currentXPosition + newOffset;
+                    }
+                }
+
+                console.log("Canvas width: " + _Canvas.width);
+                console.log("Sum: " + (this.currentXPosition + offset + "\n"));
             }
         };
 
