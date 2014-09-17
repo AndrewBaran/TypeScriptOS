@@ -45,11 +45,44 @@ var TSOS;
 
                 // TODO: Check for caps-lock and handle as shifted if so.
                 _KernelInputQueue.enqueue(chr);
-            } else if (((keyCode >= 48) && (keyCode <= 57)) || (keyCode == 32) || (keyCode == 13) || (keyCode == 9) || (keyCode == 8)) {
+            } else if (((keyCode >= 48) && (keyCode <= 57) && (!isShifted)) || (keyCode == 32) || (keyCode == 13) || (keyCode == 9) || (keyCode == 8)) {
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
             } else if ((keyCode == 38) || (keyCode == 40)) {
                 chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            } else {
+                // Not shifted
+                if (!isShifted) {
+                    switch (keyCode) {
+                        case 188:
+                            chr = String.fromCharCode(44); // ,
+                            break;
+
+                        case 190:
+                            chr = String.fromCharCode(46); // .
+                            break;
+
+                        case 59:
+                            chr = String.fromCharCode(59); // ;
+                            break;
+
+                        case 222:
+                            chr = String.fromCharCode(39); // "
+                            break;
+
+                        case 219:
+                            chr = String.fromCharCode(91); // [
+                            break;
+
+                        case 221:
+                            chr = String.fromCharCode(93); // ]
+                            break;
+                    }
+                } else {
+                }
+
+                // Add code to queue
                 _KernelInputQueue.enqueue(chr);
             }
         };

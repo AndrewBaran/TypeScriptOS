@@ -1,0 +1,95 @@
+, = 188
+	ascii: 44
+
+< = shifted 188
+	ascii: 60
+
+. = 190
+	ascii: 46
+
+> = shifted 190
+	ascii: 62
+
+; = 59
+	ascii: 59
+
+: = shifted 59
+	ascii: 58
+
+' = 222
+	ascii: 39
+
+" = shifted 222
+	ascii: 34
+
+[ = 219
+	ascii: 91
+
+{ = shifted 219
+	ascii: 123
+
+] = 221
+	ascii: 93
+
+} = shifted 221
+	ascii: 125
+
+! = 49 shifted
+	ascii: 33
+
+@ = 50 shifted
+	ascii: 64
+
+# = 51 shifted
+	ascii: 35
+
+$ = 52 shifted
+	ascii: 36
+
+% = 53 shifted
+	ascii: 37
+
+^ = 54 shifted
+	ascii: 94
+
+& = 55 shifted
+	ascii: 38
+
+* = 56 shifted
+	ascii: 42
+
+( = 57 shifted
+	ascii: 40
+
+) = 48 shifted
+	ascii: 41
+
+- = 189
+	ascii: 45
+
+_ = 189 shifted
+	ascii: 95
+
+= = 187
+	ascii: 61
+
++ = 187 shifted
+	ascii: 43
+
+` = 192
+	ascii: 96
+
+~ = 192 shifted
+	ascii: 126
+
+\ = 220
+	ascii: 92
+
+| = 220 shifted
+	ascii: 124
+
+/ = 191
+	ascii: 47
+	
+? = 191 shifted
+	ascii: 63
