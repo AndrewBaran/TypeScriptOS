@@ -34,46 +34,46 @@
 } = shifted 221
 	ascii: 125
 
-! = 49 shifted
+! = shifted 49
 	ascii: 33
 
-@ = 50 shifted
+@ = shifted 50 
 	ascii: 64
 
-# = 51 shifted
+# = shifted 51 
 	ascii: 35
 
-$ = 52 shifted
+$ = shifted 52 
 	ascii: 36
 
-% = 53 shifted
+% = shifted 53 
 	ascii: 37
 
-^ = 54 shifted
+^ = shifted 54 
 	ascii: 94
 
-& = 55 shifted
+& = shifted 55
 	ascii: 38
 
-* = 56 shifted
+* = shifted 56
 	ascii: 42
 
-( = 57 shifted
+( = shifted 57
 	ascii: 40
 
-) = 48 shifted
+) = shifted 48
 	ascii: 41
 
-- = 189
+- = 173
 	ascii: 45
 
-_ = 189 shifted
+_ = 173 shifted
 	ascii: 95
 
-= = 187
+= = 61
 	ascii: 61
 
-+ = 187 shifted
++ = 61 shifted
 	ascii: 43
 
 ` = 192
@@ -90,6 +90,6 @@ _ = 189 shifted
 
 / = 191
 	ascii: 47
-	
+
 ? = 191 shifted
 	ascii: 63

@@ -16,8 +16,8 @@ Project 1 Checklist
 	- [x] Current time and date
 	- [x] Status messages as specified by the user with a new shell command: status <string>
 - [x] Implement scrolling in the *client OS* console/CLI
-- [ ] Other console / CLI enhancements 
-	- [ ] Accept and display punctuation characters and symbols
+- [x] Other console / CLI enhancements 
+	- [x] Accept and display punctuation characters and symbols
 	- [x] Handle backspace appropriately
 	- [x] Implement command completion with the tab key
 	- [x] Provide command history recall via the up and down arrow keys

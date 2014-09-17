@@ -54,7 +54,7 @@ var TSOS;
 
                     // ... and reset our buffer.
                     this.buffer = "";
-                } else if (chr == String.fromCharCode(8)) {
+                } else if (chr === String.fromCharCode(8)) {
                     // Backspace if the buffer is not empty
                     if (this.buffer.length > 0) {
                         var lastCharacter = this.buffer[this.buffer.length - 1];
@@ -76,7 +76,7 @@ var TSOS;
                         // Remove lastCharacter from the buffer
                         this.buffer = this.buffer.substring(0, this.buffer.length - 1);
                     }
-                } else if (chr == String.fromCharCode(38)) {
+                } else if (chr === "up") {
                     // Check if there are any more commands in history to recall
                     if (_OsShell.history.numItems > 0) {
                         if (_OsShell.history.currentCommand >= 0 && _OsShell.history.currentCommand < _OsShell.history.numItems) {
@@ -95,7 +95,7 @@ var TSOS;
                             this.buffer = historyCommand;
                         }
                     }
-                } else if (chr == String.fromCharCode(40)) {
+                } else if (chr === "down") {
                     // Check if there are any more commands in history to recall
                     if (_OsShell.history.numItems > 0) {
                         var nextCommand = _OsShell.history.currentCommand + 1;
@@ -144,12 +144,6 @@ var TSOS;
         };
 
         Console.prototype.putText = function (text) {
-            // My first inclination here was to write two functions: putChar() and putString().
-            // Then I remembered that JavaScript is (sadly) untyped and it won't differentiate
-            // between the two.  So rather than be like PHP and write two (or more) functions that
-            // do the same thing, thereby encouraging confusion and decreasing readability, I
-            // decided to write one function and use the term "text" to connote string or char.
-            // UPDATE: Even though we are now working in TypeScript, char and string remain undistinguished.
             if (text !== "") {
                 var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, text);
 
@@ -211,6 +205,7 @@ var TSOS;
         };
 
         // TODO Make this work with multiple lines
+        // TODO Increase veritcal height, as some punctuation characters are not being erased
         // Erases the contents of the current line in the console and moves the cursor back to the beginning
         Console.prototype.clearLine = function () {
             var newY = this.currentYPosition - this.currentFontSize;
