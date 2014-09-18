@@ -44,13 +44,17 @@ module TSOS {
             return retVal;
         }
 
-        // TODO Improve so that we can display 12
         public static getFormattedDate() : string {
 
             var date = new Date();
 
             var AMPM : string = (date.getHours() < 12) ? "AM" : "PM";
             var properHours : number = date.getHours() % 12;
+
+            // Display 12 properly
+            if(properHours == 0) {
+                properHours += 12;
+            }
 
             var dateString : string = _MONTH_NAMES[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + " | ";
 

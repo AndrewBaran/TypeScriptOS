@@ -64,11 +64,11 @@ var TSOS;
                         // Move cursor back one character
                         this.currentXPosition -= offset;
 
-                        var newY = this.currentYPosition - this.currentFontSize;
-                        var newHeight = this.currentFontSize + _FontHeightMargin + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
+                        var newY = this.currentYPosition - this.currentFontSize - _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
+                        var newHeight = this.currentFontSize + (_FontHeightMargin * 2) + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
 
                         // Draw a rectangle over the character that is being deleted
-                        _DrawingContext.fillStyle = _CANVAS_COLOR; // Color of the canvas
+                        _DrawingContext.fillStyle = _CANVAS_COLOR;
 
                         // X, Y, Width, Height
                         _DrawingContext.fillRect(this.currentXPosition, newY, offset, newHeight);
@@ -205,11 +205,10 @@ var TSOS;
         };
 
         // TODO Make this work with multiple lines
-        // TODO Increase veritcal height, as some punctuation characters are not being erased
         // Erases the contents of the current line in the console and moves the cursor back to the beginning
         Console.prototype.clearLine = function () {
-            var newY = this.currentYPosition - this.currentFontSize;
-            var newHeight = this.currentFontSize + _FontHeightMargin + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
+            var newY = this.currentYPosition - this.currentFontSize - _FontHeightMargin;
+            var newHeight = this.currentFontSize + (_FontHeightMargin * 2) + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
             var canvasWidth = _Canvas.width;
 
             _DrawingContext.fillStyle = _CANVAS_COLOR;

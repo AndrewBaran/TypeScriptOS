@@ -43,12 +43,16 @@ var TSOS;
             return retVal;
         };
 
-        // TODO Improve so that we can display 12
         Utils.getFormattedDate = function () {
             var date = new Date();
 
             var AMPM = (date.getHours() < 12) ? "AM" : "PM";
             var properHours = date.getHours() % 12;
+
+            // Display 12 properly
+            if (properHours == 0) {
+                properHours += 12;
+            }
 
             var dateString = _MONTH_NAMES[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + " | ";
 

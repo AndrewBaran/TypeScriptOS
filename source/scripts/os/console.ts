@@ -71,11 +71,11 @@ module TSOS {
                         // Move cursor back one character
                         this.currentXPosition -= offset;
 
-                        var newY : number = this.currentYPosition - this.currentFontSize;
-                        var newHeight: number = this.currentFontSize + _FontHeightMargin + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
+                        var newY : number = this.currentYPosition - this.currentFontSize - _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
+                        var newHeight: number = this.currentFontSize + (_FontHeightMargin * 2) + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
 
                         // Draw a rectangle over the character that is being deleted
-                        _DrawingContext.fillStyle = _CANVAS_COLOR; // Color of the canvas
+                        _DrawingContext.fillStyle = _CANVAS_COLOR;
 
                         // X, Y, Width, Height
                         _DrawingContext.fillRect(this.currentXPosition, newY, offset, newHeight);
@@ -246,11 +246,10 @@ module TSOS {
         }
 
         // TODO Make this work with multiple lines
-        // TODO Increase veritcal height, as some punctuation characters are not being erased
         // Erases the contents of the current line in the console and moves the cursor back to the beginning
         public clearLine(): void {
-            var newY : number = this.currentYPosition - this.currentFontSize;
-            var newHeight : number = this.currentFontSize + _FontHeightMargin + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
+            var newY : number = this.currentYPosition - this.currentFontSize - _FontHeightMargin;
+            var newHeight : number = this.currentFontSize + (_FontHeightMargin * 2) + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
             var canvasWidth : number = _Canvas.width;
 
             _DrawingContext.fillStyle = _CANVAS_COLOR;
