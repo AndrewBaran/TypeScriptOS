@@ -41,7 +41,7 @@ Project 2 Checklist
 - [ ] As the programs executes, display Memory and the CPU status
 	PC, instruction reg, accumulator, X reg, Y reg, Z flag) in real time
 - [ ] Update and display the PCB contents at the end of the execution
-- [ ] Implement line-wrap in the CLI (no longer optional)
+- [x] Implement line-wrap in the CLI (no longer optional)
 - [ ] **Optional**: Provide the ability to single-step execution
 
 - [ ] Develop a PCB prototype and implement it in the **client OS**
