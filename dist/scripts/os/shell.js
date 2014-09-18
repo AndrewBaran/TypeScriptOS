@@ -76,7 +76,7 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
 
             // status <string>
-            sc = new TSOS.ShellCommand(this.shellStatus, "status", " - Display the status message of <string>.");
+            sc = new TSOS.ShellCommand(this.shellStatus, "status", " <string> - Display the status message of <string>.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs

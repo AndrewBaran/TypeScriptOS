@@ -97,7 +97,7 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
             // status <string>
-            sc = new ShellCommand(this.shellStatus, "status", " - Display the status message of <string>.");
+            sc = new ShellCommand(this.shellStatus, "status", " <string> - Display the status message of <string>.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -393,7 +393,7 @@ module TSOS {
 
         public shellLoad() {
             // Get text from the User Program Input textbox
-            var textInput = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
+            var textInput : string = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
 
             // Validate that the text input contains only hex characters and/or spaces
             var regExpPattern = /[a-f|A-F|0-9|\s]/;
