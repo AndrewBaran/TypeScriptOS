@@ -1,48 +1,92 @@
 /* TSOS.css */
 
-body {
-  background: #909193 url(../images/linen.png) repeat;
-  font-family: Helvetica, Verdana, Arial, sans-serif;
-  font-size: 12pt;
-  font-weight: normal;
-  font-style: normal;
+body 
+{
+	background: #909193 url(../images/linen.png) repeat;
+	font-family: Helvetica, Verdana, Arial, sans-serif;
+	font-size: 12pt;
+	font-weight: normal;
+	font-style: normal;
 }
 
-h1 {
-  color: black;
-  font-size: 24pt;
-  font-weight: normal;
-  font-style: normal;
-  border-bottom: 1px solid black;
+h1 
+{
+	color: black;
+	font-size: 24pt;
+	font-weight: normal;
+	font-style: normal;
+	border-bottom: 1px solid black;
 }
 
-h2 {
-  color: black;
-  font-size: 20pt;
-  font-weight: normal;
-  font-style: normal;
+h2 
+{
+	color: black;
+	font-size: 20pt;
+	font-weight: normal;
+	font-style: normal;
 }
 
-h3 {
-  font-family: Helvetica, Verdana, Arial, sans-serif;
-  font-size: 16pt;
-  font-weight: normal;
-  font-style: normal;
+h3 
+{
+	font-family: Helvetica, Verdana, Arial, sans-serif;
+	font-size: 16pt;
+	font-weight: normal;
+	font-style: normal;
 }
 
-#display {
-  background-color:#DFDBC3;
-  border: 2px solid red;
-  cursor: default;
+/* Container for content of page */
+#divMain
+{
+	width: 100%;
 }
 
-.normal_button {
-  width: 100px;
+/* Div containg Start, Halt, and Reset buttons*/
+#divButtonBar
+{
+	margin: 4px;
 }
 
-.footerText {
-  color: black;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 8pt;
-  text-align: center;
+/* Style for the buttons */
+.normal_button 
+{
+	width: 100px;
+}
+
+/* Div containing Canvas*/
+#divConsole
+{
+	margin: 4px;
+	width: 500px;
+	height: 500px;
+	float: left;
+}
+
+/* Canvas */
+#display 
+{
+	background-color:#DFDBC3;
+	border: 2px solid red;
+	cursor: default;
+}
+
+/* Host log for OS */
+#divLog
+{
+	margin-left: 520px;
+}
+
+/* Area for user program input of hex codes */
+#divUserProgramInput
+{
+	margin-left: 520px;
+}
+
+/* Div containing footer content*/
+.footerText 
+{
+	color: black;
+	clear: both;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 8pt;
+	text-align: center;
 }
