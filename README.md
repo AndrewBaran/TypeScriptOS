@@ -2,7 +2,10 @@ cOSmOS - Operating System
 =========================
 
 This is my Fall 2014 Operating Systems class project.
-See http://www.labouseur.com/courses/os/ for details.
+See [Alan's Website](http://www.labouseur.com/courses/os/) for details.
+
+[Access the OS](http://andrewbaran.github.io/TypeScriptOS/)
+===========================================================
 
 Project 1 Checklist
 ===================
