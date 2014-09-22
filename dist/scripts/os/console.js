@@ -96,13 +96,15 @@ var TSOS;
                 } else if (chr === "up") {
                     // Check if there are any more commands in history to recall
                     if (_OsShell.history.numItems > 0) {
-                        if (_OsShell.history.currentCommand >= 0 && _OsShell.history.currentCommand < _OsShell.history.numItems) {
-                            // Clear line and put prompt
+                        // Get index of previous command
+                        var previousCommand = _OsShell.history.currentCommand - 1;
+
+                        if (previousCommand >= 0 && previousCommand < _OsShell.history.numItems) {
                             this.clearLine();
                             _OsShell.putPrompt();
 
                             // Get previous command from history and print it
-                            var historyCommand = _OsShell.history.list[_OsShell.history.currentCommand];
+                            var historyCommand = _OsShell.history.list[previousCommand];
                             this.putText(historyCommand);
 
                             // Move to previous command
@@ -115,10 +117,10 @@ var TSOS;
                 } else if (chr === "down") {
                     // Check if there are any more commands in history to recall
                     if (_OsShell.history.numItems > 0) {
+                        // Get index of next command
                         var nextCommand = _OsShell.history.currentCommand + 1;
 
                         if (nextCommand >= 0 && nextCommand < _OsShell.history.numItems) {
-                            // Clear line and put prompt
                             this.clearLine();
                             _OsShell.putPrompt();
 
@@ -136,6 +138,7 @@ var TSOS;
                 } else if (chr === String.fromCharCode(9)) {
                     // Don't autocomplete for an empty buffer
                     if (this.buffer.length > 0) {
+                        // Scoping rules are only function wide, so this does not create a local variable
                         var suggestedCommand = _OsShell.findMatch(this.buffer);
                     }
 

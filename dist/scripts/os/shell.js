@@ -187,7 +187,7 @@ var TSOS;
             this.history.numItems++;
 
             // Move current command cursor to latest item
-            this.history.currentCommand = this.history.list.length - 1;
+            this.history.currentCommand = this.history.list.length;
         };
 
         // Finds a potential match for the current string in the buffer

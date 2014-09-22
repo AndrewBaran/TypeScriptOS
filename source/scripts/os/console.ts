@@ -103,22 +103,22 @@ module TSOS {
                     }
                 }
 
-                // TODO Going from up arrow to down arrow causes same command to appear.
-                // TODO Fix by starting search from history.numItems (1 beyond) and look backwards/forwarding before decrementing/incrementing currentCommand, then get the command
                 // Up arrow
                 else if(chr === "up") {
 
                     // Check if there are any more commands in history to recall
                     if(_OsShell.history.numItems > 0) {
 
-                        if(_OsShell.history.currentCommand >= 0 && _OsShell.history.currentCommand < _OsShell.history.numItems) {
+                    	// Get index of previous command
+                    	var previousCommand : number = _OsShell.history.currentCommand - 1;
 
-                        	// Clear line and put prompt
+                        if(previousCommand >= 0 && previousCommand < _OsShell.history.numItems) {
+
                             this.clearLine();
                             _OsShell.putPrompt();
 
                             // Get previous command from history and print it
-                            var historyCommand : string = _OsShell.history.list[_OsShell.history.currentCommand];
+                            var historyCommand : string = _OsShell.history.list[previousCommand];
                             this.putText(historyCommand);
 
                             // Move to previous command
@@ -136,11 +136,11 @@ module TSOS {
                     // Check if there are any more commands in history to recall
                     if(_OsShell.history.numItems > 0) {
 
+                    	// Get index of next command
                     	var nextCommand : number = _OsShell.history.currentCommand + 1;
 
                         if(nextCommand >= 0 && nextCommand < _OsShell.history.numItems) {
 
-                        	// Clear line and put prompt
                         	this.clearLine();
                         	_OsShell.putPrompt();
 
@@ -162,7 +162,9 @@ module TSOS {
 
                     // Don't autocomplete for an empty buffer
                     if(this.buffer.length > 0) {
-                	   var suggestedCommand: string = _OsShell.findMatch(this.buffer);
+
+                    	// Scoping rules are only function wide, so this does not create a local variable
+                		var suggestedCommand: string = _OsShell.findMatch(this.buffer);
                     }
 
                 	// Check if a match was found
