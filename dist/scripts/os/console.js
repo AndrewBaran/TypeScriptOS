@@ -8,17 +8,19 @@ Note: This is not the Shell.  The Shell is the "command line interface" (CLI) or
 var TSOS;
 (function (TSOS) {
     var Console = (function () {
-        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer) {
+        function Console(currentFont, currentFontSize, currentXPosition, currentYPosition, buffer, endingXPositions) {
             if (typeof currentFont === "undefined") { currentFont = _DefaultFontFamily; }
             if (typeof currentFontSize === "undefined") { currentFontSize = _DefaultFontSize; }
             if (typeof currentXPosition === "undefined") { currentXPosition = 0; }
             if (typeof currentYPosition === "undefined") { currentYPosition = _DefaultFontSize; }
             if (typeof buffer === "undefined") { buffer = ""; }
+            if (typeof endingXPositions === "undefined") { endingXPositions = []; }
             this.currentFont = currentFont;
             this.currentFontSize = currentFontSize;
             this.currentXPosition = currentXPosition;
             this.currentYPosition = currentYPosition;
             this.buffer = buffer;
+            this.endingXPositions = endingXPositions;
         }
         Console.prototype.init = function () {
             this.clearScreen();
@@ -48,6 +50,9 @@ var TSOS;
                         _OsShell.addHistory(this.buffer);
                     }
 
+                    // Clear the lastXPosition buffer
+                    this.endingXPositions = [];
+
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
@@ -61,10 +66,22 @@ var TSOS;
 
                         var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastCharacter);
 
+                        // HACK: Using -5 as some character slightly extend beyond 0 (left side of Canvas) when moving their X-position back
+                        // Backspace at beginning of line; move to previous line
+                        if ((this.currentXPosition - offset) < -5) {
+                            // Move up a line
+                            this.retreatLine();
+
+                            // Move currentXPosition back to end of line
+                            this.currentXPosition = this.endingXPositions.pop();
+                        }
+
                         // Move cursor back one character
                         this.currentXPosition -= offset;
 
+                        // Calculate new Y-Position using last character
                         var newY = this.currentYPosition - this.currentFontSize - _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
+
                         var newHeight = this.currentFontSize + (_FontHeightMargin * 2) + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
 
                         // Draw a rectangle over the character that is being deleted
@@ -164,6 +181,9 @@ var TSOS;
                         // Check if character extends beyond the canvas
                         var newOffset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, currentChar);
                         if ((this.currentXPosition + newOffset) > _Canvas.width) {
+                            // Remember the previous character
+                            this.endingXPositions.push(this.currentXPosition);
+
                             // Move to next line
                             this.advanceLine();
                         }
@@ -202,6 +222,13 @@ var TSOS;
                 // Move prompt up 1 line
                 this.currentYPosition -= newLineHeight;
             }
+        };
+
+        // Moves up one line in the console (used when backspacing multiple lines)
+        Console.prototype.retreatLine = function () {
+            var newLineHeight = _DefaultFontSize + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) + _FontHeightMargin;
+
+            this.currentYPosition -= newLineHeight;
         };
 
         // TODO Make this work with multiple lines

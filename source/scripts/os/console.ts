@@ -17,7 +17,8 @@ module TSOS {
                     public currentFontSize = _DefaultFontSize,
                     public currentXPosition = 0,
                     public currentYPosition = _DefaultFontSize,
-                    public buffer = "") {
+                    public buffer = "",
+                    public endingXPositions : number[] = []) {
 
         }
 
@@ -52,6 +53,9 @@ module TSOS {
                         _OsShell.addHistory(this.buffer);
                     }
 
+                    // Clear the lastXPosition buffer
+                    this.endingXPositions = [];
+
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
@@ -64,14 +68,28 @@ module TSOS {
 
                     // Backspace if the buffer is not empty
                     if(this.buffer.length > 0) {
+
                         var lastCharacter : string = this.buffer[this.buffer.length - 1];
 
                         var offset = _DrawingContext.measureText(this.currentFont, this.currentFontSize, lastCharacter);
                        
-                        // Move cursor back one character
-                        this.currentXPosition -= offset;
+                    	// HACK: Using -5 as some character slightly extend beyond 0 (left side of Canvas) when moving their X-position back
+                    	// Backspace at beginning of line; move to previous line
+                        if((this.currentXPosition - offset) < -5) {
 
-                        var newY : number = this.currentYPosition - this.currentFontSize - _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
+                            // Move up a line
+                            this.retreatLine();
+
+                            // Move currentXPosition back to end of line
+                            this.currentXPosition = this.endingXPositions.pop();
+                        }
+
+                        // Move cursor back one character
+                       	this.currentXPosition -= offset;
+
+                       	// Calculate new Y-Position using last character
+                        var newY: number = this.currentYPosition - this.currentFontSize - _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
+
                         var newHeight: number = this.currentFontSize + (_FontHeightMargin * 2) + _DrawingContext.fontDescent(this.currentFont, this.currentFontSize);
 
                         // Draw a rectangle over the character that is being deleted
@@ -200,6 +218,10 @@ module TSOS {
                 		// Check if character extends beyond the canvas
                 		var newOffset : number = _DrawingContext.measureText(this.currentFont, this.currentFontSize, currentChar);
                 		if((this.currentXPosition + newOffset) > _Canvas.width) {
+
+                            // Remember the previous character
+                            this.endingXPositions.push(this.currentXPosition);
+
                 			// Move to next line
                 			this.advanceLine();
                 		}
@@ -243,6 +265,15 @@ module TSOS {
             	this.currentYPosition -= newLineHeight;
             }
 
+        }
+
+        // Moves up one line in the console (used when backspacing multiple lines)
+        public retreatLine() : void {
+        	var newLineHeight : number = _DefaultFontSize + 
+                                _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
+                   				_FontHeightMargin;
+
+            this.currentYPosition -= newLineHeight;     		
         }
 
         // TODO Make this work with multiple lines
