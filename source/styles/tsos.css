@@ -90,3 +90,20 @@ h3
 	font-size: 8pt;
 	text-align: center;
 }
+
+/* Div containing the table of main memory */
+#divMainMemory
+{
+
+}
+
+/* Table containing main memory data structure */
+#mainMemory
+{
+	border: 1px solid black;
+}
+
+#mainMemory td
+{
+	border: 1px solid black;
+}

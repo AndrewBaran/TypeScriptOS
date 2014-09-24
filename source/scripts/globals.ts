@@ -22,6 +22,16 @@ interface Constants {
 
 var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1};
 
+interface MemoryConstants {
+	PROCESS_SIZE: number;
+	NUM_COLUMNS: number;
+	NUM_ROWS: number;
+}
+
+// TODO Figure out number of rows
+var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_COLUMNS: 9, NUM_ROWS: 10};
+
+
 // My Globals
 var _MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -31,10 +41,12 @@ var _CANVAS_COLOR : string = "#DFDBC3";
 // Global Variables
 //
 var _CPU: TSOS.Cpu;  // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
-
 var _OSclock: number = 0;  // Page 23.
 
 var _Mode: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
+
+// TODO Do I want this or just a static memory data structure?
+var _Memory: TSOS.Memory; // Main memory data structure
 
 var _Canvas: HTMLCanvasElement = null;  // Initialized in hostInit().
 var _DrawingContext = null;             // Initialized in hostInit().

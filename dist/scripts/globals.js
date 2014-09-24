@@ -8,6 +8,9 @@ Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 
 
 var _Constants = { APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1 };
 
+// TODO Figure out number of rows
+var _MemoryConstants = { PROCESS_SIZE: 256, NUM_COLUMNS: 9, NUM_ROWS: 10 };
+
 // My Globals
 var _MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -17,10 +20,12 @@ var _CANVAS_COLOR = "#DFDBC3";
 // Global Variables
 //
 var _CPU;
-
 var _OSclock = 0;
 
 var _Mode = 0;
+
+// TODO Do I want this or just a static memory data structure?
+var _Memory;
 
 var _Canvas = null;
 var _DrawingContext = null;
