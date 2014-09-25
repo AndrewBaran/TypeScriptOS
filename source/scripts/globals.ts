@@ -29,7 +29,7 @@ interface MemoryConstants {
 }
 
 // TODO 64 rows seems enough?
-var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 64, NUM_COLUMNS: 9};
+var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 64, NUM_COLUMNS: 8};
 
 
 // My Globals
@@ -45,7 +45,6 @@ var _OSclock: number = 0;  // Page 23.
 
 var _Mode: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
 
-// TODO Do I want this or just a static memory data structure?
 var _Memory: TSOS.Memory; // Main memory data structure
 
 var _Canvas: HTMLCanvasElement = null;  // Initialized in hostInit().

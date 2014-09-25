@@ -86,7 +86,7 @@ h3
 {
 	height: 200px;
 	width: 300px;
-	margin-right: 700px;
+	margin-right: 100px;
 	overflow: auto;
 	float: right;
 }
@@ -105,7 +105,7 @@ h3
 /* Div containing table of the CPU status values */
 #divCPUStatus
 {
-
+	
 }
 
 /* Table containing CPU status values */

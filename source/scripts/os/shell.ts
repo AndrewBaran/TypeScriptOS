@@ -400,19 +400,44 @@ module TSOS {
             var validInput : boolean = true;
 
             // Loop through input, testing regExpPattern against each character
-            for(var i = 0; i < textInput.length; i++) {
+            for(var i: number = 0; i < textInput.length; i++) {
                 if(!regExpPattern.test(textInput[i])) {
                     validInput = false;
                     break;
                 }
             }
 
-            if(validInput) {
-                _StdOut.putText("Valid program input.");
+            // Valid hex
+            if(validInput && textInput.length > 0) {
+
+                // Split input into bytes (2 hex digits each)
+                var byteList: string[] = textInput.split(" ");
+                console.log(byteList);
+
+                // Check if they are nibble pairs
+                for(var j: number = 0; j < byteList.length; j++) {
+                	if(byteList[j].length != 2) {
+                		validInput = false;
+                	}
+                }
+
+                if(validInput) {
+
+                	// Load program into memory at $0000
+                	// TODO Change to dynamically load into an available location
+                	_Memory.loadProgram(byteList, 0);
+
+                	_StdOut.putText("Valid program input. Program loaded.");
+                }
+
+                else {
+                	_StdOut.putText("Invalid program input. Invalid number of hex digits.")
+                }
+
             }
 
             else {
-                _StdOut.putText("Error: Invalid program input.");
+                _StdOut.putText("Error: Invalid program input. Only hex digits allowed.");
             }
 
         }

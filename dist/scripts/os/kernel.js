@@ -36,11 +36,10 @@ var TSOS;
             this.krnTrace(_krnKeyboardDriver.status);
 
             // Initialize and display memory
-            TSOS.Memory.initializeMemory();
+            _Memory = new TSOS.Memory();
+            TSOS.Display.displayMemory();
 
-            // TODO Add display here from
-            // TSOS.Display.displayMemory();
-            // Initialize and display CPU status
+            // Display CPU status
             TSOS.Display.displayCPU();
 
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
