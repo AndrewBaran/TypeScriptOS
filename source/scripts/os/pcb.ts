@@ -1,6 +1,7 @@
 module TSOS {
 	export class PCB {
 
+		// TODO Probably need additional fields
 		// Fields
 		public processID: number;
 		public baseRegister: number;
@@ -12,7 +13,6 @@ module TSOS {
 		public Yreg: number;
 		public Zflag: number;
 		public isExecuting: boolean;
-
 
 
 		// Constructor

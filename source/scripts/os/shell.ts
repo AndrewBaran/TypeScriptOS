@@ -100,6 +100,10 @@ module TSOS {
             sc = new ShellCommand(this.shellStatus, "status", " <string> - Display the status message of <string>.");
             this.commandList[this.commandList.length] = sc;
 
+            // run <pid>
+            sc = new ShellCommand(this.shellRun, "run", " <pid> - Runs the program <pid> in memory.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -452,6 +456,33 @@ module TSOS {
 
                 // Update display with new status value
                 document.getElementById("statusDisplay").innerHTML = statusString;
+            }
+
+        }
+
+        // TODO Implement
+        public shellRun(args) {
+
+            console.log("In shellRun");
+
+            if(args.length != 1) {
+                _StdOut.putText("Usage: run <pid> Please supply a program ID");
+            }
+
+            var processID: number = parseInt(args[0], 10);
+            console.log("ProcessID = " + processID);
+
+            if(processID >= 0 && processID < _PCBList.length) {
+
+                console.log("Valid process ID. Run the program");
+
+                // Clear the memory of program after execution
+                _Memory.clearMemory();
+                TSOS.Display.displayMemory();
+            }
+
+            else {
+                _StdOut.putText("Error: Invalid process ID");
             }
 
         }
