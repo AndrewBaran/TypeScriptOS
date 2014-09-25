@@ -14,7 +14,7 @@ var TSOS;
             for (var i = 0; i < 2; i++) {
                 var newRow = cpuInfoTable.insertRow(i);
 
-                for (var j = 0; j < 5; j++) {
+                for (var j = 0; j < 6; j++) {
                     var newCell = newRow.insertCell(j);
                     var value = "";
 

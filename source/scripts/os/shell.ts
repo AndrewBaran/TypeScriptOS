@@ -412,7 +412,6 @@ module TSOS {
 
                 // Split input into bytes (2 hex digits each)
                 var byteList: string[] = textInput.split(" ");
-                console.log(byteList);
 
                 // Check if they are nibble pairs
                 for(var j: number = 0; j < byteList.length; j++) {
@@ -426,8 +425,6 @@ module TSOS {
                 	// Load program into memory at $0000
                 	// TODO Change to dynamically load into an available location
                 	_Memory.loadProgram(byteList, 0);
-
-                	_StdOut.putText("Valid program input. Program loaded.");
                 }
 
                 else {

@@ -34,9 +34,9 @@ Project 2 Checklist
 
 - [x] Modify the load command to copy the 6502a machine language op codes into main memory
 	- [x] Put the code at location $0000 in memory
-	- [ ] Assign a Process ID (PID)
-	- [ ] Create a Process Control Block (PCB)
-	- [ ] Return the PID to the console
+	- [x] Assign a Process ID (PID)
+	- [x] Create a Process Control Block (PCB)
+	- [x] Return the PID to the console
 - [ ] Add a shell command, run <pid>, to run a program already in memory (user should be able to execute many load/run cycles)
 - [ ] Execute the running program (including displaying any output)
 	Note: Be sure to synchronize the CPU execution cycles with clock ticks

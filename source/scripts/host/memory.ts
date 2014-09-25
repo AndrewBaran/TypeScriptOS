@@ -48,11 +48,11 @@ module TSOS {
 			var startingRow: number = baseAddress % _MemoryConstants.BYTES_PER_ROW;
 			var endingRow: number = startingRow + Math.floor(byteList.length / _MemoryConstants.BYTES_PER_ROW);
 
-			for(; startingRow < (endingRow + 1); startingRow++) {
+			for(; startingRow <= endingRow; startingRow++) {
 				for(var colNumber: number = 0; colNumber < _MemoryConstants.NUM_COLUMNS; colNumber++) {
 
 					var index: number = (startingRow * _MemoryConstants.BYTES_PER_ROW) + colNumber;
-					
+
 					if(index < byteList.length) {
 						_Memory.memoryList[startingRow][colNumber] = byteList[index];
 					}
@@ -63,8 +63,18 @@ module TSOS {
 			TSOS.Display.displayMemory();
 
 			// TODO Create a PCB and print the process ID
+			var newPCB: TSOS.PCB = new PCB(processNumber,
+											baseAddress,
+											limitAddress,
+											_CPU.PC,
+											_CPU.Acc,
+											_CPU.Xreg,
+											_CPU.Yreg,
+											_CPU.Zflag,
+											_CPU.isExecuting);
+			_PCBList.push(newPCB);
 
+			_StdOut.putText("Program loaded | PID " + processNumber + " created");
 		}
-
 	}
 }

@@ -16,7 +16,7 @@ module TSOS {
 
 				var newRow = <HTMLTableRowElement>cpuInfoTable.insertRow(i);
 
-				for(var j: number = 0; j < 5; j++) {
+				for(var j: number = 0; j < 6; j++) {
 
 					var newCell = newRow.insertCell(j);
 					var value: string = "";

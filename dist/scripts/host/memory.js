@@ -35,7 +35,7 @@ var TSOS;
             var startingRow = baseAddress % _MemoryConstants.BYTES_PER_ROW;
             var endingRow = startingRow + Math.floor(byteList.length / _MemoryConstants.BYTES_PER_ROW);
 
-            for (; startingRow < (endingRow + 1); startingRow++) {
+            for (; startingRow <= endingRow; startingRow++) {
                 for (var colNumber = 0; colNumber < _MemoryConstants.NUM_COLUMNS; colNumber++) {
                     var index = (startingRow * _MemoryConstants.BYTES_PER_ROW) + colNumber;
 
@@ -47,7 +47,12 @@ var TSOS;
 
             // Reload memory display
             TSOS.Display.displayMemory();
+
             // TODO Create a PCB and print the process ID
+            var newPCB = new TSOS.PCB(processNumber, baseAddress, limitAddress, _CPU.PC, _CPU.Acc, _CPU.Xreg, _CPU.Yreg, _CPU.Zflag, _CPU.isExecuting);
+            _PCBList.push(newPCB);
+
+            _StdOut.putText("Program loaded | PID " + processNumber + " created");
         };
         return Memory;
     })();
