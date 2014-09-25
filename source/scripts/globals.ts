@@ -29,7 +29,7 @@ interface MemoryConstants {
 }
 
 // TODO Figure out number of rows
-var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_COLUMNS: 9, NUM_ROWS: 10};
+var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 40, NUM_COLUMNS: 9};
 
 
 // My Globals
