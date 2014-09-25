@@ -32,8 +32,6 @@ module TSOS {
 
 				// Loop through all of memory, making the values the empty string ""
 				for(var i: number = 0; i < _MemoryConstants.NUM_ROWS; i++) {
-
-					// Skip over the 1st column in each row (this containg memory address of starting byte
 					for(var j: number = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
 						this.memoryList[i][j] = "00";
 					}
@@ -47,15 +45,25 @@ module TSOS {
 			var baseAddress: number = processNumber * _MemoryConstants.PROCESS_SIZE;
 			var limitAddress: number = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
 
-			console.log("Base = " + baseAddress);
-			console.log("Limit = " + limitAddress);
+			var startingRow: number = baseAddress % _MemoryConstants.BYTES_PER_ROW;
+			var endingRow: number = startingRow + Math.floor(byteList.length / _MemoryConstants.BYTES_PER_ROW);
 
+			for(; startingRow < (endingRow + 1); startingRow++) {
+				for(var colNumber: number = 0; colNumber < _MemoryConstants.NUM_COLUMNS; colNumber++) {
 
-			for(var i: number = 0; i < _MemoryConstants.NUM_ROWS; i++) {
-				for(var j: number = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
-
+					var index: number = (startingRow * _MemoryConstants.BYTES_PER_ROW) + colNumber;
+					
+					if(index < byteList.length) {
+						_Memory.memoryList[startingRow][colNumber] = byteList[index];
+					}
 				}
-			} 
+			}
+
+			// Reload memory display
+			TSOS.Display.displayMemory();
+
+			// TODO Create a PCB and print the process ID
+
 		}
 
 	}

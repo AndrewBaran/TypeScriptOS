@@ -32,13 +32,22 @@ var TSOS;
             var baseAddress = processNumber * _MemoryConstants.PROCESS_SIZE;
             var limitAddress = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
 
-            console.log("Base = " + baseAddress);
-            console.log("Limit = " + limitAddress);
+            var startingRow = baseAddress % _MemoryConstants.BYTES_PER_ROW;
+            var endingRow = startingRow + Math.floor(byteList.length / _MemoryConstants.BYTES_PER_ROW);
 
-            for (var i = 0; i < _MemoryConstants.NUM_ROWS; i++) {
-                for (var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
+            for (; startingRow < (endingRow + 1); startingRow++) {
+                for (var colNumber = 0; colNumber < _MemoryConstants.NUM_COLUMNS; colNumber++) {
+                    var index = (startingRow * _MemoryConstants.BYTES_PER_ROW) + colNumber;
+
+                    if (index < byteList.length) {
+                        _Memory.memoryList[startingRow][colNumber] = byteList[index];
+                    }
                 }
             }
+
+            // Reload memory display
+            TSOS.Display.displayMemory();
+            // TODO Create a PCB and print the process ID
         };
         return Memory;
     })();

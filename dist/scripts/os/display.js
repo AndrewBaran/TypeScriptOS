@@ -41,7 +41,7 @@ var TSOS;
             for (var rowNumber = 0; rowNumber < _MemoryConstants.NUM_ROWS; rowNumber++) {
                 var newRow = memoryTable.insertRow(rowNumber);
 
-                for (var columnNumber = 0; columnNumber < _MemoryConstants.NUM_COLUMNS; columnNumber++) {
+                for (var columnNumber = 0; columnNumber < _MemoryConstants.NUM_COLUMNS + 1; columnNumber++) {
                     var cell = newRow.insertCell(columnNumber);
 
                     // First cell in the row; put the hex memory address
@@ -60,7 +60,7 @@ var TSOS;
 
                         cell.innerHTML = hexValue;
                     } else {
-                        var cellValue = _Memory.memoryList[rowNumber][columnNumber];
+                        var cellValue = _Memory.memoryList[rowNumber][columnNumber - 1];
                         cell.innerHTML = cellValue;
                     }
                 }

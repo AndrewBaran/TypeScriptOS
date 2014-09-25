@@ -32,8 +32,8 @@ Project 1 Checklist
 Project 2 Checklist
 ===================
 
-- [ ] Modify the load command to copy the 6502a machine language op codes into main memory
-	- [ ] Put the code at location $0000 in memory
+- [x] Modify the load command to copy the 6502a machine language op codes into main memory
+	- [x] Put the code at location $0000 in memory
 	- [ ] Assign a Process ID (PID)
 	- [ ] Create a Process Control Block (PCB)
 	- [ ] Return the PID to the console

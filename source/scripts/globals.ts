@@ -26,10 +26,11 @@ interface MemoryConstants {
 	PROCESS_SIZE: number;
 	NUM_COLUMNS: number;
 	NUM_ROWS: number;
+	BYTES_PER_ROW: number;
 }
 
 // TODO 64 rows seems enough?
-var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 64, NUM_COLUMNS: 8};
+var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 64, NUM_COLUMNS: 8, BYTES_PER_ROW: 8};
 
 
 // My Globals

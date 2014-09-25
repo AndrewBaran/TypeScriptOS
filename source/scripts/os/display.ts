@@ -55,7 +55,7 @@ module TSOS {
 
 				var newRow = <HTMLTableRowElement>memoryTable.insertRow(rowNumber);
 
-				for(var columnNumber: number = 0; columnNumber < _MemoryConstants.NUM_COLUMNS; columnNumber++) {
+				for(var columnNumber: number = 0; columnNumber < _MemoryConstants.NUM_COLUMNS + 1; columnNumber++) {
 
 					var cell = newRow.insertCell(columnNumber);
 
@@ -81,7 +81,7 @@ module TSOS {
 					// Regular cell
 					else {
 
-						var cellValue: string = _Memory.memoryList[rowNumber][columnNumber];
+						var cellValue: string = _Memory.memoryList[rowNumber][columnNumber - 1];
 						cell.innerHTML = cellValue;
 					}
 
