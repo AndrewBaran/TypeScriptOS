@@ -50,10 +50,6 @@ module TSOS {
                 _GLaDOS = new Glados();
                 _GLaDOS.init();
             }
-
-            // TODO Is this the correct location to create this?
-            // Populate and display the main memory table
-            TSOS.Memory.initializeMemory();
         }
 
         public static hostLog(msg: string, source: string = "?"): void {

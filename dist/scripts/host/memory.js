@@ -1,27 +1,51 @@
+// TODO Should this be in the OS folder?
 var TSOS;
 (function (TSOS) {
     var Memory = (function () {
         function Memory() {
         }
         Memory.initializeMemory = function () {
-            // TODO Not working
-            // TSOS.Memory.clearMemory();
-            // Get the table id
-            var memoryTable = document.getElementById("mainMemory");
-            console.log(memoryTable);
-
+            TSOS.Memory.memoryList = new Array(_MemoryConstants.NUM_ROWS);
             for (var i = 0; i < _MemoryConstants.NUM_ROWS; i++) {
-                // Create a new row
-                var row = memoryTable.insertRow(i);
+                TSOS.Memory.memoryList[i] = new Array(_MemoryConstants.NUM_COLUMNS);
+            }
 
-                for (var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
-                    // Create a new cell for each cell at position j
-                    var cell = row.insertCell(j);
+            TSOS.Memory.clearMemory();
+
+            // Display memory view in browser
+            // TODO move this to Display.ts
+            TSOS.Memory.displayMemory();
+        };
+
+        // Takes an optional parameter that clears a specific part of memory; otherwise, clear all memory
+        Memory.clearMemory = function (sector) {
+            if (typeof sector === "undefined") { sector = -1; }
+            // TODO Implement
+            // Clear specific sector of memory
+            if (sector >= 0) {
+            } else {
+                for (var i = 0; i < _MemoryConstants.NUM_ROWS; i++) {
+                    for (var j = 1; j < _MemoryConstants.NUM_COLUMNS; j++) {
+                        TSOS.Memory.memoryList[i][j] = "00";
+                    }
+                }
+            }
+        };
+
+        // Displays the (potentially updated) view of the memory in the browser
+        Memory.displayMemory = function () {
+            var memoryTable = document.getElementById("mainMemory");
+
+            for (var rowNumber = 0; rowNumber < _MemoryConstants.NUM_ROWS; rowNumber++) {
+                var newRow = memoryTable.insertRow(rowNumber);
+
+                for (var columnNumber = 0; columnNumber < _MemoryConstants.NUM_COLUMNS; columnNumber++) {
+                    var cell = newRow.insertCell(columnNumber);
 
                     // First cell in the row; put the hex memory address
-                    if (j === 0) {
+                    if (columnNumber === 0) {
                         // Multiply row number by 8 (each cell is a byte; 8 bytes per row)
-                        var decimalValue = i * 8;
+                        var decimalValue = rowNumber * 8;
                         var hexValue = decimalValue.toString(16);
 
                         var stringLength = hexValue.length;
@@ -34,34 +58,11 @@ var TSOS;
 
                         cell.innerHTML = hexValue;
                     } else {
-                        // Get value from 2d-array of memory and put it here
-                        // TODO
-                        cell.innerHTML = "FF";
+                        var cellValue = TSOS.Memory.memoryList[rowNumber][columnNumber];
+                        cell.innerHTML = cellValue;
                     }
                 }
             }
-        };
-
-        // Takes an optional parameter that clears a specific part of memory; otherwise, clear all memory
-        Memory.clearMemory = function (sector) {
-            if (typeof sector === "undefined") { sector = -1; }
-            console.log("In clearMemory()");
-
-            // TODO Implement
-            // Clear specific sector of memory
-            if (sector >= 0) {
-            } else {
-                for (var i = 0; i < _MemoryConstants.NUM_ROWS; i++) {
-                    for (var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
-                        TSOS.Memory.memoryList[i][j] = "";
-                    }
-                }
-            }
-        };
-
-        // TODO I feel like I need this
-        Memory.displayMemory = function () {
-            console.log("In displayMemory()");
         };
         return Memory;
     })();

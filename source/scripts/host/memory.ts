@@ -1,3 +1,5 @@
+// TODO Should this be in the OS folder?
+
 module TSOS {
 
 	export class Memory {
@@ -7,30 +9,61 @@ module TSOS {
 
 		public static initializeMemory() : void {
 
-			// TODO Not working
-			// TSOS.Memory.clearMemory();
+			TSOS.Memory.memoryList = new Array(_MemoryConstants.NUM_ROWS);
+			for(var i: number = 0; i < _MemoryConstants.NUM_ROWS; i++) {
+				TSOS.Memory.memoryList[i] = new Array(_MemoryConstants.NUM_COLUMNS);
+			}
 
-			// Get the table id
+			TSOS.Memory.clearMemory();
+
+			// Display memory view in browser
+			// TODO move this to Display.ts
+			TSOS.Memory.displayMemory();
+
+		}
+
+		// Takes an optional parameter that clears a specific part of memory; otherwise, clear all memory
+		public static clearMemory(sector: number = -1) {
+
+			// TODO Implement
+			// Clear specific sector of memory
+			if(sector >= 0) {
+
+			}
+
+			// Clear all of memory
+			else {
+
+				// Loop through all of memory, making the values the empty string ""
+				for(var i: number = 0; i < _MemoryConstants.NUM_ROWS; i++) {
+
+					// Skip over the 1st column in each row (this containg memory address of starting byte
+					for(var j: number = 1; j < _MemoryConstants.NUM_COLUMNS; j++) {
+						TSOS.Memory.memoryList[i][j] = "00";
+					}
+				}
+			} // End else
+		} // End clearMemory()
+
+		// Displays the (potentially updated) view of the memory in the browser
+		public static displayMemory() {
+
 			var memoryTable = <HTMLTableElement>document.getElementById("mainMemory");
-			console.log(memoryTable);
 
 			// Display memory in window
-			// TODO Probably can refactor to another method. createDisplay()?
-			for(var i: number = 0; i < _MemoryConstants.NUM_ROWS; i++) {
+			for(var rowNumber: number = 0; rowNumber < _MemoryConstants.NUM_ROWS; rowNumber++) {
 
-				// Create a new row
-				var row = <HTMLTableRowElement>memoryTable.insertRow(i);
+				var newRow = <HTMLTableRowElement>memoryTable.insertRow(rowNumber);
 
-				for(var j: number = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
+				for(var columnNumber: number = 0; columnNumber < _MemoryConstants.NUM_COLUMNS; columnNumber++) {
 
-					// Create a new cell for each cell at position j
-					var cell = row.insertCell(j);
+					var cell = newRow.insertCell(columnNumber);
 
 					// First cell in the row; put the hex memory address
-					if(j === 0) {
+					if(columnNumber === 0) {
 
 						// Multiply row number by 8 (each cell is a byte; 8 bytes per row)
-						var decimalValue: number = i * 8;
+						var decimalValue: number = rowNumber * 8;
 						var hexValue: string = decimalValue.toString(16);
 
 						var stringLength: number = hexValue.length;
@@ -45,46 +78,16 @@ module TSOS {
 						cell.innerHTML = hexValue;
 					}
 
-					// Regular ole cell
+					// Regular cell
 					else {
 
-						// Get value from 2d-array of memory and put it here
-						// TODO
-						cell.innerHTML = "FF";
+						var cellValue: string = TSOS.Memory.memoryList[rowNumber][columnNumber];
+						cell.innerHTML = cellValue;
 					}
 
-				}
-			}
-		}
+				} // Inner for
+			} // Outer for
 
-		// Takes an optional parameter that clears a specific part of memory; otherwise, clear all memory
-		public static clearMemory(sector: number = -1) {
-
-			console.log("In clearMemory()");
-
-			// TODO Implement
-			// Clear specific sector of memory
-			if(sector >= 0) {
-
-			}
-
-			// Clear all of memory
-			else {
-
-				// Loop through all of memory, making the values the empty string ""
-				for(var i: number = 0; i < _MemoryConstants.NUM_ROWS; i++) {
-					for(var j: number = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
-						TSOS.Memory.memoryList[i][j] = "";
-					}
-				}
-			} // End else
-		} // End clearMemory()
-
-		// TODO I feel like I need this
-		public static displayMemory() {
-
-			console.log("In displayMemory()");
-
-		} // End displayMemory()
+		} // displayMemory()
 	}
 }

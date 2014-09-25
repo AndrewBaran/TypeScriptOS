@@ -8,8 +8,8 @@ Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 
 
 var _Constants = { APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1 };
 
-// TODO Figure out number of rows
-var _MemoryConstants = { PROCESS_SIZE: 256, NUM_ROWS: 40, NUM_COLUMNS: 9 };
+// TODO 64 rows seems enough?
+var _MemoryConstants = { PROCESS_SIZE: 256, NUM_ROWS: 64, NUM_COLUMNS: 9 };
 
 // My Globals
 var _MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

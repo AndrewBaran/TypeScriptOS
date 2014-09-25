@@ -27,6 +27,7 @@
    <script type="text/javascript" src="dist/scripts/os/shell.js"></script>
    <script type="text/javascript" src="dist/scripts/os/shellCommand.js"></script>
    <script type="text/javascript" src="dist/scripts/os/userCommand.js"></script>
+   <script type="text/javascript" src="dist/scripts/os/display.js"></script>
    <script type="text/javascript" src="dist/scripts/os/kernel.js"></script>
 
    <!-- Other Routines -->
@@ -75,6 +76,11 @@
 	  	</canvas>
 	</div>
 
+	<div id="divMainMemory">
+		<table id="mainMemory">
+		</table>
+	</div>
+
 	<div id="divLog">
 	  	<label>
 		Host Log:
@@ -108,11 +114,10 @@
 				   		rows="8"
 				   		cols="48"></textarea>
 		</label>
-		</div>
+	</div>
 
-	<div id="divMainMemory">
-		<table id="mainMemory">
-
+	<div id="divCPUStatus">
+		<table id="cpuStatus">
 		</table>
 	</div>
 

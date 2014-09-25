@@ -85,7 +85,10 @@ h3
 #divMainMemory
 {
 	height: 200px;
+	width: 300px;
+	margin-right: 700px;
 	overflow: auto;
+	float: right;
 }
 
 /* Table containing main memory data structure */
@@ -95,6 +98,23 @@ h3
 }
 
 #mainMemory td
+{
+	border: 1px solid black;
+}
+
+/* Div containing table of the CPU status values */
+#divCPUStatus
+{
+
+}
+
+/* Table containing CPU status values */
+#cpuStatus
+{
+	border: 1px solid black;
+}
+
+#cpuStatus td
 {
 	border: 1px solid black;
 }

@@ -28,12 +28,12 @@ interface MemoryConstants {
 	NUM_ROWS: number;
 }
 
-// TODO Figure out number of rows
-var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 40, NUM_COLUMNS: 9};
+// TODO 64 rows seems enough?
+var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 64, NUM_COLUMNS: 9};
 
 
 // My Globals
-var _MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+var _MONTH_NAMES: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 var _CANVAS_COLOR : string = "#DFDBC3";
 
