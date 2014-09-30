@@ -7,27 +7,18 @@ var TSOS;
         Display.displayCPU = function () {
             var cpuInfoTable = document.getElementById("cpuStatus");
 
-            while (cpuInfoTable.rows.length > 0) {
+            while (cpuInfoTable.rows.length > 2) {
                 cpuInfoTable.deleteRow(-1);
             }
 
-            for (var i = 0; i < 2; i++) {
-                var newRow = cpuInfoTable.insertRow(i);
+            var newRow = cpuInfoTable.insertRow();
 
-                for (var j = 0; j < 6; j++) {
-                    var newCell = newRow.insertCell(j);
-                    var value = "";
+            for (var i = 0; i < 5; i++) {
+                var key = Object.keys(_CPU)[i];
+                var value = _CPU[key];
 
-                    // Display header
-                    if (i === 0) {
-                        value = Object.keys(_CPU)[j];
-                    } else {
-                        var key = Object.keys(_CPU)[j];
-                        value = _CPU[key];
-                    }
-
-                    newCell.innerHTML = value;
-                }
+                var newCell = newRow.insertCell(i);
+                newCell.innerHTML = value;
             }
         };
 

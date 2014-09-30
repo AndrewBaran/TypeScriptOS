@@ -119,6 +119,12 @@ h3
 	border: 1px solid black;
 }
 
+#cpuStatus thead th
+{
+	font-weight: normal;
+	text-align: center;
+}
+
 /* Div containing footer content*/
 .footerText 
 {
