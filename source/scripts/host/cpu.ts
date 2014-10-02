@@ -81,6 +81,12 @@ module TSOS {
             		// Read 1 data byte
             		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
 
+            		var hexString: string = instructionData.pop();
+            		var hexValue: number = parseInt(hexString, 10);
+
+            		// Load accumulator with constant
+            		this.Acc = hexValue;
+
             		// Increment PC
             		this.PC++;
 
@@ -93,7 +99,7 @@ module TSOS {
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
 
             		this.PC += 2;
@@ -107,8 +113,17 @@ module TSOS {
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
+
+            		var memoryAddress: string = "";
+
+            		for(var i: number = 0; i < 2; i++) {
+
+            			memoryAddress += instructionData.pop();
+            		}
+
+            		console.log("Memory address to write to: " + memoryAddress);
 
             		this.PC += 2;
 
@@ -121,7 +136,7 @@ module TSOS {
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
 
             		this.PC += 2;
@@ -147,7 +162,7 @@ module TSOS {
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
 
             		this.PC += 2;
@@ -173,7 +188,7 @@ module TSOS {
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
 
             		this.PC += 2;
@@ -199,6 +214,13 @@ module TSOS {
             		// Display PCB in console
             		_CurrentPCB.display();
 
+            		// Clear memory contents
+
+            		// Implement eventually
+            		// _MemoryManager.clearMemory(_CurrentPCB.processID);
+            		_MemoryManager.clearMemory();
+            		_MemoryManager.displayMemory();
+
             		break;
 
             	// Compare a byte in memory to X reg
@@ -209,7 +231,7 @@ module TSOS {
 
             		// Read 2 bytes?
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
 
             		this.PC += 2;
@@ -235,7 +257,7 @@ module TSOS {
 
             		// Read 2 bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
 
             		this.PC += 2;

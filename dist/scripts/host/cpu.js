@@ -68,6 +68,12 @@ var TSOS;
                     // Read 1 data byte
                     instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
 
+                    var hexString = instructionData.pop();
+                    var hexValue = parseInt(hexString, 10);
+
+                    // Load accumulator with constant
+                    this.Acc = hexValue;
+
                     // Increment PC
                     this.PC++;
 
@@ -77,7 +83,7 @@ var TSOS;
                     console.log("LDA");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
                     }
 
                     this.PC += 2;
@@ -88,8 +94,16 @@ var TSOS;
                     console.log("SDA");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
                     }
+
+                    var memoryAddress = "";
+
+                    for (var i = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    console.log("Memory address to write to: " + memoryAddress);
 
                     this.PC += 2;
 
@@ -99,7 +113,7 @@ var TSOS;
                     console.log("ADC");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
                     }
 
                     this.PC += 2;
@@ -120,7 +134,7 @@ var TSOS;
                     console.log("LDX");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
                     }
 
                     this.PC += 2;
@@ -141,7 +155,7 @@ var TSOS;
                     console.log("LDY");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
                     }
 
                     this.PC += 2;
@@ -163,13 +177,19 @@ var TSOS;
                     // Display PCB in console
                     _CurrentPCB.display();
 
+                    // Clear memory contents
+                    // Implement eventually
+                    // _MemoryManager.clearMemory(_CurrentPCB.processID);
+                    _MemoryManager.clearMemory();
+                    _MemoryManager.displayMemory();
+
                     break;
 
                 case "EC":
                     console.log("CPX");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
                     }
 
                     this.PC += 2;
@@ -190,7 +210,7 @@ var TSOS;
                     console.log("INC");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
                     }
 
                     this.PC += 2;
