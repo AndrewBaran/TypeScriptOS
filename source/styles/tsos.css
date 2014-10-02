@@ -105,7 +105,7 @@ h3
 /* Div containing table of the CPU status values */
 #divCPUStatus
 {
-	
+	width: auto;
 }
 
 /* Table containing CPU status values */

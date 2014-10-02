@@ -3,7 +3,6 @@ var TSOS;
     var Display = (function () {
         function Display() {
         }
-        // TODO Probably a smoother way to do this
         Display.displayCPU = function () {
             var cpuInfoTable = document.getElementById("cpuStatus");
 

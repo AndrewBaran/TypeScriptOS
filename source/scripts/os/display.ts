@@ -1,7 +1,6 @@
 module TSOS {
 	export class Display {
 
-		// TODO Probably a smoother way to do this
 		public static displayCPU(): void {
 
 			var cpuInfoTable = <HTMLTableElement>document.getElementById("cpuStatus");
@@ -21,7 +20,6 @@ module TSOS {
 				var newCell = newRow.insertCell(i);
 				newCell.innerHTML = value;
 			}
-
 
 		} // displayCPU()
 

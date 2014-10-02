@@ -1,11 +1,19 @@
 module TSOS {
 	export class MemoryManager {
 
+		public memoryObject: TSOS.Memory;
+
+		// Constructors
+		constructor() {
+			this.memoryObject = null;
+		}
+
 		// Methods
 
+		// Create new memory object and clear it out
 		public initializeMemory() : void {
 
-			_Memory = new Memory();
+			this.memoryObject = new Memory();
 			this.clearMemory();
 		}
 
@@ -25,12 +33,12 @@ module TSOS {
 				// Loop through all of memory, making the values the empty string ""
 				for(var i: number = 0; i < _MemoryConstants.NUM_ROWS; i++) {
 					for(var j: number = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
-						_Memory.memoryList[i][j] = "00";
+						this.memoryObject.memoryList[i][j] = "00";
 					}
 				}
-			} // End else
+			} // else
 
-		} // End clearMemory()
+		} // clearMemory()
 
 		public loadProgram(byteList: string[], processNumber: number = 0) {
 
@@ -47,7 +55,7 @@ module TSOS {
 					var index: number = (startingRow * _MemoryConstants.BYTES_PER_ROW) + colNumber;
 
 					if(index < byteList.length) {
-						_Memory.memoryList[startingRow][colNumber] = byteList[index];
+						this.memoryObject.memoryList[startingRow][colNumber] = byteList[index];
 					}
 				}
 			}
@@ -110,13 +118,13 @@ module TSOS {
 					// Regular cell
 					else {
 
-						var cellValue: string = _Memory.memoryList[rowNumber][columnNumber - 1];
+						var cellValue: string = this.memoryObject.memoryList[rowNumber][columnNumber - 1];
 						cell.innerHTML = cellValue;
 					}
 
 				} // Inner for
 			} // Outer for
-			
+
 		} // displayMemory()
 
 	}

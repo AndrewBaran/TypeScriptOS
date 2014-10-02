@@ -476,9 +476,8 @@ module TSOS {
 
                 console.log("Valid process ID. Run the program");
 
-                // Clear the memory of program after execution
-                _MemoryManager.clearMemory();
-                _MemoryManager.displayMemory();
+                // Set CPU to begin executing program
+                _CPU.isExecuting = true;
             }
 
             else {

@@ -1,11 +1,14 @@
 var TSOS;
 (function (TSOS) {
     var MemoryManager = (function () {
+        // Constructors
         function MemoryManager() {
+            this.memoryObject = null;
         }
         // Methods
+        // Create new memory object and clear it out
         MemoryManager.prototype.initializeMemory = function () {
-            _Memory = new TSOS.Memory();
+            this.memoryObject = new TSOS.Memory();
             this.clearMemory();
         };
 
@@ -18,7 +21,7 @@ var TSOS;
             } else {
                 for (var i = 0; i < _MemoryConstants.NUM_ROWS; i++) {
                     for (var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
-                        _Memory.memoryList[i][j] = "00";
+                        this.memoryObject.memoryList[i][j] = "00";
                     }
                 }
             }
@@ -38,7 +41,7 @@ var TSOS;
                     var index = (startingRow * _MemoryConstants.BYTES_PER_ROW) + colNumber;
 
                     if (index < byteList.length) {
-                        _Memory.memoryList[startingRow][colNumber] = byteList[index];
+                        this.memoryObject.memoryList[startingRow][colNumber] = byteList[index];
                     }
                 }
             }
@@ -82,7 +85,7 @@ var TSOS;
 
                         cell.innerHTML = hexValue;
                     } else {
-                        var cellValue = _Memory.memoryList[rowNumber][columnNumber - 1];
+                        var cellValue = this.memoryObject.memoryList[rowNumber][columnNumber - 1];
                         cell.innerHTML = cellValue;
                     }
                 }

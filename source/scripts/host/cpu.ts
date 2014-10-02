@@ -39,8 +39,13 @@ module TSOS {
 
         public cycle(): void {
             _Kernel.krnTrace('CPU cycle');
+
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
+            // TODO Program execution goes here
+
+            // Use PC to get next instruction
+            // Switch statement using instruction to get data and execute instruction
         }
     }
 }

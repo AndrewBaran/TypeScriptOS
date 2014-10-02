@@ -435,9 +435,8 @@ var TSOS;
             if (processID >= 0 && processID < _PCBList.length) {
                 console.log("Valid process ID. Run the program");
 
-                // Clear the memory of program after execution
-                _MemoryManager.clearMemory();
-                _MemoryManager.displayMemory();
+                // Set CPU to begin executing program
+                _CPU.isExecuting = true;
             } else {
                 _StdOut.putText("Error: Invalid process ID");
             }
