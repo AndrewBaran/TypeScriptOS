@@ -20,7 +20,8 @@ interface Constants {
 	KEYBOARD_IRQ: number;
 }
 
-var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1};
+// TODO Change CPU back to regular interval
+var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 500, TIMER_IRQ: 0, KEYBOARD_IRQ: 1};
 
 interface MemoryConstants {
 	PROCESS_SIZE: number;
@@ -29,8 +30,8 @@ interface MemoryConstants {
 	BYTES_PER_ROW: number;
 }
 
-// TODO 64 rows seems enough?
-var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 64, NUM_COLUMNS: 8, BYTES_PER_ROW: 8};
+// TODO I think 96 rows is enough for 3 processes of size 256
+var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 96, NUM_COLUMNS: 8, BYTES_PER_ROW: 8};
 
 
 // My Globals
@@ -50,6 +51,7 @@ var _Mode: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode
 var _MemoryManager: TSOS.MemoryManager; // Abstraction layer above main memory
 
 var _PCBList: TSOS.PCB[]; // List holding each process control block
+var _CurrentPCB: TSOS.PCB;
 
 var _Canvas: HTMLCanvasElement = null;  // Initialized in hostInit().
 var _DrawingContext = null;             // Initialized in hostInit().

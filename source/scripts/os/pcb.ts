@@ -14,6 +14,8 @@ module TSOS {
 		public Zflag: number;
 		public isExecuting: boolean;
 
+		public cyclesComplete: number;
+
 
 		// Constructor
 		constructor(processID = -1,
@@ -24,7 +26,8 @@ module TSOS {
 					Xreg = 0, 
 					Yreg = 0, 
 					Zflag = 0, 
-					isExecuting = false) {
+					isExecuting = false,
+					cyclesComplete = 0) {
 			this.processID = processID;
 			this.baseRegister = baseRegister;
 			this.limitRegister = limitRegister;
@@ -34,6 +37,21 @@ module TSOS {
 			this.Yreg = Yreg;
 			this.Zflag = Zflag;
 			this.isExecuting = isExecuting;
+			this.cyclesComplete = cyclesComplete;
+		}
+
+		// Methods
+		public saveInfo() : void {
+
+			this.programCounter = _CPU.PC;
+			this.accumulator = _CPU.Acc;
+			this.Xreg = _CPU.Xreg;
+			this.Yreg = _CPU.Yreg;
+			this.Zflag = _CPU.Zflag;
+		}
+
+		public display() : void {
+			_StdOut.putText("PC = " + this.programCounter + " | Acc = " + this.accumulator + " | Xreg = " + this.Xreg + " | Yreg = " + this.Yreg + " | Zflag = " + this.Zflag);
 		}
 
 	}

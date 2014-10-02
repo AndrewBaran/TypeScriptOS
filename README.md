@@ -40,9 +40,9 @@ Project 2 Checklist
 - [ ] Add a shell command, run <pid>, to run a program already in memory (user should be able to execute many load/run cycles)
 - [ ] Execute the running program (including displaying any output)
 	Note: Be sure to synchronize the CPU execution cycles with clock ticks
-- [ ] As the programs executes, display Memory and the CPU status
+- [x] As the programs executes, display Memory and the CPU status
 	PC, instruction reg, accumulator, X reg, Y reg, Z flag) in real time
-- [ ] Update and display the PCB contents at the end of the execution
+- [x] Update and display the PCB contents at the end of the execution
 - [x] Implement line-wrap in the CLI (no longer optional)
 - [ ] **Optional**: Provide the ability to single-step execution
 

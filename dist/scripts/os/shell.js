@@ -394,6 +394,9 @@ var TSOS;
                     if (byteList[j].length != 2) {
                         validInput = false;
                     }
+
+                    // Convert to uppercase hex letters if necessary
+                    byteList[j] = TSOS.Utils.toUpperHex(byteList[j]);
                 }
 
                 if (validInput) {
@@ -437,6 +440,7 @@ var TSOS;
 
                 // Set CPU to begin executing program
                 _CPU.isExecuting = true;
+                _CurrentPCB = _PCBList[processID];
             } else {
                 _StdOut.putText("Error: Invalid process ID");
             }

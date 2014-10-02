@@ -91,6 +91,16 @@ var TSOS;
                 }
             }
         };
+
+        // Returns the value of the byte in memory using PC and PID
+        MemoryManager.prototype.getByte = function (programCounter, processID) {
+            var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+            rowNumber += Math.floor(programCounter / _MemoryConstants.BYTES_PER_ROW);
+
+            var columnNumber = programCounter % _MemoryConstants.BYTES_PER_ROW;
+
+            return this.memoryObject.memoryList[rowNumber][columnNumber];
+        };
         return MemoryManager;
     })();
     TSOS.MemoryManager = MemoryManager;

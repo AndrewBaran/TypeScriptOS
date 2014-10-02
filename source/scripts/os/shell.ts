@@ -422,6 +422,9 @@ module TSOS {
                 	if(byteList[j].length != 2) {
                 		validInput = false;
                 	}
+
+                    // Convert to uppercase hex letters if necessary
+                    byteList[j] = Utils.toUpperHex(byteList[j]);
                 }
 
                 if(validInput) {
@@ -478,6 +481,7 @@ module TSOS {
 
                 // Set CPU to begin executing program
                 _CPU.isExecuting = true;
+                _CurrentPCB = _PCBList[processID];
             }
 
             else {

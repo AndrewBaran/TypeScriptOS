@@ -75,5 +75,28 @@ module TSOS {
 
             return dateString;
         }
+
+        // Convert hex strings to uppercase if user input them with lowercase letters
+        public static toUpperHex(hexString: string) : string {
+
+            var newString: string = "";
+
+            // Loop through string
+            for(var i: number = 0; i < hexString.length; i++) {
+
+                // Letter
+                if(hexString[i].match(/[a-zA-Z]/g)) {
+                    newString += hexString[i].toUpperCase();
+                }
+
+                // Number
+                else {
+                    newString += hexString[i];
+                }
+
+            }
+
+            return newString;
+        }
     }
 }

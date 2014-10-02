@@ -19,7 +19,7 @@ module TSOS {
 
 
 		// Takes an optional parameter that clears a specific part of memory; otherwise, clear all memory
-		public clearMemory(processNumber: number = -1) {
+		public clearMemory(processNumber: number = -1) : void {
 
 			// TODO Implement
 			// Clear specific processNumber of memory
@@ -40,7 +40,7 @@ module TSOS {
 
 		} // clearMemory()
 
-		public loadProgram(byteList: string[], processNumber: number = 0) {
+		public loadProgram(byteList: string[], processNumber: number = 0) : void {
 
 			// Start at the beginning of the specified program section
 			var baseAddress: number = processNumber * _MemoryConstants.PROCESS_SIZE;
@@ -126,6 +126,17 @@ module TSOS {
 			} // Outer for
 
 		} // displayMemory()
+
+		// Returns the value of the byte in memory using PC and PID
+		public getByte(programCounter: number, processID: number): string {
+
+			var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+			rowNumber += Math.floor(programCounter / _MemoryConstants.BYTES_PER_ROW);
+
+			var columnNumber: number = programCounter % _MemoryConstants.BYTES_PER_ROW;
+
+			return this.memoryObject.memoryList[rowNumber][columnNumber];
+		}
 
 	}
 }

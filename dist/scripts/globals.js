@@ -6,10 +6,11 @@ This code references page numbers in the text book:
 Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
 ------------ */
 
-var _Constants = { APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1 };
+// TODO Change CPU back to regular interval
+var _Constants = { APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 500, TIMER_IRQ: 0, KEYBOARD_IRQ: 1 };
 
-// TODO 64 rows seems enough?
-var _MemoryConstants = { PROCESS_SIZE: 256, NUM_ROWS: 64, NUM_COLUMNS: 8, BYTES_PER_ROW: 8 };
+// TODO I think 96 rows is enough for 3 processes of size 256
+var _MemoryConstants = { PROCESS_SIZE: 256, NUM_ROWS: 96, NUM_COLUMNS: 8, BYTES_PER_ROW: 8 };
 
 // My Globals
 var _MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -28,6 +29,7 @@ var _Mode = 0;
 var _MemoryManager;
 
 var _PCBList;
+var _CurrentPCB;
 
 var _Canvas = null;
 var _DrawingContext = null;

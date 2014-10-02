@@ -73,6 +73,22 @@ var TSOS;
 
             return dateString;
         };
+
+        // Convert hex strings to uppercase if user input them with lowercase letters
+        Utils.toUpperHex = function (hexString) {
+            var newString = "";
+
+            for (var i = 0; i < hexString.length; i++) {
+                // Letter
+                if (hexString[i].match(/[a-zA-Z]/g)) {
+                    newString += hexString[i].toUpperCase();
+                } else {
+                    newString += hexString[i];
+                }
+            }
+
+            return newString;
+        };
         return Utils;
     })();
     TSOS.Utils = Utils;
