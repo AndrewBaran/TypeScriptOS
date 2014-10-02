@@ -428,7 +428,7 @@ module TSOS {
 
                 	// Load program into memory at $0000
                 	// TODO Change to dynamically load into an available location
-                	_Memory.loadProgram(byteList, 0);
+                	_MemoryManager.loadProgram(byteList, 0);
                 }
 
                 else {
@@ -477,8 +477,8 @@ module TSOS {
                 console.log("Valid process ID. Run the program");
 
                 // Clear the memory of program after execution
-                _Memory.clearMemory();
-                TSOS.Display.displayMemory();
+                _MemoryManager.clearMemory();
+                _MemoryManager.displayMemory();
             }
 
             else {

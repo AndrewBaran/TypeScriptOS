@@ -26,6 +26,8 @@ var _Mode = 0;
 
 // Main memory
 var _Memory;
+var _MemoryManager;
+
 var _PCBList;
 
 var _Canvas = null;

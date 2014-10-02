@@ -48,6 +48,8 @@ var _Mode: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode
 
 // Main memory
 var _Memory: TSOS.Memory; // Main memory data structure
+var _MemoryManager: TSOS.MemoryManager; // Abstraction layer above main memory
+
 var _PCBList: TSOS.PCB[]; // List holding each process control block
 
 var _Canvas: HTMLCanvasElement = null;  // Initialized in hostInit().

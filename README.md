@@ -27,7 +27,7 @@ Project 1 Checklist
 - [x] Display a BSOD message (on the CLI) when the kernel traps an OS error
 	- [x] Add a shell command to test this
 - [x] Add a shell command called load to validate the user code in the HTML 5 text area (id="taProgramInput"). Only hex digits and spaces are valid
-- [x] **Optional**: Implement line-wrap in the CLI 
+- [x] **Optional**: Implement line-wrap in the CLI
 
 Project 2 Checklist
 ===================
@@ -46,9 +46,9 @@ Project 2 Checklist
 - [x] Implement line-wrap in the CLI (no longer optional)
 - [ ] **Optional**: Provide the ability to single-step execution
 
-- [ ] Develop a PCB prototype and implement it in the **client OS**
-- [ ] Develop a memory manager and implement it in the **client OS**
-- [ ] Develop a core memory prototype and implement it in the **host OS**
+- [x] Develop a PCB prototype and implement it in the **client OS**
+- [x] Develop a memory manager and implement it in the **client OS**
+- [x] Develop a core memory prototype and implement it in the **host OS**
 - [ ] Develop a CPU prototype and implement it in the **host OS**
 
 Project 3 Checklist

@@ -36,8 +36,9 @@ var TSOS;
             this.krnTrace(_krnKeyboardDriver.status);
 
             // Initialize and display memory
-            _Memory = new TSOS.Memory();
-            TSOS.Display.displayMemory();
+            _MemoryManager = new TSOS.MemoryManager();
+            _MemoryManager.initializeMemory();
+            _MemoryManager.displayMemory();
 
             // Display CPU status
             TSOS.Display.displayCPU();

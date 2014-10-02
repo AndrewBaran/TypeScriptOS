@@ -38,9 +38,10 @@ module TSOS {
             this.krnTrace(_krnKeyboardDriver.status);
 
             // Initialize and display memory
-            _Memory = new Memory();
-            TSOS.Display.displayMemory();
-
+            _MemoryManager = new MemoryManager();
+            _MemoryManager.initializeMemory();
+            _MemoryManager.displayMemory();
+            
             // Display CPU status
             TSOS.Display.displayCPU();
 
