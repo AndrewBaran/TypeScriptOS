@@ -31,6 +31,7 @@ var TSOS;
             this.Xreg = _CPU.Xreg;
             this.Yreg = _CPU.Yreg;
             this.Zflag = _CPU.Zflag;
+            this.isExecuting = _CPU.isExecuting;
         };
 
         PCB.prototype.display = function () {

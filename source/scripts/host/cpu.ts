@@ -53,8 +53,6 @@ module TSOS {
 
                 // Get real instruction from memory
                 var nextInstruction: string = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
-
-                console.log("Instruction: " + nextInstruction);
             }
 
             // Error
@@ -63,6 +61,14 @@ module TSOS {
             	// Destroy program; BSOD; kernel panic
 
             }
+
+            // Increment PC to point to next byte (could be instruction or data)
+            this.PC++;
+
+            // Save PCB state
+            _CurrentPCB.saveInfo();
+
+            var instructionData: string[] = [];
 
             // Switch statement using instruction to get data and execute instruction
             switch(nextInstruction) {
@@ -73,6 +79,11 @@ module TSOS {
             		console.log("LDA");
 
             		// Read 1 data byte
+            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+
+            		// Increment PC
+            		this.PC++;
+
             		break;
 
             	// Load the accumulator from memory
@@ -81,6 +92,12 @@ module TSOS {
             		console.log("LDA");
 
             		// Read 2 data bytes
+            		for(var i: number = 0; i < 2; i++) {
+            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            		}
+
+            		this.PC += 2;
+
             		break;
 
             	// Store the accumulator in memory
@@ -89,6 +106,12 @@ module TSOS {
             		console.log("SDA");
 
             		// Read 2 data bytes
+            		for(var i: number = 0; i < 2; i++) {
+            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            		}
+
+            		this.PC += 2;
+
             		break;
 
             	// Add with carry
@@ -97,6 +120,12 @@ module TSOS {
             		console.log("ADC");
 
             		// Read 2 data bytes
+            		for(var i: number = 0; i < 2; i++) {
+            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            		}
+
+            		this.PC += 2;
+
             		break;
 
             	// Load the X register with a constant
@@ -105,6 +134,10 @@ module TSOS {
             		console.log("LDX");
 
             		// Read 1 data byte
+            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+
+            		this.PC++;
+
             		break;
 
             	// Load the X register from memory
@@ -113,6 +146,12 @@ module TSOS {
             		console.log("LDX");
 
             		// Read 2 data bytes
+            		for(var i: number = 0; i < 2; i++) {
+            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            		}
+
+            		this.PC += 2;
+
             		break;
 
             	// Load the Y register with a constant
@@ -121,6 +160,10 @@ module TSOS {
             		console.log("LDY");
 
             		// Read 1 data byte
+            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+
+            		this.PC++;
+
             		break;
 
             	// Load the Y register from memory
@@ -129,6 +172,12 @@ module TSOS {
             		console.log("LDY");
 
             		// Read 2 data bytes
+            		for(var i: number = 0; i < 2; i++) {
+            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            		}
+
+            		this.PC += 2;
+
             		break;
 
             	// No Operation
@@ -159,6 +208,12 @@ module TSOS {
             		console.log("CPX");
 
             		// Read 2 bytes?
+            		for(var i: number = 0; i < 2; i++) {
+            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            		}
+
+            		this.PC += 2;
+
             		break;
 
             	// Branch X bytes if Z flag = 0
@@ -167,6 +222,10 @@ module TSOS {
             		console.log("BNE");
 
             		// Read 1 byte
+            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+
+            		this.PC++;
+
             		break;
 
             	// Increment the value of a byte
@@ -175,12 +234,38 @@ module TSOS {
             		console.log("INC");
 
             		// Read 2 bytes
+            		for(var i: number = 0; i < 2; i++) {
+            			instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            		}
+
+            		this.PC += 2;
+
             		break;
 
             	// System call
+            	// 01 in X reg = print integer stored in Y register
+            	// 02 in X reg = print the 00-terminated string stored at the address in the Y register
             	case "FF":
 
             		console.log("SYS");
+
+            		if((this.Xreg.toString(10)) === "01") {
+
+            			console.log("Printing integer stored in Y register");
+            			_StdOut.putText(this.Yreg.toString(10));
+            		}
+
+            		else if((this.Xreg.toString(10)) === "02") {
+
+            			// TODO
+            			// Print 00-terminated string in Y reg
+            		}
+
+            		break;
+
+            	default:
+
+            		console.log("This shouldn't happen.");
 
             		break;
 
@@ -191,9 +276,8 @@ module TSOS {
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             // TODO Program execution goes here
 
-            // TODO Remove
-            // Increment PC
-            this.PC++;
+            // Clear out instruction data buffer
+            instructionData = [];
 
             // Increment number of cycles done
             _CurrentPCB.cyclesComplete++;

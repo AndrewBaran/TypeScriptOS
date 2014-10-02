@@ -48,10 +48,13 @@ module TSOS {
 			this.Xreg = _CPU.Xreg;
 			this.Yreg = _CPU.Yreg;
 			this.Zflag = _CPU.Zflag;
+			this.isExecuting = _CPU.isExecuting;
 		}
 
 		public display() : void {
-			_StdOut.putText("PC = " + this.programCounter + " | Acc = " + this.accumulator + " | Xreg = " + this.Xreg + " | Yreg = " + this.Yreg + " | Zflag = " + this.Zflag);
+
+			_StdOut.putText("PC = " + this.programCounter + " | Acc = " + this.accumulator + 
+					" | Xreg = " + this.Xreg + " | Yreg = " + this.Yreg + " | Zflag = " + this.Zflag);
 		}
 
 	}

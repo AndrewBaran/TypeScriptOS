@@ -49,50 +49,102 @@ var TSOS;
             if (this.PC >= 0 && this.PC < _MemoryConstants.PROCESS_SIZE) {
                 // Get real instruction from memory
                 var nextInstruction = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
-
-                console.log("Instruction: " + nextInstruction);
             } else {
                 // Destroy program; BSOD; kernel panic
             }
 
+            // Increment PC to point to next byte (could be instruction or data)
+            this.PC++;
+
+            // Save PCB state
+            _CurrentPCB.saveInfo();
+
+            var instructionData = [];
+
             switch (nextInstruction) {
                 case "A9":
                     console.log("LDA");
+
+                    // Read 1 data byte
+                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+
+                    // Increment PC
+                    this.PC++;
 
                     break;
 
                 case "AD":
                     console.log("LDA");
 
+                    for (var i = 0; i < 2; i++) {
+                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    }
+
+                    this.PC += 2;
+
                     break;
 
                 case "8D":
                     console.log("SDA");
+
+                    for (var i = 0; i < 2; i++) {
+                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    }
+
+                    this.PC += 2;
 
                     break;
 
                 case "6D":
                     console.log("ADC");
 
+                    for (var i = 0; i < 2; i++) {
+                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    }
+
+                    this.PC += 2;
+
                     break;
 
                 case "A2":
                     console.log("LDX");
+
+                    // Read 1 data byte
+                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+
+                    this.PC++;
 
                     break;
 
                 case "AE":
                     console.log("LDX");
 
+                    for (var i = 0; i < 2; i++) {
+                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    }
+
+                    this.PC += 2;
+
                     break;
 
                 case "A0":
                     console.log("LDY");
 
+                    // Read 1 data byte
+                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+
+                    this.PC++;
+
                     break;
 
                 case "AC":
                     console.log("LDY");
+
+                    for (var i = 0; i < 2; i++) {
+                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    }
+
+                    this.PC += 2;
 
                     break;
 
@@ -116,20 +168,50 @@ var TSOS;
                 case "EC":
                     console.log("CPX");
 
+                    for (var i = 0; i < 2; i++) {
+                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    }
+
+                    this.PC += 2;
+
                     break;
 
                 case "D0":
                     console.log("BNE");
+
+                    // Read 1 byte
+                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+
+                    this.PC++;
 
                     break;
 
                 case "EE":
                     console.log("INC");
 
+                    for (var i = 0; i < 2; i++) {
+                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    }
+
+                    this.PC += 2;
+
                     break;
 
                 case "FF":
                     console.log("SYS");
+
+                    if ((this.Xreg.toString(10)) === "01") {
+                        console.log("Printing integer stored in Y register");
+                        _StdOut.putText(this.Yreg.toString(10));
+                    } else if ((this.Xreg.toString(10)) === "02") {
+                        // TODO
+                        // Print 00-terminated string in Y reg
+                    }
+
+                    break;
+
+                default:
+                    console.log("This shouldn't happen.");
 
                     break;
             }
@@ -137,9 +219,8 @@ var TSOS;
             // TODO: Accumulate CPU usage and profiling statistics here.
             // Do the real work here. Be sure to set this.isExecuting appropriately.
             // TODO Program execution goes here
-            // TODO Remove
-            // Increment PC
-            this.PC++;
+            // Clear out instruction data buffer
+            instructionData = [];
 
             // Increment number of cycles done
             _CurrentPCB.cyclesComplete++;

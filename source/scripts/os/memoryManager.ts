@@ -63,16 +63,8 @@ module TSOS {
 			// Reload memory display
 			this.displayMemory();
 
-			var newPCB: TSOS.PCB = new PCB(processNumber,
-											baseAddress,
-											limitAddress,
-											_CPU.PC,
-											_CPU.Acc,
-											_CPU.Xreg,
-											_CPU.Yreg,
-											_CPU.Zflag,
-											_CPU.isExecuting);
-			_PCBList.push(newPCB);
+			var newPCB: TSOS.PCB = new PCB(processNumber, baseAddress, limitAddress);
+			_PCBList[processNumber] = newPCB;
 
 			_StdOut.putText("Program loaded | PID " + processNumber + " created");
 		}
