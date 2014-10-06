@@ -42,6 +42,9 @@ module TSOS {
 
 		public loadProgram(byteList: string[], processNumber: number = 0) : void {
 
+			// Clear memory
+			this.clearMemory();
+
 			// Start at the beginning of the specified program section
 			var baseAddress: number = processNumber * _MemoryConstants.PROCESS_SIZE;
 			var limitAddress: number = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
@@ -168,6 +171,10 @@ module TSOS {
 			var columnNumber: number = hexAddress % _MemoryConstants.BYTES_PER_ROW;
 
 			return this.memoryObject.memoryList[rowNumber][columnNumber];
+		}
+
+		public getFormattedAddress(bytesToRead: number): string[] {
+			return [];
 		}
 
 	}

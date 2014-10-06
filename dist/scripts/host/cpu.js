@@ -43,6 +43,9 @@ var TSOS;
             if (_CurrentPCB.cyclesComplete === 0) {
                 // Setup stuff
                 console.log("Setting up CPU for first cycle");
+
+                // Clear CPU
+                this.clear();
             }
 
             // Check if the PC is valid
@@ -348,7 +351,6 @@ var TSOS;
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
-            this.isExecuting = false;
         };
         return Cpu;
     })();

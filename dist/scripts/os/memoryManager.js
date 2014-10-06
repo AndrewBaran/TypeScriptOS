@@ -29,6 +29,9 @@ var TSOS;
 
         MemoryManager.prototype.loadProgram = function (byteList, processNumber) {
             if (typeof processNumber === "undefined") { processNumber = 0; }
+            // Clear memory
+            this.clearMemory();
+
             // Start at the beginning of the specified program section
             var baseAddress = processNumber * _MemoryConstants.PROCESS_SIZE;
             var limitAddress = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
@@ -137,6 +140,10 @@ var TSOS;
             var columnNumber = hexAddress % _MemoryConstants.BYTES_PER_ROW;
 
             return this.memoryObject.memoryList[rowNumber][columnNumber];
+        };
+
+        MemoryManager.prototype.getFormattedAddress = function (bytesToRead) {
+            return [];
         };
         return MemoryManager;
     })();
