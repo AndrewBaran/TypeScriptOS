@@ -18,6 +18,7 @@ module TSOS {
 				var value: string = _CPU[key];
 
 				var newCell = newRow.insertCell(i);
+
 				newCell.innerHTML = value;
 			}
 

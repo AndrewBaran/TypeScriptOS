@@ -130,10 +130,11 @@ module TSOS {
 			return this.memoryObject.memoryList[rowNumber][columnNumber];
 		}
 
-		public writeData(startingAddress: string, inputValue: number, processID: number): void {
+		// TODO BSOD or something if invalid memory access
+		public writeData(address: string, inputValue: number, processID: number): void {
 
 			// Convert memoryAddress to hex
-			var hexAddress: number = parseInt(startingAddress, 16);
+			var hexAddress: number = parseInt(address, 16);
 
 			var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
 			rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
@@ -150,8 +151,21 @@ module TSOS {
 
 			// Write value to memory
 			this.memoryObject.memoryList[rowNumber][columnNumber] = valueString;
-			
+
 		} // writeData()
+
+		// TODO BSOD or something if invalid memory access
+		public getData(address: string, processID: number): string {
+
+			var hexAddress: number = parseInt(address, 16);
+
+			var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+			rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
+
+			var columnNumber: number = hexAddress % _MemoryConstants.BYTES_PER_ROW;
+
+			return this.memoryObject.memoryList[rowNumber][columnNumber];
+		}
 
 	}
 }

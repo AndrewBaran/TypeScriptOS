@@ -17,6 +17,7 @@ var TSOS;
                 var value = _CPU[key];
 
                 var newCell = newRow.insertCell(i);
+
                 newCell.innerHTML = value;
             }
         };

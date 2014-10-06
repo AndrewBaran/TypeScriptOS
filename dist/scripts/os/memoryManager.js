@@ -102,9 +102,10 @@ var TSOS;
             return this.memoryObject.memoryList[rowNumber][columnNumber];
         };
 
-        MemoryManager.prototype.writeData = function (startingAddress, inputValue, processID) {
+        // TODO BSOD or something if invalid memory access
+        MemoryManager.prototype.writeData = function (address, inputValue, processID) {
             // Convert memoryAddress to hex
-            var hexAddress = parseInt(startingAddress, 16);
+            var hexAddress = parseInt(address, 16);
 
             var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
             rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
@@ -121,6 +122,18 @@ var TSOS;
 
             // Write value to memory
             this.memoryObject.memoryList[rowNumber][columnNumber] = valueString;
+        };
+
+        // TODO BSOD or something if invalid memory access
+        MemoryManager.prototype.getData = function (address, processID) {
+            var hexAddress = parseInt(address, 16);
+
+            var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+            rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
+
+            var columnNumber = hexAddress % _MemoryConstants.BYTES_PER_ROW;
+
+            return this.memoryObject.memoryList[rowNumber][columnNumber];
         };
         return MemoryManager;
     })();

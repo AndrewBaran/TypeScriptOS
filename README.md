@@ -37,8 +37,8 @@ Project 2 Checklist
 	- [x] Assign a Process ID (PID)
 	- [x] Create a Process Control Block (PCB)
 	- [x] Return the PID to the console
-- [ ] Add a shell command, run <pid>, to run a program already in memory (user should be able to execute many load/run cycles)
-- [ ] Execute the running program (including displaying any output)
+- [x] Add a shell command, run <pid>, to run a program already in memory (user should be able to execute many load/run cycles)
+- [x] Execute the running program (including displaying any output)
 	Note: Be sure to synchronize the CPU execution cycles with clock ticks
 - [x] As the programs executes, display Memory and the CPU status
 	PC, instruction reg, accumulator, X reg, Y reg, Z flag) in real time
@@ -49,7 +49,7 @@ Project 2 Checklist
 - [x] Develop a PCB prototype and implement it in the **client OS**
 - [x] Develop a memory manager and implement it in the **client OS**
 - [x] Develop a core memory prototype and implement it in the **host OS**
-- [ ] Develop a CPU prototype and implement it in the **host OS**
+- [x] Develop a CPU prototype and implement it in the **host OS**
 
 Project 3 Checklist
 ===================

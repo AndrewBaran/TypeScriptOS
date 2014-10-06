@@ -55,6 +55,7 @@ module TSOS {
 
 			_StdOut.putText("PC = " + this.programCounter + " | Acc = " + this.accumulator + 
 					" | Xreg = " + this.Xreg + " | Yreg = " + this.Yreg + " | Zflag = " + this.Zflag);
+			_StdOut.newLine();
 		}
 
 	}

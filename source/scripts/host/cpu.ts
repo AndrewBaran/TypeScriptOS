@@ -62,6 +62,10 @@ module TSOS {
 
             }
 
+            // Convert PC to decimal equivalent
+            var decimalPC: string = this.PC.toString(10);
+            this.PC = parseInt(decimalPC, 10);
+
             // Increment PC to point to next byte (could be instruction or data)
             this.PC++;
 
@@ -79,7 +83,7 @@ module TSOS {
             		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
 
             		var hexString: string = instructionData.pop();
-            		var hexValue: number = parseInt(hexString, 10);
+            		var hexValue: number = parseInt(hexString, 16);
 
             		// Load accumulator with constant
             		this.Acc = hexValue;
@@ -89,7 +93,7 @@ module TSOS {
 
             		break;
 
-            	// TODO Load the accumulator from memory
+            	// Load the accumulator from memory
             	case "AD":
 
             		console.log("LDA");
@@ -105,7 +109,10 @@ module TSOS {
                         memoryAddress += instructionData.pop();
                     }
 
-                    console.log("memoryAddress = " + memoryAddress);
+                    var stringValue: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexValue: number = parseInt(stringValue, 16);
+
+                    this.Acc = hexValue;
 
             		this.PC += 2;
 
@@ -134,6 +141,7 @@ module TSOS {
             		break;
 
             	// Add with carry
+                // Add contents of address to accumlator and keep result in accumulator
             	case "6D":
 
             		console.log("ADC");
@@ -142,6 +150,18 @@ module TSOS {
             		for(var i: number = 0; i < 2; i++) {
             			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
+
+                    var memoryAddress: string = "";
+
+                    for(var i: number = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    var stringValue: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexValue: number = parseInt(stringValue, 16);
+
+                    // Add to accumulator
+                    this.Acc += hexValue;
 
             		this.PC += 2;
 
@@ -155,11 +175,16 @@ module TSOS {
             		// Read 1 data byte
             		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
 
+                    var hexString: string = instructionData.pop();
+                    var hexValue: number = parseInt(hexString, 16);
+
+                    this.Xreg = hexValue;
+
             		this.PC++;
 
             		break;
 
-            	// Load the X register from memory
+            	// TODO Load the X register from memory
             	case "AE":
 
             		console.log("LDX");
@@ -181,11 +206,16 @@ module TSOS {
             		// Read 1 data byte
             		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
 
+                    var hexString: string = instructionData.pop();
+                    var hexValue: number = parseInt(hexString, 16);
+
+                    this.Yreg = hexValue;
+
             		this.PC++;
 
             		break;
 
-            	// Load the Y register from memory
+            	// TODO Load the Y register from memory
             	case "AC":
 
             		console.log("LDY");
@@ -195,11 +225,23 @@ module TSOS {
             			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
 
+                    var memoryAddress: string = "";
+
+                    for(var i: number = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexValue: number = parseInt(hexString, 16);
+
+                    // Load Yreg
+                    this.Yreg = hexValue;
+
             		this.PC += 2;
 
             		break;
 
-            	// No Operation
+            	// TODO? No Operation
             	case "EA":
 
             		console.log("NOP");
@@ -220,8 +262,8 @@ module TSOS {
             		// Display PCB in console
             		_CurrentPCB.display();
 
-                    // Clear CPU contents
-                    _CPU.clear(); 
+                    // TODO Uncomment
+                    // _CPU.clear();
 
             		// Clear memory contents
             		// Implement eventually
@@ -229,7 +271,7 @@ module TSOS {
 
             		break;
 
-            	// Compare a byte in memory to X reg
+            	// TODO Compare a byte in memory to X reg
             	// Sets the Z flag if equal
             	case "EC":
 
@@ -244,7 +286,7 @@ module TSOS {
 
             		break;
 
-            	// Branch X bytes if Z flag = 0
+            	// TODO ranch X bytes if Z flag = 0
             	case "D0":
 
             		console.log("BNE");
@@ -256,7 +298,7 @@ module TSOS {
 
             		break;
 
-            	// Increment the value of a byte
+            	// TODO Increment the value of a byte
             	case "EE":
 
             		console.log("INC");
@@ -276,14 +318,16 @@ module TSOS {
             	case "FF":
 
             		console.log("SYS");
+                    console.log("Xreg = " + this.Xreg);
+                    console.log("Yreg = " + this.Yreg);
 
-            		if((this.Xreg.toString(10)) === "01") {
+            		if((this.Xreg.toString(10)) === "1") {
 
-            			console.log("Printing integer stored in Y register");
             			_StdOut.putText(this.Yreg.toString(10));
+                        _StdOut.newLine();
             		}
 
-            		else if((this.Xreg.toString(10)) === "02") {
+            		else if((this.Xreg.toString(10)) === "2") {
 
             			// TODO
             			// Print 00-terminated string in Y reg
@@ -299,11 +343,14 @@ module TSOS {
 
             }
             
-
             // TODO: Accumulate CPU usage and profiling statistics here.
 
             // Clear out instruction data buffer
             instructionData = [];
+
+            // Convert PC back to hex
+            var hexPC: string = this.PC.toString(16);
+            this.PC = parseInt(hexPC, 16);
 
             // Increment number of cycles done
             _CurrentPCB.cyclesComplete++;
@@ -316,7 +363,7 @@ module TSOS {
 
         } // cycle()
 
-        public clear() : void {
+        public clear(): void {
 
             this.PC = 0;
             this.Acc = 0;

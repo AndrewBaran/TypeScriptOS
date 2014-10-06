@@ -250,6 +250,12 @@ var TSOS;
             // Move currentXPosition back to start
             this.currentXPosition = 0;
         };
+
+        // Moves to new line and places prompt
+        Console.prototype.newLine = function () {
+            this.advanceLine();
+            _OsShell.putPrompt();
+        };
         return Console;
     })();
     TSOS.Console = Console;
