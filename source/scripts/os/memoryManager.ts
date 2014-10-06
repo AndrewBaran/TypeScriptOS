@@ -119,6 +119,7 @@ module TSOS {
 
 		} // displayMemory()
 
+		// TODO Fix for pid 1 and 2
 		// Returns the value of the byte in memory using PC and PID
 		public getByte(programCounter: number, processID: number): string {
 
@@ -149,8 +150,10 @@ module TSOS {
 				valueString = "0" + valueString;
 			}
 
+			var properString: string = Utils.toUpperHex(valueString);
+
 			// Write value to memory
-			this.memoryObject.memoryList[rowNumber][columnNumber] = valueString;
+			this.memoryObject.memoryList[rowNumber][columnNumber] = properString;
 
 		} // writeData()
 

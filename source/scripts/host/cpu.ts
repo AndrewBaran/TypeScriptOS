@@ -184,7 +184,7 @@ module TSOS {
 
             		break;
 
-            	// TODO Load the X register from memory
+            	// Load the X register from memory
             	case "AE":
 
             		console.log("LDX");
@@ -194,7 +194,19 @@ module TSOS {
             			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
 
-            		this.PC += 2;
+                    var memoryAddress: string = "";
+
+                    for(var i: number = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexValue: number = parseInt(hexString, 16);
+
+                    // Load Yreg
+                    this.Xreg = hexValue;
+
+                    this.PC += 2;
 
             		break;
 
@@ -215,7 +227,7 @@ module TSOS {
 
             		break;
 
-            	// TODO Load the Y register from memory
+            	// Load the Y register from memory
             	case "AC":
 
             		console.log("LDY");
@@ -241,7 +253,7 @@ module TSOS {
 
             		break;
 
-            	// TODO? No Operation
+            	// No Operation
             	case "EA":
 
             		console.log("NOP");
@@ -262,31 +274,45 @@ module TSOS {
             		// Display PCB in console
             		_CurrentPCB.display();
 
-                    // TODO Uncomment
-                    // _CPU.clear();
-
-            		// Clear memory contents
-            		// Implement eventually
-            		// _MemoryManager.clearMemory(_CurrentPCB.processID);
+            		// Remove currentPCB from list
+            		var index = _CurrentPCB.processID;
+            		_PCBList.splice(index, 1);
 
             		break;
 
-            	// TODO Compare a byte in memory to X reg
-            	// Sets the Z flag if equal
+            	// Compare a byte in memory to X reg
+            	// Sets the Z flag (to 1) if equal
             	case "EC":
 
             		console.log("CPX");
 
-            		// Read 2 bytes?
+            		// Read 2 bytes
             		for(var i: number = 0; i < 2; i++) {
             			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
+
+                    var memoryAddress: string = "";
+
+                    for(var i: number = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexValue: number = parseInt(hexString);
+
+                    console.log("hex = " + hexValue);
+                    console.log("x reg = " + this.Xreg);
+
+                    // Set Zflag if equal
+                    if(hexValue === this.Xreg) {
+                        this.Zflag = 1;
+                    }
 
             		this.PC += 2;
 
             		break;
 
-            	// TODO ranch X bytes if Z flag = 0
+            	// TODO Branch X bytes if Z flag = 1
             	case "D0":
 
             		console.log("BNE");
@@ -308,6 +334,22 @@ module TSOS {
             			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
 
+                    var memoryAddress: string = "";
+
+                    for(var i: number = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    // Get the byte from memory
+                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexValue: number = parseInt(hexString);
+
+                    // Increment the byte
+                    hexValue++;
+
+                    // TODO Store the byte in memory
+
+
             		this.PC += 2;
 
             		break;
@@ -316,10 +358,6 @@ module TSOS {
             	// 01 in X reg = print integer stored in Y register
             	// 02 in X reg = print the 00-terminated string stored at the address in the Y register
             	case "FF":
-
-            		console.log("SYS");
-                    console.log("Xreg = " + this.Xreg);
-                    console.log("Yreg = " + this.Yreg);
 
             		if((this.Xreg.toString(10)) === "1") {
 
@@ -353,6 +391,7 @@ module TSOS {
             this.PC = parseInt(hexPC, 16);
 
             // Increment number of cycles done
+            // TODO Move
             _CurrentPCB.cyclesComplete++;
 
             // Update CPU display

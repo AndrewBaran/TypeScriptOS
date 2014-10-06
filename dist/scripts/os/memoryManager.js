@@ -92,6 +92,7 @@ var TSOS;
             }
         };
 
+        // TODO Fix for pid 1 and 2
         // Returns the value of the byte in memory using PC and PID
         MemoryManager.prototype.getByte = function (programCounter, processID) {
             var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
@@ -120,8 +121,10 @@ var TSOS;
                 valueString = "0" + valueString;
             }
 
+            var properString = TSOS.Utils.toUpperHex(valueString);
+
             // Write value to memory
-            this.memoryObject.memoryList[rowNumber][columnNumber] = valueString;
+            this.memoryObject.memoryList[rowNumber][columnNumber] = properString;
         };
 
         // TODO BSOD or something if invalid memory access

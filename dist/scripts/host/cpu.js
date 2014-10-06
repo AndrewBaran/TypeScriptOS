@@ -166,6 +166,18 @@ var TSOS;
                         instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
                     }
 
+                    var memoryAddress = "";
+
+                    for (var i = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexValue = parseInt(hexString, 16);
+
+                    // Load Yreg
+                    this.Xreg = hexValue;
+
                     this.PC += 2;
 
                     break;
@@ -225,6 +237,10 @@ var TSOS;
                     // Display PCB in console
                     _CurrentPCB.display();
 
+                    // Remove currentPCB from list
+                    var index = _CurrentPCB.processID;
+                    _PCBList.splice(index, 1);
+
                     break;
 
                 case "EC":
@@ -232,6 +248,23 @@ var TSOS;
 
                     for (var i = 0; i < 2; i++) {
                         instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+                    }
+
+                    var memoryAddress = "";
+
+                    for (var i = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexValue = parseInt(hexString);
+
+                    console.log("hex = " + hexValue);
+                    console.log("x reg = " + this.Xreg);
+
+                    // Set Zflag if equal
+                    if (hexValue === this.Xreg) {
+                        this.Zflag = 1;
                     }
 
                     this.PC += 2;
@@ -255,15 +288,25 @@ var TSOS;
                         instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
                     }
 
+                    var memoryAddress = "";
+
+                    for (var i = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    // Get the byte from memory
+                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexValue = parseInt(hexString);
+
+                    // Increment the byte
+                    hexValue++;
+
+                    // TODO Store the byte in memory
                     this.PC += 2;
 
                     break;
 
                 case "FF":
-                    console.log("SYS");
-                    console.log("Xreg = " + this.Xreg);
-                    console.log("Yreg = " + this.Yreg);
-
                     if ((this.Xreg.toString(10)) === "1") {
                         _StdOut.putText(this.Yreg.toString(10));
                         _StdOut.newLine();
@@ -289,6 +332,7 @@ var TSOS;
             this.PC = parseInt(hexPC, 16);
 
             // Increment number of cycles done
+            // TODO Move
             _CurrentPCB.cyclesComplete++;
 
             // Update CPU display
