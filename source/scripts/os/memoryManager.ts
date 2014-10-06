@@ -19,11 +19,24 @@ module TSOS {
 
 
 		// Takes an optional parameter that clears a specific part of memory; otherwise, clear all memory
-		public clearMemory(processNumber: number = -1) : void {
+		public clearMemory(processID: number = -1) : void {
 
-			// TODO Implement
-			// Clear specific processNumber of memory
-			if(processNumber >= 0) {
+			// Clear specific processID of memory
+			if(processID >= 0 && processID < 3) {
+
+				var baseAddress: number = processID * _MemoryConstants.PROCESS_SIZE;
+				var limitAddress: number = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
+
+				var startingRow: number = baseAddress / _MemoryConstants.BYTES_PER_ROW;
+				var endingRow: number = Math.floor(limitAddress / 8);
+
+				console.log("Clearing rows " + baseAddress + " - " + endingRow);
+
+				for(var i = startingRow; i <= endingRow; i++) {
+					for(var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
+						this.memoryObject.memoryList[i][j] = "00";
+					}
+				}
 
 			}
 
@@ -43,7 +56,7 @@ module TSOS {
 		public loadProgram(byteList: string[], processNumber: number = 0) : void {
 
 			// Clear memory
-			this.clearMemory();
+			this.clearMemory(processNumber);
 
 			// Start at the beginning of the specified program section
 			var baseAddress: number = processNumber * _MemoryConstants.PROCESS_SIZE;
@@ -122,7 +135,6 @@ module TSOS {
 
 		} // displayMemory()
 
-		// TODO Fix for pid 1 and 2
 		// Returns the value of the byte in memory using PC and PID
 		public getByte(programCounter: number, processID: number): string {
 
@@ -161,6 +173,7 @@ module TSOS {
 		} // writeData()
 
 		// TODO BSOD or something if invalid memory access
+		// TODO This seems unnecessary
 		public getData(address: string, processID: number): string {
 
 			var hexAddress: number = parseInt(address, 16);
