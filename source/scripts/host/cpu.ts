@@ -58,15 +58,12 @@ module TSOS {
             // Error
             else {
 
-            	// Destroy program; BSOD; kernel panic
+            	// TODO Destroy program; BSOD; kernel panic
 
             }
 
             // Increment PC to point to next byte (could be instruction or data)
             this.PC++;
-
-            // Save PCB state
-            _CurrentPCB.saveInfo();
 
             var instructionData: string[] = [];
 
@@ -92,7 +89,7 @@ module TSOS {
 
             		break;
 
-            	// Load the accumulator from memory
+            	// TODO Load the accumulator from memory
             	case "AD":
 
             		console.log("LDA");
@@ -101,6 +98,14 @@ module TSOS {
             		for(var i: number = 0; i < 2; i++) {
             			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
+
+                    var memoryAddress: string = "";
+
+                    for(var i: number = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    console.log("memoryAddress = " + memoryAddress);
 
             		this.PC += 2;
 
@@ -116,14 +121,13 @@ module TSOS {
             			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
             		}
 
-            		var memoryAddress: string = "";
+                    var memoryAddress: string = "";
 
             		for(var i: number = 0; i < 2; i++) {
-
-            			memoryAddress += instructionData.pop();
+                        memoryAddress += instructionData.pop();
             		}
 
-            		console.log("Memory address to write to: " + memoryAddress);
+                    _MemoryManager.writeData(memoryAddress, _CPU.Acc, _CurrentPCB.processID);
 
             		this.PC += 2;
 
@@ -206,20 +210,22 @@ module TSOS {
             	case "00":
 
             		console.log("BRK");
-            		console.log("Program finished.");
 
             		// Program is complete; stop CPU
             		this.isExecuting = false;
 
+                    // Save the contents of CPU into PCB
+                    _CurrentPCB.saveInfo();
+
             		// Display PCB in console
             		_CurrentPCB.display();
 
-            		// Clear memory contents
+                    // Clear CPU contents
+                    _CPU.clear(); 
 
+            		// Clear memory contents
             		// Implement eventually
             		// _MemoryManager.clearMemory(_CurrentPCB.processID);
-            		_MemoryManager.clearMemory();
-            		_MemoryManager.displayMemory();
 
             		break;
 
@@ -295,8 +301,6 @@ module TSOS {
             
 
             // TODO: Accumulate CPU usage and profiling statistics here.
-            // Do the real work here. Be sure to set this.isExecuting appropriately.
-            // TODO Program execution goes here
 
             // Clear out instruction data buffer
             instructionData = [];
@@ -307,9 +311,19 @@ module TSOS {
             // Update CPU display
             TSOS.Display.displayCPU();
 
-            // Save PCB information
-            _CurrentPCB.saveInfo();
+            // Update memory display
+            _MemoryManager.displayMemory();
 
+        } // cycle()
+
+        public clear() : void {
+
+            this.PC = 0;
+            this.Acc = 0;
+            this.Xreg = 0;
+            this.Yreg = 0;
+            this.Zflag = 0;
+            this.isExecuting = false;
         }
     }
 }

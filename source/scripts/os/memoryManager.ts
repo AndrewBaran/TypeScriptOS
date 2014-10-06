@@ -130,5 +130,28 @@ module TSOS {
 			return this.memoryObject.memoryList[rowNumber][columnNumber];
 		}
 
+		public writeData(startingAddress: string, inputValue: number, processID: number): void {
+
+			// Convert memoryAddress to hex
+			var hexAddress: number = parseInt(startingAddress, 16);
+
+			var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+			rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
+
+			var columnNumber: number = hexAddress % _MemoryConstants.BYTES_PER_ROW;
+
+			// Convert input value to hex
+			var valueString: string = inputValue.toString(16);
+
+			// Pad inputValue if necessary
+			if(valueString.length === 1) {
+				valueString = "0" + valueString;
+			}
+
+			// Write value to memory
+			this.memoryObject.memoryList[rowNumber][columnNumber] = valueString;
+			
+		} // writeData()
+
 	}
 }

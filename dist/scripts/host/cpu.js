@@ -50,14 +50,11 @@ var TSOS;
                 // Get real instruction from memory
                 var nextInstruction = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
             } else {
-                // Destroy program; BSOD; kernel panic
+                // TODO Destroy program; BSOD; kernel panic
             }
 
             // Increment PC to point to next byte (could be instruction or data)
             this.PC++;
-
-            // Save PCB state
-            _CurrentPCB.saveInfo();
 
             var instructionData = [];
 
@@ -86,6 +83,14 @@ var TSOS;
                         instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
                     }
 
+                    var memoryAddress = "";
+
+                    for (var i = 0; i < 2; i++) {
+                        memoryAddress += instructionData.pop();
+                    }
+
+                    console.log("memoryAddress = " + memoryAddress);
+
                     this.PC += 2;
 
                     break;
@@ -103,7 +108,7 @@ var TSOS;
                         memoryAddress += instructionData.pop();
                     }
 
-                    console.log("Memory address to write to: " + memoryAddress);
+                    _MemoryManager.writeData(memoryAddress, _CPU.Acc, _CurrentPCB.processID);
 
                     this.PC += 2;
 
@@ -169,19 +174,18 @@ var TSOS;
 
                 case "00":
                     console.log("BRK");
-                    console.log("Program finished.");
 
                     // Program is complete; stop CPU
                     this.isExecuting = false;
 
+                    // Save the contents of CPU into PCB
+                    _CurrentPCB.saveInfo();
+
                     // Display PCB in console
                     _CurrentPCB.display();
 
-                    // Clear memory contents
-                    // Implement eventually
-                    // _MemoryManager.clearMemory(_CurrentPCB.processID);
-                    _MemoryManager.clearMemory();
-                    _MemoryManager.displayMemory();
+                    // Clear CPU contents
+                    _CPU.clear();
 
                     break;
 
@@ -237,8 +241,6 @@ var TSOS;
             }
 
             // TODO: Accumulate CPU usage and profiling statistics here.
-            // Do the real work here. Be sure to set this.isExecuting appropriately.
-            // TODO Program execution goes here
             // Clear out instruction data buffer
             instructionData = [];
 
@@ -248,8 +250,17 @@ var TSOS;
             // Update CPU display
             TSOS.Display.displayCPU();
 
-            // Save PCB information
-            _CurrentPCB.saveInfo();
+            // Update memory display
+            _MemoryManager.displayMemory();
+        };
+
+        Cpu.prototype.clear = function () {
+            this.PC = 0;
+            this.Acc = 0;
+            this.Xreg = 0;
+            this.Yreg = 0;
+            this.Zflag = 0;
+            this.isExecuting = false;
         };
         return Cpu;
     })();

@@ -21,7 +21,7 @@ interface Constants {
 }
 
 // TODO Change CPU back to regular interval
-var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 500, TIMER_IRQ: 0, KEYBOARD_IRQ: 1};
+var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 250, TIMER_IRQ: 0, KEYBOARD_IRQ: 1};
 
 interface MemoryConstants {
 	PROCESS_SIZE: number;

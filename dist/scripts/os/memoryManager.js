@@ -101,6 +101,27 @@ var TSOS;
 
             return this.memoryObject.memoryList[rowNumber][columnNumber];
         };
+
+        MemoryManager.prototype.writeData = function (startingAddress, inputValue, processID) {
+            // Convert memoryAddress to hex
+            var hexAddress = parseInt(startingAddress, 16);
+
+            var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+            rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
+
+            var columnNumber = hexAddress % _MemoryConstants.BYTES_PER_ROW;
+
+            // Convert input value to hex
+            var valueString = inputValue.toString(16);
+
+            // Pad inputValue if necessary
+            if (valueString.length === 1) {
+                valueString = "0" + valueString;
+            }
+
+            // Write value to memory
+            this.memoryObject.memoryList[rowNumber][columnNumber] = valueString;
+        };
         return MemoryManager;
     })();
     TSOS.MemoryManager = MemoryManager;
