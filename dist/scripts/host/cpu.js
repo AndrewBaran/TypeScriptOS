@@ -53,7 +53,8 @@ var TSOS;
                 // Get real instruction from memory
                 var nextInstruction = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
             } else {
-                // TODO Destroy program; BSOD; kernel panic
+                // TODO Probably better to remove program instead
+                _Kernel.krnTrapError("Error! PC must be in range: 0 <= PC <= " + _MemoryConstants.PROCESS_SIZE);
             }
 
             // Convert PC to decimal equivalent
@@ -261,9 +262,6 @@ var TSOS;
 
                     var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
                     var hexValue = parseInt(hexString);
-
-                    console.log("hex = " + hexValue);
-                    console.log("x reg = " + this.Xreg);
 
                     // Set Zflag if equal
                     if (hexValue === this.Xreg) {

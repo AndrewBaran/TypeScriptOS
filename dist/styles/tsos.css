@@ -34,6 +34,15 @@ h3
 	font-style: normal;
 }
 
+/* Container of header with title */
+#pageHeader
+{
+	text-align: center;
+	font-size: 16px;
+
+	border-bottom: 1px solid black;
+}
+
 /* Container for content of page */
 #divMain
 {
@@ -89,6 +98,7 @@ h3
 	margin-right: 100px;
 	overflow: auto;
 	float: right;
+	border: 1px solid black;
 }
 
 /* Table containing main memory data structure */

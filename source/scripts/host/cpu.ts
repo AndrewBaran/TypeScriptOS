@@ -61,7 +61,8 @@ module TSOS {
             // Error
             else {
 
-            	// TODO Destroy program; BSOD; kernel panic
+            	// TODO Probably better to remove program instead
+                _Kernel.krnTrapError("Error! PC must be in range: 0 <= PC <= " + _MemoryConstants.PROCESS_SIZE);
 
             }
 
@@ -302,9 +303,6 @@ module TSOS {
 
                     var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
                     var hexValue: number = parseInt(hexString);
-
-                    console.log("hex = " + hexValue);
-                    console.log("x reg = " + this.Xreg);
 
                     // Set Zflag if equal
                     if(hexValue === this.Xreg) {
