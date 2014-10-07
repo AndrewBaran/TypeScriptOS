@@ -104,6 +104,10 @@ module TSOS {
             sc = new ShellCommand(this.shellRun, "run", " <pid> - Runs the program <pid> in memory.");
             this.commandList[this.commandList.length] = sc;
 
+            // clearmem
+            sc = new ShellCommand(this.shellClearMem, "clearmem", "Clears all memory partitions in the system.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -429,16 +433,15 @@ module TSOS {
 
                 if(validInput) {
 
-                	// Load program into memory at next available opening in memory
-                    for(var pid: number = 0; pid < _PCBList.length; pid++) {
-
-                        if(_PCBList[pid] === null) {
-                            break;
-                        }
+                    // Load the program into memory at the opening found by the for loop above
+                    if(_PCBList.length !== 3) {
+                	   _MemoryManager.loadProgram(byteList, _PCBList.length);
                     }
 
-                    // Load the program into memory at the opening found by the for loop above
-                	_MemoryManager.loadProgram(byteList, pid);
+                    else {
+                        _StdOut.putText("Cannot load program - memory is full.");
+                    }
+
                 }
 
                 else {
@@ -487,6 +490,9 @@ module TSOS {
                     // Set CPU to begin executing program
                     _CPU.isExecuting = true;
                     _CurrentPCB = _PCBList[processID];
+
+                    // Clear CPU
+                    _CPU.clear();
                 }
 
                 else {
@@ -495,6 +501,15 @@ module TSOS {
                 
             } // else
 
+        }
+
+        public shellClearMem(): void {
+
+            // Call this method without parameters to clear all partitions
+            _MemoryManager.clearMemory();
+            _MemoryManager.displayMemory();
+
+            _StdOut.putText("Memory has been cleared.");
         }
 
     }

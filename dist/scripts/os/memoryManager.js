@@ -13,11 +13,23 @@ var TSOS;
         };
 
         // Takes an optional parameter that clears a specific part of memory; otherwise, clear all memory
-        MemoryManager.prototype.clearMemory = function (processNumber) {
-            if (typeof processNumber === "undefined") { processNumber = -1; }
-            // TODO Implement
-            // Clear specific processNumber of memory
-            if (processNumber >= 0) {
+        MemoryManager.prototype.clearMemory = function (processID) {
+            if (typeof processID === "undefined") { processID = -1; }
+            // Clear specific processID of memory
+            if (processID >= 0 && processID < 3) {
+                var baseAddress = processID * _MemoryConstants.PROCESS_SIZE;
+                var limitAddress = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
+
+                var startingRow = baseAddress / _MemoryConstants.BYTES_PER_ROW;
+                var endingRow = Math.floor(limitAddress / 8);
+
+                console.log("Clearing rows " + startingRow + " - " + endingRow);
+
+                for (var i = startingRow; i <= endingRow; i++) {
+                    for (var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
+                        this.memoryObject.memoryList[i][j] = "00";
+                    }
+                }
             } else {
                 for (var i = 0; i < _MemoryConstants.NUM_ROWS; i++) {
                     for (var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
@@ -30,21 +42,22 @@ var TSOS;
         MemoryManager.prototype.loadProgram = function (byteList, processNumber) {
             if (typeof processNumber === "undefined") { processNumber = 0; }
             // Clear memory
-            this.clearMemory();
+            this.clearMemory(processNumber);
 
             // Start at the beginning of the specified program section
             var baseAddress = processNumber * _MemoryConstants.PROCESS_SIZE;
             var limitAddress = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
 
-            var startingRow = baseAddress % _MemoryConstants.BYTES_PER_ROW;
+            var startingRow = baseAddress / _MemoryConstants.BYTES_PER_ROW;
             var endingRow = startingRow + Math.floor(byteList.length / _MemoryConstants.BYTES_PER_ROW);
+
+            var index = 0;
 
             for (; startingRow <= endingRow; startingRow++) {
                 for (var colNumber = 0; colNumber < _MemoryConstants.NUM_COLUMNS; colNumber++) {
-                    var index = (startingRow * _MemoryConstants.BYTES_PER_ROW) + colNumber;
-
                     if (index < byteList.length) {
                         this.memoryObject.memoryList[startingRow][colNumber] = byteList[index];
+                        index++;
                     }
                 }
             }
@@ -95,7 +108,6 @@ var TSOS;
             }
         };
 
-        // TODO Fix for pid 1 and 2
         // Returns the value of the byte in memory using PC and PID
         MemoryManager.prototype.getByte = function (programCounter, processID) {
             var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
@@ -131,6 +143,7 @@ var TSOS;
         };
 
         // TODO BSOD or something if invalid memory access
+        // TODO This seems unnecessary
         MemoryManager.prototype.getData = function (address, processID) {
             var hexAddress = parseInt(address, 16);
 

@@ -30,7 +30,7 @@ module TSOS {
 				var startingRow: number = baseAddress / _MemoryConstants.BYTES_PER_ROW;
 				var endingRow: number = Math.floor(limitAddress / 8);
 
-				console.log("Clearing rows " + baseAddress + " - " + endingRow);
+				console.log("Clearing rows " + startingRow + " - " + endingRow);
 
 				for(var i = startingRow; i <= endingRow; i++) {
 					for(var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
@@ -62,16 +62,18 @@ module TSOS {
 			var baseAddress: number = processNumber * _MemoryConstants.PROCESS_SIZE;
 			var limitAddress: number = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
 
-			var startingRow: number = baseAddress % _MemoryConstants.BYTES_PER_ROW;
+			var startingRow: number = baseAddress / _MemoryConstants.BYTES_PER_ROW;
 			var endingRow: number = startingRow + Math.floor(byteList.length / _MemoryConstants.BYTES_PER_ROW);
 
-			for(; startingRow <= endingRow; startingRow++) {
-				for(var colNumber: number = 0; colNumber < _MemoryConstants.NUM_COLUMNS; colNumber++) {
+			var index: number = 0;
 
-					var index: number = (startingRow * _MemoryConstants.BYTES_PER_ROW) + colNumber;
+			for(; startingRow <= endingRow; startingRow++) {
+
+				for(var colNumber: number = 0; colNumber < _MemoryConstants.NUM_COLUMNS; colNumber++) {
 
 					if(index < byteList.length) {
 						this.memoryObject.memoryList[startingRow][colNumber] = byteList[index];
+						index++;
 					}
 				}
 			}

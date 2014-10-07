@@ -36,11 +36,13 @@ var TSOS;
             this.krnTrace(_krnKeyboardDriver.status);
 
             // Initialize and display memory
+            this.krnTrace("Initializing and displaying memory.");
             _MemoryManager = new TSOS.MemoryManager();
             _MemoryManager.initializeMemory();
             _MemoryManager.displayMemory();
 
             // Display CPU status
+            this.krnTrace("Displaying CPU");
             TSOS.Display.displayCPU();
 
             // Initialize new PCB list

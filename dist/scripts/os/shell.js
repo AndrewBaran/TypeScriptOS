@@ -83,6 +83,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellRun, "run", " <pid> - Runs the program <pid> in memory.");
             this.commandList[this.commandList.length] = sc;
 
+            // clearmem
+            sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", "Clears all memory partitions in the system.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
             //
@@ -400,9 +404,12 @@ var TSOS;
                 }
 
                 if (validInput) {
-                    // Load program into memory at $0000
-                    // TODO Change to dynamically load into an available location
-                    _MemoryManager.loadProgram(byteList, 0);
+                    // Load the program into memory at the opening found by the for loop above
+                    if (_PCBList.length !== 3) {
+                        _MemoryManager.loadProgram(byteList, _PCBList.length);
+                    } else {
+                        _StdOut.putText("Cannot load program - memory is full.");
+                    }
                 } else {
                     _StdOut.putText("Invalid program input. Invalid number of hex digits.");
                 }
@@ -424,26 +431,32 @@ var TSOS;
             }
         };
 
-        // TODO Implement
         Shell.prototype.shellRun = function (args) {
-            console.log("In shellRun");
-
             if (args.length != 1) {
                 _StdOut.putText("Usage: run <pid> Please supply a program ID");
-            }
-
-            var processID = parseInt(args[0], 10);
-            console.log("ProcessID = " + processID);
-
-            if (processID >= 0 && processID < _PCBList.length) {
-                console.log("Valid process ID. Run the program");
-
-                // Set CPU to begin executing program
-                _CPU.isExecuting = true;
-                _CurrentPCB = _PCBList[processID];
             } else {
-                _StdOut.putText("Error: Invalid process ID");
+                var processID = parseInt(args[0], 10);
+                console.log("ProcessID = " + processID);
+
+                if (processID >= 0 && processID < _PCBList.length) {
+                    // Set CPU to begin executing program
+                    _CPU.isExecuting = true;
+                    _CurrentPCB = _PCBList[processID];
+
+                    // Clear CPU
+                    _CPU.clear();
+                } else {
+                    _StdOut.putText("Error: Invalid process ID");
+                }
             }
+        };
+
+        Shell.prototype.shellClearMem = function () {
+            // Call this method without parameters to clear all partitions
+            _MemoryManager.clearMemory();
+            _MemoryManager.displayMemory();
+
+            _StdOut.putText("Memory has been cleared.");
         };
         return Shell;
     })();
