@@ -3,6 +3,7 @@ var TSOS;
     var Display = (function () {
         function Display() {
         }
+        // TODO Move this into CPU class
         Display.displayCPU = function () {
             var cpuInfoTable = document.getElementById("cpuStatus");
 

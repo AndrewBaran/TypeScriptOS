@@ -73,6 +73,9 @@ module TSOS {
             // Increment PC to point to next byte (could be instruction or data)
             this.PC++;
 
+            // Increment number of cycles done
+            _CurrentPCB.cyclesComplete++;
+
             var instructionData: string[] = [];
 
             // Switch statement using instruction to get data and execute instruction
@@ -278,9 +281,9 @@ module TSOS {
             		// Display PCB in console
             		_CurrentPCB.display();
 
-            		// Remove currentPCB from list
-            		var index = _CurrentPCB.processID;
-            		_PCBList.splice(index, 1);
+                    // TODO THIS MAY BE BUGGY IN THE FUTURE. FUTURE ME, LOOK HERE
+            		// Remove currentPCB from ready queue
+                    _ReadyQueue.dequeue();
 
             		break;
 
@@ -302,7 +305,7 @@ module TSOS {
                     }
 
                     var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
-                    var hexValue: number = parseInt(hexString);
+                    var hexValue: number = parseInt(hexString, 16);
 
                     // Set Zflag if equal
                     if(hexValue === this.Xreg) {
@@ -314,6 +317,7 @@ module TSOS {
             		break;
 
             	// TODO Branch X bytes if Z flag = 1
+                // This is done by wrapping around when you overflow over the limit address
             	case "D0":
 
             		console.log("BNE");
@@ -358,6 +362,7 @@ module TSOS {
             	// System call
             	// 01 in X reg = print integer stored in Y register
             	// 02 in X reg = print the 00-terminated string stored at the address in the Y register
+                // TODO Enqueue an interrupt?
             	case "FF":
 
             		if((this.Xreg.toString(10)) === "1") {
@@ -377,6 +382,7 @@ module TSOS {
             	default:
 
             		console.log("This shouldn't happen.");
+            		// TODO Make the CPU implode (or make the kernel panic)
 
             		break;
 
@@ -390,10 +396,6 @@ module TSOS {
             // Convert PC back to hex
             var hexPC: string = this.PC.toString(16);
             this.PC = parseInt(hexPC, 16);
-
-            // Increment number of cycles done
-            // TODO Move
-            _CurrentPCB.cyclesComplete++;
 
             // Update CPU display
             TSOS.Display.displayCPU();

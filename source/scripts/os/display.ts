@@ -1,6 +1,7 @@
 module TSOS {
 	export class Display {
 
+		// TODO Move this into CPU class
 		public static displayCPU(): void {
 
 			var cpuInfoTable = <HTMLTableElement>document.getElementById("cpuStatus");

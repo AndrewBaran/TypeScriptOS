@@ -39,6 +39,7 @@ var TSOS;
             }
         };
 
+        // Load the program into physical memory; default process block = 0
         MemoryManager.prototype.loadProgram = function (byteList, processNumber) {
             if (typeof processNumber === "undefined") { processNumber = 0; }
             // Clear memory
@@ -66,7 +67,7 @@ var TSOS;
             this.displayMemory();
 
             var newPCB = new TSOS.PCB(processNumber, baseAddress, limitAddress);
-            _PCBList[processNumber] = newPCB;
+            _ResidentQueue.push(newPCB);
 
             _StdOut.putText("Program loaded | PID " + processNumber + " created");
         };

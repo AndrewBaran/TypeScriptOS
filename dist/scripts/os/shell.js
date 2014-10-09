@@ -84,7 +84,7 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
 
             // clearmem
-            sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", "Clears all memory partitions in the system.");
+            sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", " - Clears all memory partitions in the system.");
             this.commandList[this.commandList.length] = sc;
 
             // processes - list the running processes and their IDs
@@ -405,8 +405,12 @@ var TSOS;
 
                 if (validInput) {
                     // Load the program into memory at the opening found by the for loop above
-                    if (_PCBList.length !== 3) {
-                        _MemoryManager.loadProgram(byteList, _PCBList.length);
+                    if (_ResidentQueue.length !== 3) {
+                        // Allows 1 program to be loaded
+                        _MemoryManager.loadProgram(byteList, 0);
+                        // TODO Buggy and needs fixing
+                        // Allow 3 programs to be loaded
+                        // _MemoryManager.loadProgram(byteList, _ResidentQueue.length);
                     } else {
                         _StdOut.putText("Cannot load program - memory is full.");
                     }
@@ -438,10 +442,31 @@ var TSOS;
                 var processID = parseInt(args[0], 10);
                 console.log("ProcessID = " + processID);
 
-                if (processID >= 0 && processID < _PCBList.length) {
+                if (processID >= 0 && processID < _ResidentQueue.length) {
                     // Set CPU to begin executing program
                     _CPU.isExecuting = true;
-                    _CurrentPCB = _PCBList[processID];
+
+                    console.log(_ResidentQueue);
+                    console.log(_ReadyQueue);
+
+                    for (var i = 0; i < _ResidentQueue.length; i++) {
+                        if (_ResidentQueue[i].processID == processID) {
+                            console.log("Found a match at index " + i);
+                            var properIndex = i;
+                            break;
+                        }
+                    }
+
+                    // Remove PCB from resident queue
+                    var selectedPCB = _ResidentQueue[properIndex];
+                    _ResidentQueue.splice(properIndex, 1);
+
+                    // Add PCB to ready queue
+                    _ReadyQueue.enqueue(selectedPCB);
+                    _CurrentPCB = selectedPCB;
+
+                    console.log(_ResidentQueue);
+                    console.log(_ReadyQueue);
 
                     // Clear CPU
                     _CPU.clear();

@@ -27,7 +27,10 @@ var _Mode = 0;
 // Main memory
 var _MemoryManager;
 
-var _PCBList;
+// Process lists and related
+var _ResidentQueue;
+var _ReadyQueue;
+
 var _CurrentPCB;
 
 var _Canvas = null;

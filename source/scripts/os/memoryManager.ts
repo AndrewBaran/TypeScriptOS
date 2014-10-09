@@ -53,6 +53,7 @@ module TSOS {
 
 		} // clearMemory()
 
+		// Load the program into physical memory; default process block = 0
 		public loadProgram(byteList: string[], processNumber: number = 0) : void {
 
 			// Clear memory
@@ -82,7 +83,7 @@ module TSOS {
 			this.displayMemory();
 
 			var newPCB: TSOS.PCB = new PCB(processNumber, baseAddress, limitAddress);
-			_PCBList[processNumber] = newPCB;
+			_ResidentQueue.push(newPCB);
 
 			_StdOut.putText("Program loaded | PID " + processNumber + " created");
 		}

@@ -64,6 +64,9 @@ var TSOS;
             // Increment PC to point to next byte (could be instruction or data)
             this.PC++;
 
+            // Increment number of cycles done
+            _CurrentPCB.cyclesComplete++;
+
             var instructionData = [];
 
             switch (nextInstruction) {
@@ -241,9 +244,9 @@ var TSOS;
                     // Display PCB in console
                     _CurrentPCB.display();
 
-                    // Remove currentPCB from list
-                    var index = _CurrentPCB.processID;
-                    _PCBList.splice(index, 1);
+                    // TODO THIS MAY BE BUGGY IN THE FUTURE. FUTURE ME, LOOK HERE
+                    // Remove currentPCB from ready queue
+                    _ReadyQueue.dequeue();
 
                     break;
 
@@ -261,7 +264,7 @@ var TSOS;
                     }
 
                     var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
-                    var hexValue = parseInt(hexString);
+                    var hexValue = parseInt(hexString, 16);
 
                     // Set Zflag if equal
                     if (hexValue === this.Xreg) {
@@ -331,10 +334,6 @@ var TSOS;
             // Convert PC back to hex
             var hexPC = this.PC.toString(16);
             this.PC = parseInt(hexPC, 16);
-
-            // Increment number of cycles done
-            // TODO Move
-            _CurrentPCB.cyclesComplete++;
 
             // Update CPU display
             TSOS.Display.displayCPU();

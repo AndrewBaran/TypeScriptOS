@@ -49,7 +49,10 @@ var _Mode: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode
 // Main memory
 var _MemoryManager: TSOS.MemoryManager; // Abstraction layer above main memory
 
-var _PCBList: TSOS.PCB[]; // List holding each process control block
+// Process lists and related
+var _ResidentQueue: TSOS.PCB[]; // List of processes in memory but not running
+var _ReadyQueue: TSOS.Queue; // Queue of processes that are in memory and running
+
 var _CurrentPCB: TSOS.PCB;
 
 var _Canvas: HTMLCanvasElement = null;  // Initialized in hostInit().
