@@ -137,7 +137,7 @@ module TSOS {
             // Determine the command and execute it.
             //
             // JavaScript may not support associative arrays in all browsers so we have to
-            // iterate over the command list in attempt to find a match.  TODO: Is there a better way? Probably.
+            // iterate over the command list in attempt to find a match.
             var index = 0;
             var found = false;
             var fn = undefined;

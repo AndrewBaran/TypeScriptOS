@@ -197,8 +197,9 @@ var TSOS;
                 _StdOut.putText(_CPU.Yreg.toString(10));
                 _StdOut.newLine();
             } else if ((_CPU.Xreg.toString(10)) === "2") {
-                // TODO
-                // Print 00-terminated string in Y reg
+                // TODO Print 00-terminated string in Y reg
+            } else {
+                TSOS.Control.hostLog("Attention! CPU state did not match any known system call.");
             }
         };
         return Kernel;

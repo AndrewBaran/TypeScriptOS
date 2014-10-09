@@ -214,8 +214,13 @@ module TSOS {
             // 02 in X reg = print the 00-terminated string stored at the address in the Y register
             else if((_CPU.Xreg.toString(10)) === "2") {
 
-                // TODO
-                // Print 00-terminated string in Y reg
+                // TODO Print 00-terminated string in Y reg
+            }
+
+            // Invalid system call
+            else {
+
+                Control.hostLog("Attention! CPU state did not match any known system call.");
             }
 
         }

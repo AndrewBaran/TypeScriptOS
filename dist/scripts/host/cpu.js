@@ -41,9 +41,6 @@ var TSOS;
 
             // Check if first cycle
             if (_CurrentPCB.cyclesComplete === 0) {
-                // Setup stuff
-                console.log("Setting up CPU for first cycle");
-
                 // Clear CPU
                 this.clear();
             }
@@ -281,7 +278,11 @@ var TSOS;
                     // Read 1 byte
                     instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
 
-                    this.PC++;
+                    var hexString = instructionData.pop();
+                    var hexValue = parseInt(hexString, 16);
+
+                    // Add new value to PC
+                    this.PC = (this.PC + hexValue) % _MemoryConstants.PROCESS_SIZE;
 
                     break;
 
@@ -305,7 +306,9 @@ var TSOS;
                     // Increment the byte
                     hexValue++;
 
-                    // TODO Store the byte in memory
+                    // Store incremented byte back in memory
+                    _MemoryManager.writeData(memoryAddress, hexValue, _CurrentPCB.processID);
+
                     this.PC += 2;
 
                     break;

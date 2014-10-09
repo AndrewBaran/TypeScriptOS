@@ -1,7 +1,6 @@
 module TSOS {
 	export class PCB {
 
-		// TODO Probably need additional fields
 		// Fields
 		public processID: number;
 		public baseRegister: number;

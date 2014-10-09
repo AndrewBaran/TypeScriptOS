@@ -44,9 +44,6 @@ module TSOS {
             // Check if first cycle
             if(_CurrentPCB.cyclesComplete === 0) {
 
-                // Setup stuff
-                console.log("Setting up CPU for first cycle");
-                
                 // Clear CPU
                 this.clear();
             }
@@ -316,8 +313,7 @@ module TSOS {
 
             		break;
 
-            	// TODO Branch X bytes if Z flag = 1
-                // This is done by wrapping around when you overflow over the limit address
+            	// Branch X bytes if Z flag = 1
             	case "D0":
 
             		console.log("BNE");
@@ -325,11 +321,15 @@ module TSOS {
             		// Read 1 byte
             		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
 
-            		this.PC++;
+                    var hexString: string = instructionData.pop();
+                    var hexValue: number = parseInt(hexString, 16);
+
+                    // Add new value to PC
+                    this.PC = (this.PC + hexValue) % _MemoryConstants.PROCESS_SIZE;
 
             		break;
 
-            	// TODO Increment the value of a byte
+            	// Increment the value of a byte
             	case "EE":
 
             		console.log("INC");
@@ -352,8 +352,8 @@ module TSOS {
                     // Increment the byte
                     hexValue++;
 
-                    // TODO Store the byte in memory
-
+                    // Store incremented byte back in memory
+                    _MemoryManager.writeData(memoryAddress, hexValue, _CurrentPCB.processID);
 
             		this.PC += 2;
 
