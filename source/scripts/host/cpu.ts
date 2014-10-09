@@ -398,7 +398,7 @@ module TSOS {
             this.PC = parseInt(hexPC, 16);
 
             // Update CPU display
-            TSOS.Display.displayCPU();
+            _CPU.display();
 
             // Update memory display
             _MemoryManager.displayMemory();
@@ -413,5 +413,30 @@ module TSOS {
             this.Yreg = 0;
             this.Zflag = 0;
         }
+
+        // Displays the CPU information in the browser
+        public display(): void {
+
+            var cpuInfoTable = <HTMLTableElement>document.getElementById("cpuStatus");
+
+            // Check if table has any rows and remove them
+            while(cpuInfoTable.rows.length > 2) {
+                cpuInfoTable.deleteRow(-1);
+            }
+
+            var newRow = <HTMLTableRowElement>cpuInfoTable.insertRow();
+
+            // Display each value in the CPU table
+            for(var i: number = 0; i < 5; i++) {
+                var key: string = Object.keys(_CPU)[i];
+                var value: string = _CPU[key];
+
+                var newCell = newRow.insertCell(i);
+
+                newCell.innerHTML = value;
+            }
+
+        } // displayCPU()
+
     }
 }

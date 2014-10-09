@@ -43,7 +43,7 @@ var TSOS;
 
             // Display CPU status
             this.krnTrace("Displaying CPU");
-            TSOS.Display.displayCPU();
+            _CPU.display();
 
             // Initialize new PCB list
             _ResidentQueue = [];

@@ -336,7 +336,7 @@ var TSOS;
             this.PC = parseInt(hexPC, 16);
 
             // Update CPU display
-            TSOS.Display.displayCPU();
+            _CPU.display();
 
             // Update memory display
             _MemoryManager.displayMemory();
@@ -348,6 +348,26 @@ var TSOS;
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
+        };
+
+        // Displays the CPU information in the browser
+        Cpu.prototype.display = function () {
+            var cpuInfoTable = document.getElementById("cpuStatus");
+
+            while (cpuInfoTable.rows.length > 2) {
+                cpuInfoTable.deleteRow(-1);
+            }
+
+            var newRow = cpuInfoTable.insertRow();
+
+            for (var i = 0; i < 5; i++) {
+                var key = Object.keys(_CPU)[i];
+                var value = _CPU[key];
+
+                var newCell = newRow.insertCell(i);
+
+                newCell.innerHTML = value;
+            }
         };
         return Cpu;
     })();
