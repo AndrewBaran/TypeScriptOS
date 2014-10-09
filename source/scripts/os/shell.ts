@@ -12,7 +12,7 @@
 module TSOS {
     export class Shell {
         // Properties
-        public promptStr = ">";
+        public promptStr: string = ">";
         public commandList = [];
         public history = {list: [], currentCommand: 0, numItems: 0};
 
@@ -20,7 +20,7 @@ module TSOS {
 
         }
 
-        public init() {
+        public init(): void {
             var sc = null;
             //
             // Load the command list.
@@ -113,11 +113,11 @@ module TSOS {
             this.putPrompt();
         }
 
-        public putPrompt() {
+        public putPrompt(): void {
             _StdOut.putText(this.promptStr);
         }
 
-        public handleInput(buffer) {
+        public handleInput(buffer): void {
             _Kernel.krnTrace("Shell Command~" + buffer);
             //
             // Parse the input...
@@ -156,20 +156,23 @@ module TSOS {
         }
 
         // args is an option parameter, ergo the ? which allows TypeScript to understand that
-        public execute(fn, args?) {
+        public execute(fn, args?): void {
             // We just got a command, so advance the line...
             _StdOut.advanceLine();
+
             // ... call the command function passing in the args...
             fn(args);
+
             // Check to see if we need to advance the line again
             if (_StdOut.currentXPosition > 0) {
                 _StdOut.advanceLine();
             }
+
             // ... and finally write the prompt again.
             this.putPrompt();
         }
 
-        public parseInput(buffer) {
+        public parseInput(buffer): UserCommand {
             var retVal = new UserCommand();
 
             // 1. Remove leading and trailing spaces.
@@ -235,11 +238,11 @@ module TSOS {
             _StdOut.putText("Type 'help' for a list of available commands.");
         }
 
-        public shellVer(args) {
+        public shellVer(args): void {
             _StdOut.putText(_Constants.APP_NAME + ": version " + _Constants.APP_VERSION);
         }
 
-        public shellHelp(args) {
+        public shellHelp(args): void {
             _StdOut.putText("Commands:");
             for (var i in _OsShell.commandList) {
                 _StdOut.advanceLine();
@@ -247,19 +250,19 @@ module TSOS {
             }
         }
 
-        public shellShutdown(args) {
+        public shellShutdown(args): void {
              _StdOut.putText("Shutting down...");
              // Call Kernel shutdown routine.
             _Kernel.krnShutdown();
             // TODO: Stop the final prompt from being displayed.  If possible.  Not a high priority.  (Damn OCD!)
         }
 
-        public shellCls(args) {
+        public shellCls(args): void {
             _StdOut.clearScreen();
             _StdOut.resetXY();
         }
 
-        public shellMan(args) {
+        public shellMan(args): void {
             if (args.length > 0) {
                 var topic = args[0];
                 switch (topic) {
@@ -274,7 +277,7 @@ module TSOS {
             }
         }
 
-        public shellTrace(args) {
+        public shellTrace(args): void {
             if (args.length > 0) {
                 var setting = args[0];
                 switch (setting) {
@@ -299,7 +302,7 @@ module TSOS {
             }
         }
 
-        public shellRot13(args) {
+        public shellRot13(args): void {
             if (args.length > 0) {
                 // Requires Utils.ts for rot13() function.
                 _StdOut.putText(args.join(' ') + " = '" + Utils.rot13(args.join(' ')) +"'");
@@ -308,7 +311,7 @@ module TSOS {
             }
         }
 
-        public shellPrompt(args) {
+        public shellPrompt(args): void {
             if (args.length > 0) {
                 _OsShell.promptStr = args[0];
             } else {
@@ -316,17 +319,17 @@ module TSOS {
             }
         }
 
-        public shellDate() {
+        public shellDate(): void {
             var dateString : string = Utils.getFormattedDate();
 
             _StdOut.putText("The current date is: " + dateString);
         }
 
-        public shellWhereAreI() {
+        public shellWhereAreI(): void {
             _StdOut.putText("You are probably in Pouhgkeepsie, NY, at Marist College. Or not if you are a job recruiter...");
         }
 
-        public shell007() {
+        public shell007(): void {
 
         	var movies = [
         		{title: "Dr. No", bondActor: "Sean Connery"},
@@ -351,7 +354,7 @@ module TSOS {
         }
 
         // TODO Improve by removing prompt that follows error message (same issue as in shellShutdown())
-        public shellBSOD() {
+        public shellBSOD(): void {
 
             // Change canvas background color to Microsoft Approved Blue (TM)
             document.getElementById("display").style.backgroundColor = "#2067B2";
@@ -365,7 +368,8 @@ module TSOS {
             clearInterval(_hardwareClockID);
         }
 
-        public shellLoad() {
+        public shellLoad(): void {
+
             // Get text from the User Program Input textbox
             var textInput : string = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
 
@@ -428,7 +432,7 @@ module TSOS {
 
         }
 
-        public shellStatus(args : string[]) {
+        public shellStatus(args : string[]): void {
             
             // Invalid number of arguments
             if(args.length < 1) {
@@ -446,7 +450,7 @@ module TSOS {
 
         }
 
-        public shellRun(args) {
+        public shellRun(args: string[]): void {
 
             if(args.length != 1) {
                 _StdOut.putText("Usage: run <pid> Please supply a program ID");
@@ -455,15 +459,11 @@ module TSOS {
             else {
 
                 var processID: number = parseInt(args[0], 10);
-                console.log("ProcessID = " + processID);
 
                 if(processID >= 0 && processID < _ResidentQueue.length) {
 
                     // Set CPU to begin executing program
                     _CPU.isExecuting = true;
-
-                    console.log(_ResidentQueue);
-                    console.log(_ReadyQueue);
 
                     // Move process from resident queue to ready queue
                     // Find index of PCB with processID
@@ -471,7 +471,6 @@ module TSOS {
 
                         if(_ResidentQueue[i].processID == processID) {
 
-                            console.log("Found a match at index " + i);
                             var properIndex: number = i;
                             break;
                         }
@@ -485,9 +484,6 @@ module TSOS {
                     _ReadyQueue.enqueue(selectedPCB);
                     _CurrentPCB = selectedPCB;
                     
-                    console.log(_ResidentQueue);
-                    console.log(_ReadyQueue);
-
                     // Clear CPU
                     _CPU.clear();
                 }

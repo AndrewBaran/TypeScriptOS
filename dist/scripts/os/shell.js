@@ -407,18 +407,13 @@ var TSOS;
                 _StdOut.putText("Usage: run <pid> Please supply a program ID");
             } else {
                 var processID = parseInt(args[0], 10);
-                console.log("ProcessID = " + processID);
 
                 if (processID >= 0 && processID < _ResidentQueue.length) {
                     // Set CPU to begin executing program
                     _CPU.isExecuting = true;
 
-                    console.log(_ResidentQueue);
-                    console.log(_ReadyQueue);
-
                     for (var i = 0; i < _ResidentQueue.length; i++) {
                         if (_ResidentQueue[i].processID == processID) {
-                            console.log("Found a match at index " + i);
                             var properIndex = i;
                             break;
                         }
@@ -431,9 +426,6 @@ var TSOS;
                     // Add PCB to ready queue
                     _ReadyQueue.enqueue(selectedPCB);
                     _CurrentPCB = selectedPCB;
-
-                    console.log(_ResidentQueue);
-                    console.log(_ReadyQueue);
 
                     // Clear CPU
                     _CPU.clear();

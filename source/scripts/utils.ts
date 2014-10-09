@@ -9,16 +9,10 @@ module TSOS {
     export class Utils {
 
         public static trim(str): string {
+
             // Use a regular expression to remove leading and trailing spaces.
+            // Replaces 1 or more spaces with the empty string ""
             return str.replace(/^\s+ | \s+$/g, "");
-            /*
-            Huh? WTF? Okay... take a breath. Here we go:
-            - The "|" separates this into two expressions, as in A or B.
-            - "^\s+" matches a sequence of one or more whitespace characters at the beginning of a string.
-            - "\s+$" is the same thing, but at the end of the string.
-            - "g" makes is global, so we get all the whitespace.
-            - "" is nothing, which is what we replace the whitespace with.
-            */
         }
 
         public static rot13(str: string): string {
@@ -44,7 +38,7 @@ module TSOS {
             return retVal;
         }
 
-        public static getFormattedDate() : string {
+        public static getFormattedDate(): string {
 
             var date = new Date();
 
@@ -77,7 +71,7 @@ module TSOS {
         }
 
         // Convert hex strings to uppercase if user input them with lowercase letters
-        public static toUpperHex(hexString: string) : string {
+        public static toUpperHex(hexString: string): string {
 
             var newString: string = "";
 

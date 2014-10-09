@@ -155,10 +155,6 @@ var TSOS;
 
             return this.memoryObject.memoryList[rowNumber][columnNumber];
         };
-
-        MemoryManager.prototype.getFormattedAddress = function (bytesToRead) {
-            return [];
-        };
         return MemoryManager;
     })();
     TSOS.MemoryManager = MemoryManager;

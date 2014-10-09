@@ -13,11 +13,11 @@ module TSOS {
 
     export class Console {
 
-        constructor(public currentFont = _DefaultFontFamily,
-                    public currentFontSize = _DefaultFontSize,
-                    public currentXPosition = 0,
-                    public currentYPosition = _DefaultFontSize,
-                    public buffer = "",
+        constructor(public currentFont: string = _DefaultFontFamily,
+                    public currentFontSize: number = _DefaultFontSize,
+                    public currentXPosition: number = 0,
+                    public currentYPosition: number = _DefaultFontSize,
+                    public buffer: string = "",
                     public endingXPositions : number[] = []) {
 
         }
@@ -245,7 +245,7 @@ module TSOS {
              * Font descent measures from the baseline to the lowest point in the font.
              * Font height margin is extra spacing between the lines.
              */
-            var newLineHeight : number = _DefaultFontSize + 
+            var newLineHeight: number = _DefaultFontSize + 
                                 _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                    				_FontHeightMargin;
 
@@ -270,7 +270,7 @@ module TSOS {
         }
 
         // Moves up one line in the console (used when backspacing multiple lines)
-        public retreatLine() : void {
+        public retreatLine(): void {
         	var newLineHeight : number = _DefaultFontSize + 
                                 _DrawingContext.fontDescent(this.currentFont, this.currentFontSize) +
                    				_FontHeightMargin;

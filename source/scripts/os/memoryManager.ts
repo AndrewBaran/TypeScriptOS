@@ -11,7 +11,7 @@ module TSOS {
 		// Methods
 
 		// Create new memory object and clear it out
-		public initializeMemory() : void {
+		public initializeMemory(): void {
 
 			this.memoryObject = new Memory();
 			this.clearMemory();
@@ -19,7 +19,7 @@ module TSOS {
 
 
 		// Takes an optional parameter that clears a specific part of memory; otherwise, clear all memory
-		public clearMemory(processID: number = -1) : void {
+		public clearMemory(processID: number = -1): void {
 
 			// Clear specific processID of memory
 			if(processID >= 0 && processID < 3) {
@@ -89,7 +89,7 @@ module TSOS {
 		}
 
 		// Display the (potentially updated) memory in the browser
-		public displayMemory() : void {
+		public displayMemory(): void {
 
 			var memoryTable = <HTMLTableElement>document.getElementById("mainMemory");
 
@@ -187,10 +187,6 @@ module TSOS {
 			var columnNumber: number = hexAddress % _MemoryConstants.BYTES_PER_ROW;
 
 			return this.memoryObject.memoryList[rowNumber][columnNumber];
-		}
-
-		public getFormattedAddress(bytesToRead: number): string[] {
-			return [];
 		}
 
 	}
