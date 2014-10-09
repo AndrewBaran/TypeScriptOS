@@ -282,8 +282,8 @@ module TSOS {
                 var setting = args[0];
                 switch (setting) {
                     case "on":
-                        if (_Trace && _SarcasticMode) {
-                            _StdOut.putText("Trace is already on, dumbass.");
+                        if (_Trace) {
+                            _StdOut.putText("Trace is already on.");
                         } else {
                             _Trace = true;
                             _StdOut.putText("Trace ON");

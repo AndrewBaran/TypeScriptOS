@@ -26,6 +26,9 @@ var TSOS;
             // Increment the hardware (host) clock.
             _OSclock++;
 
+            // Update timer
+            TSOS.Control.displayTimer();
+
             // Call the kernel clock pulse event handler.
             _Kernel.krnOnCPUClockPulse();
         };

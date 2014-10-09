@@ -44,7 +44,7 @@ Project 2 Checklist
 	PC, instruction reg, accumulator, X reg, Y reg, Z flag) in real time
 - [x] Update and display the PCB contents at the end of the execution
 - [x] Implement line-wrap in the CLI (no longer optional)
-- [ ] **Optional**: Provide the ability to single-step execution
+- [x] **Optional**: Provide the ability to single-step execution
 
 - [x] Develop a PCB prototype and implement it in the **client OS**
 - [x] Develop a memory manager and implement it in the **client OS**
@@ -55,7 +55,7 @@ Project 3 Checklist
 ===================
 
 - [x] Add a shell command, clearmem, to clear all memory partitions
-- [x] Allow the user to load three programs into memory at once
+- [ ] Allow the user to load three programs into memory at once
 - [ ] Add a shell command, runall, to execute all the programs at once
 - [ ] Add a shell command, quantum <int>, to let the user set the Round Robin quantum (measured in clock ticks)
 - [ ] Display the Ready queue and its (PCB) contents (including process state) in real time

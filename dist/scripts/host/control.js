@@ -64,6 +64,12 @@ var TSOS;
             // Optionally update a log database or some streaming service.
         };
 
+        Control.displayTimer = function () {
+            // Update time every second
+            var dateString = TSOS.Utils.getFormattedDate();
+            document.getElementById("statusTimer").innerHTML = dateString;
+        };
+
         //
         // Host Events
         //
@@ -71,9 +77,10 @@ var TSOS;
             // Disable the (passed-in) start button...
             btn.disabled = true;
 
-            // .. enable the Halt and Reset buttons ...
+            // Enable all other buttons
             document.getElementById("btnHaltOS").disabled = false;
             document.getElementById("btnReset").disabled = false;
+            document.getElementById("btnEnableStep").disabled = false;
 
             // .. set focus on the OS console display ...
             document.getElementById("display").focus();
@@ -108,6 +115,29 @@ var TSOS;
             // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
+        };
+
+        // Enables single step mode
+        Control.hostBtnEnableStep_click = function (btn) {
+            console.log("Starting single stepping.");
+
+            // Disable start and step button
+            document.getElementById("btnStartOS").disabled = true;
+            document.getElementById("btnEnableStep").disabled = true;
+
+            // Enable step button
+            document.getElementById("btnStep").disabled = false;
+
+            // Clear CPU interval
+            clearInterval(_hardwareClockID);
+
+            // Keep clock still running
+            _hostClockDisplay = setInterval(Control.displayTimer, _Constants.CPU_CLOCK_INTERVAL);
+        };
+
+        // Executes 1 cycle in single step mode
+        Control.hostBtnStep_click = function (btn) {
+            TSOS.Devices.hostClockPulse();
         };
         return Control;
     })();

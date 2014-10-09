@@ -49,7 +49,7 @@
 
 	<div id="divButtonBar">
 		<input type="button"
-			id = "btnStartOS"
+			id="btnStartOS"
 			name="brnStartOS"
 			class="normal_button"
 			value="Start"
@@ -57,7 +57,7 @@
 			onclick="TSOS.Control.hostBtnStartOS_click(this);">
 
 	 	<input type="button"
-			id = "btnHaltOS"
+			id="btnHaltOS"
 			name="brnHaltOS"
 			class="normal_button"
 			disabled="disabled"
@@ -66,13 +66,32 @@
 			onclick="TSOS.Control.hostBtnHaltOS_click(this);">
 
 	  	<input type="button"
-			id = "btnReset"
+			id="btnReset"
 			name="brnReset"
 			class="normal_button"
 			disabled="disabled"
 			value="Reset"
 			tabindex="2"
 			onclick="TSOS.Control.hostBtnReset_click(this);">
+
+		<input type="button"
+			id="btnEnableStep"
+			name="brnEnableStep"
+			class="normal_button"
+			disabled="disabled"
+			value="Start Step"
+			tabindex=""
+			onclick="TSOS.Control.hostBtnEnableStep_click(this);">
+
+		<input type="button"
+			id="btnStep"
+			name="brnStep"
+			class="small_button"
+			disabled="disabled"
+			value="Step"
+			tabindex=""
+			onclick="TSOS.Control.hostBtnStep_click(this);">
+
 	</div>
 
 	<div id="divConsole">

@@ -15,7 +15,7 @@ module TSOS {
         //
         // OS Startup and Shutdown Routines
         //
-        public krnBootstrap() {      // Page 8. {
+        public krnBootstrap(): void {      // Page 8. {
             Control.hostLog("bootstrap", "host");  // Use hostLog because we ALWAYS want this, even if _Trace is off.
 
             // Initialize our global queues.
@@ -48,6 +48,7 @@ module TSOS {
             _CPU.display();
 
             // Initialize new PCB list
+            this.krnTrace("Initializing the resident and ready queues.");
             _ResidentQueue = [];
             _ReadyQueue = new Queue();
 
@@ -62,8 +63,7 @@ module TSOS {
 
             // Add timer to the host log
             this.krnTrace("Enabling host display clock.");
-            var dateString : string = Utils.getFormattedDate();
-			document.getElementById("statusTimer").innerHTML = dateString;
+            Control.displayTimer();
 
             // Finally, initiate testing.
             if (_GLaDOS) {
@@ -71,8 +71,8 @@ module TSOS {
             }
         }
 
-        public krnShutdown() {
-            this.krnTrace("begin shutdown OS");
+        public krnShutdown(): void {
+            this.krnTrace("Begin shutdown of OS.");
             // TODO: Check for running processes.  Alert if there are some, alert and stop.  Else...
             // ... Disable the Interrupts.
             this.krnTrace("Disabling the interrupts.");
@@ -81,16 +81,17 @@ module TSOS {
             // Unload the Device Drivers?
             // More?
             //
-            this.krnTrace("end shutdown OS");
+            this.krnTrace("Ending the shutdown of OS");
         }
 
 
-        public krnOnCPUClockPulse() {
+        public krnOnCPUClockPulse(): void {
             /* This gets called from the host hardware sim every time there is a hardware clock pulse.
                This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
                This, on the other hand, is the clock pulse from the hardware (or host) that tells the kernel
                that it has to look for interrupts and process them if it finds any.                           */
             // Check for an interrupt, are any. Page 560
+
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
                 // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
@@ -107,19 +108,19 @@ module TSOS {
         //
         // Interrupt Handling
         //
-        public krnEnableInterrupts() {
+        public krnEnableInterrupts(): void {
             // Keyboard
             Devices.hostEnableKeyboardInterrupt();
             // Put more here.
         }
 
-        public krnDisableInterrupts() {
+        public krnDisableInterrupts(): void {
             // Keyboard
             Devices.hostDisableKeyboardInterrupt();
             // Put more here.
         }
 
-        public krnInterruptHandler(irq, params) {
+        public krnInterruptHandler(irq, params): void {
             // This is the Interrupt Handler Routine.  Pages 8 and 560. {
             // Trace our entrance here so we can compute Interrupt Latency by analyzing the log file later on.  Page 766.
             this.krnTrace("Handling IRQ~" + irq);
@@ -147,7 +148,7 @@ module TSOS {
             }
         }
 
-        public krnTimerISR() {
+        public krnTimerISR(): void {
             // The built-in TIMER (not clock) Interrupt Service Routine (as opposed to an ISR coming from a device driver). {
             // Check multiprogramming parameters and enforce quanta here. Call the scheduler / context switch here if necessary.
         }
@@ -171,7 +172,7 @@ module TSOS {
         //
         // OS Utility Routines
         //
-        public krnTrace(msg: string) {
+        public krnTrace(msg: string): void {
              // Check globals to see if trace is set ON.  If so, then (maybe) log the message.
              if (_Trace) {
                 if (msg === "Idle") {
@@ -181,10 +182,6 @@ module TSOS {
                         // Check the CPU_CLOCK_INTERVAL in globals.ts for an
                         // idea of the tick rate and adjust this line accordingly.
                         Control.hostLog(msg, "OS");
-
-                    	// Update time every second
-		            	var dateString : string = Utils.getFormattedDate();
-			            document.getElementById("statusTimer").innerHTML = dateString;
                     }
                 } 
 
@@ -194,7 +191,7 @@ module TSOS {
              }
         }
 
-        public krnTrapError(msg) {
+        public krnTrapError(msg): void {
             Control.hostLog("OS ERROR - TRAP: " + msg);
 
             _OsShell.shellBSOD();

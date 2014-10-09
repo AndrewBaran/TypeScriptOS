@@ -46,6 +46,7 @@ var TSOS;
             _CPU.display();
 
             // Initialize new PCB list
+            this.krnTrace("Initializing the resident and ready queues.");
             _ResidentQueue = [];
             _ReadyQueue = new TSOS.Queue();
 
@@ -60,8 +61,7 @@ var TSOS;
 
             // Add timer to the host log
             this.krnTrace("Enabling host display clock.");
-            var dateString = TSOS.Utils.getFormattedDate();
-            document.getElementById("statusTimer").innerHTML = dateString;
+            TSOS.Control.displayTimer();
 
             // Finally, initiate testing.
             if (_GLaDOS) {
@@ -70,7 +70,7 @@ var TSOS;
         };
 
         Kernel.prototype.krnShutdown = function () {
-            this.krnTrace("begin shutdown OS");
+            this.krnTrace("Begin shutdown of OS.");
 
             // TODO: Check for running processes.  Alert if there are some, alert and stop.  Else...
             // ... Disable the Interrupts.
@@ -81,7 +81,7 @@ var TSOS;
             // Unload the Device Drivers?
             // More?
             //
-            this.krnTrace("end shutdown OS");
+            this.krnTrace("Ending the shutdown of OS");
         };
 
         Kernel.prototype.krnOnCPUClockPulse = function () {
@@ -172,10 +172,6 @@ var TSOS;
                         // Check the CPU_CLOCK_INTERVAL in globals.ts for an
                         // idea of the tick rate and adjust this line accordingly.
                         TSOS.Control.hostLog(msg, "OS");
-
-                        // Update time every second
-                        var dateString = TSOS.Utils.getFormattedDate();
-                        document.getElementById("statusTimer").innerHTML = dateString;
                     }
                 } else {
                     TSOS.Control.hostLog(msg, "OS");
