@@ -9,15 +9,12 @@
    ------------ */
 
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
-// TODO Remove curses (for the children)
 module TSOS {
     export class Shell {
         // Properties
         public promptStr = ">";
         public commandList = [];
         public history = {list: [], currentCommand: 0, numItems: 0};
-        public curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
-        public apologies = "[sorry]";
 
         constructor() {
 
@@ -153,16 +150,8 @@ module TSOS {
                 this.execute(fn, args);
             }
 
-            // TODO Remove curses (for the children)
             else {
-                // It's not found, so check for curses and apologies before declaring the command invalid.
-                if (this.curses.indexOf("[" + Utils.rot13(cmd) + "]") >= 0) {     // Check for curses. {
-                    this.execute(this.shellCurse);
-                } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) {    // Check for apologies. {
-                    this.execute(this.shellApology);
-                } else { // It's just a bad command. {
-                    this.execute(this.shellInvalidCommand);
-                }
+                this.execute(this.shellInvalidCommand);
             }
         }
 
@@ -241,30 +230,9 @@ module TSOS {
         // Shell Command Functions.  Again, not part of Shell() class per se', just called from there.
         //
 
-        // TODO Remove curses (for the children)
-        public shellInvalidCommand() {
+        public shellInvalidCommand(): void {
             _StdOut.putText("Invalid Command. ");
-            if (_SarcasticMode) {
-                _StdOut.putText("Duh. Go back to your Speak & Spell.");
-            } else {
-                _StdOut.putText("Type 'help' for a list of available commands.");
-            }
-        }
-
-        public shellCurse() {
-            _StdOut.putText("Oh, so that's how it's going to be, eh? Fine.");
-            _StdOut.advanceLine();
-            _StdOut.putText("Bitch.");
-            _SarcasticMode = true;
-        }
-
-        public shellApology() {
-           if (_SarcasticMode) {
-              _StdOut.putText("Okay. I forgive you. This time.");
-              _SarcasticMode = false;
-           } else {
-              _StdOut.putText("For what?");
-           }
+            _StdOut.putText("Type 'help' for a list of available commands.");
         }
 
         public shellVer(args) {

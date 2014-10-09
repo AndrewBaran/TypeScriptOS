@@ -6,7 +6,6 @@ Shell.ts
 The OS Shell - The "command line interface" (CLI) for the console.
 ------------ */
 // TODO: Write a base class / prototype for system services and let Shell inherit from it.
-// TODO Remove curses (for the children)
 var TSOS;
 (function (TSOS) {
     var Shell = (function () {
@@ -15,8 +14,6 @@ var TSOS;
             this.promptStr = ">";
             this.commandList = [];
             this.history = { list: [], currentCommand: 0, numItems: 0 };
-            this.curses = "[fuvg],[cvff],[shpx],[phag],[pbpxfhpxre],[zbgureshpxre],[gvgf]";
-            this.apologies = "[sorry]";
         }
         Shell.prototype.init = function () {
             var sc = null;
@@ -130,14 +127,7 @@ var TSOS;
             if (found) {
                 this.execute(fn, args);
             } else {
-                // It's not found, so check for curses and apologies before declaring the command invalid.
-                if (this.curses.indexOf("[" + TSOS.Utils.rot13(cmd) + "]") >= 0) {
-                    this.execute(this.shellCurse);
-                } else if (this.apologies.indexOf("[" + cmd + "]") >= 0) {
-                    this.execute(this.shellApology);
-                } else {
-                    this.execute(this.shellInvalidCommand);
-                }
+                this.execute(this.shellInvalidCommand);
             }
         };
 
@@ -217,30 +207,9 @@ var TSOS;
         //
         // Shell Command Functions.  Again, not part of Shell() class per se', just called from there.
         //
-        // TODO Remove curses (for the children)
         Shell.prototype.shellInvalidCommand = function () {
             _StdOut.putText("Invalid Command. ");
-            if (_SarcasticMode) {
-                _StdOut.putText("Duh. Go back to your Speak & Spell.");
-            } else {
-                _StdOut.putText("Type 'help' for a list of available commands.");
-            }
-        };
-
-        Shell.prototype.shellCurse = function () {
-            _StdOut.putText("Oh, so that's how it's going to be, eh? Fine.");
-            _StdOut.advanceLine();
-            _StdOut.putText("Bitch.");
-            _SarcasticMode = true;
-        };
-
-        Shell.prototype.shellApology = function () {
-            if (_SarcasticMode) {
-                _StdOut.putText("Okay. I forgive you. This time.");
-                _SarcasticMode = false;
-            } else {
-                _StdOut.putText("For what?");
-            }
+            _StdOut.putText("Type 'help' for a list of available commands.");
         };
 
         Shell.prototype.shellVer = function (args) {
