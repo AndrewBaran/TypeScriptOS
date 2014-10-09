@@ -367,10 +367,8 @@ var TSOS;
             _StdOut.resetXY();
 
             // Display BSOD message
-            _StdOut.putText("Attention! An unexpected error has occurred and the system must be reset.");
+            _StdOut.putText("Attention! An unexpected error has occurred and the system must be reset. Check host log for details.");
 
-            // TODO Should I shut down here? Or leave this for krnTrapError()?
-            _Kernel.krnShutdown();
             clearInterval(_hardwareClockID);
         };
 

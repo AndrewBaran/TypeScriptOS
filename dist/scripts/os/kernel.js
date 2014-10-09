@@ -126,10 +126,16 @@ var TSOS;
                 case _Constants.TIMER_IRQ:
                     this.krnTimerISR(); // Kernel built-in routine for timers (not the clock).
                     break;
+
                 case _Constants.KEYBOARD_IRQ:
                     _krnKeyboardDriver.isr(params); // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
+
+                case _Constants.SYSTEM_CALL_IRQ:
+                    this.systemCall();
+                    break;
+
                 default:
                     this.krnTrapError("Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]");
             }
@@ -182,6 +188,18 @@ var TSOS;
 
             _OsShell.shellBSOD();
             this.krnShutdown();
+        };
+
+        // Performs a system call, depending on the contents of the X register
+        Kernel.prototype.systemCall = function () {
+            // 01 in X reg = print integer stored in Y register
+            if ((_CPU.Xreg.toString(10)) === "1") {
+                _StdOut.putText(_CPU.Yreg.toString(10));
+                _StdOut.newLine();
+            } else if ((_CPU.Xreg.toString(10)) === "2") {
+                // TODO
+                // Print 00-terminated string in Y reg
+            }
         };
         return Kernel;
     })();

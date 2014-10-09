@@ -360,22 +360,12 @@ module TSOS {
             		break;
 
             	// System call
-            	// 01 in X reg = print integer stored in Y register
-            	// 02 in X reg = print the 00-terminated string stored at the address in the Y register
-                // TODO Enqueue an interrupt?
             	case "FF":
 
-            		if((this.Xreg.toString(10)) === "1") {
+            		console.log("SYS");
 
-            			_StdOut.putText(this.Yreg.toString(10));
-                        _StdOut.newLine();
-            		}
-
-            		else if((this.Xreg.toString(10)) === "2") {
-
-            			// TODO
-            			// Print 00-terminated string in Y reg
-            		}
+            		// Enqueue a new interrupt to do a system call on the next cycle
+                    _KernelInterruptQueue.enqueue(new Interrupt(_Constants.SYSTEM_CALL_IRQ, ""));
 
             		break;
 

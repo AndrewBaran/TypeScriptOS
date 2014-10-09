@@ -18,9 +18,10 @@ interface Constants {
 	CPU_CLOCK_INTERVAL: number; // This is in ms, so 1000 = 1 second.
 	TIMER_IRQ: number; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 	KEYBOARD_IRQ: number;
+	SYSTEM_CALL_IRQ: number;
 }
 
-var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1};
+var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1, SYSTEM_CALL_IRQ: 2};
 
 interface MemoryConstants {
 	PROCESS_SIZE: number;
@@ -29,7 +30,6 @@ interface MemoryConstants {
 	BYTES_PER_ROW: number;
 }
 
-// TODO I think 96 rows is enough for 3 processes of size 256
 var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 96, NUM_COLUMNS: 8, BYTES_PER_ROW: 8};
 
 

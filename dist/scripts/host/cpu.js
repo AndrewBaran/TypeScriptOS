@@ -311,13 +311,10 @@ var TSOS;
                     break;
 
                 case "FF":
-                    if ((this.Xreg.toString(10)) === "1") {
-                        _StdOut.putText(this.Yreg.toString(10));
-                        _StdOut.newLine();
-                    } else if ((this.Xreg.toString(10)) === "2") {
-                        // TODO
-                        // Print 00-terminated string in Y reg
-                    }
+                    console.log("SYS");
+
+                    // Enqueue a new interrupt to do a system call on the next cycle
+                    _KernelInterruptQueue.enqueue(new TSOS.Interrupt(_Constants.SYSTEM_CALL_IRQ, ""));
 
                     break;
 
