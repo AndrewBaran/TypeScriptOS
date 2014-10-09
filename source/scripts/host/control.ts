@@ -27,6 +27,9 @@ module TSOS {
 
     export class Control {
 
+        // Fields
+        public static singleStepEnabled: boolean = false;
+
         public static hostInit(): void {
             // Get a global reference to the canvas.  TODO: Move this stuff into a Display Device Driver, maybe?
             _Canvas = <HTMLCanvasElement>document.getElementById('display');
@@ -133,11 +136,14 @@ module TSOS {
             // Enable step button
             document.getElementById("btnStep").disabled = false;
 
+            // Set flag
+            Control.singleStepEnabled = true;
+
             // Clear CPU interval
             clearInterval(_hardwareClockID);
 
-            // Keep clock still running
-            _hostClockDisplay = setInterval(Control.displayTimer, _Constants.CPU_CLOCK_INTERVAL);
+            // Keep clock still running; update it every second (1000ms = 1s)
+            _hostClockDisplay = setInterval(Control.displayTimer, 1000);
         }
 
         // Executes 1 cycle in single step mode

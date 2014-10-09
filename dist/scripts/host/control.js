@@ -128,17 +128,21 @@ var TSOS;
             // Enable step button
             document.getElementById("btnStep").disabled = false;
 
+            // Set flag
+            Control.singleStepEnabled = true;
+
             // Clear CPU interval
             clearInterval(_hardwareClockID);
 
-            // Keep clock still running
-            _hostClockDisplay = setInterval(Control.displayTimer, _Constants.CPU_CLOCK_INTERVAL);
+            // Keep clock still running; update it every second (1000ms = 1s)
+            _hostClockDisplay = setInterval(Control.displayTimer, 1000);
         };
 
         // Executes 1 cycle in single step mode
         Control.hostBtnStep_click = function (btn) {
             TSOS.Devices.hostClockPulse();
         };
+        Control.singleStepEnabled = false;
         return Control;
     })();
     TSOS.Control = Control;

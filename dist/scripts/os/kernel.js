@@ -168,7 +168,7 @@ var TSOS;
             if (_Trace) {
                 if (msg === "Idle") {
                     // We can't log every idle clock pulse because it would lag the browser very quickly.
-                    if (_OSclock % 10 == 0) {
+                    if (_OSclock % 10 == 0 || TSOS.Control.singleStepEnabled) {
                         // Check the CPU_CLOCK_INTERVAL in globals.ts for an
                         // idea of the tick rate and adjust this line accordingly.
                         TSOS.Control.hostLog(msg, "OS");
