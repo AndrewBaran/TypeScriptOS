@@ -23,6 +23,13 @@ interface Constants {
 
 var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1, SYSTEM_CALL_IRQ: 2};
 
+interface MiscConstants {
+	NUM_HEX_DIGITS: number;
+}
+
+// Constants that don't have a definitive category (I don't like magic numbers)
+var _MiscConstants: MiscConstants = {NUM_HEX_DIGITS: 3};
+
 interface MemoryConstants {
 	PROCESS_SIZE: number;
 	NUM_COLUMNS: number;

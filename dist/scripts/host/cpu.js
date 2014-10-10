@@ -289,8 +289,6 @@ var TSOS;
 
                         // Add new value to PC
                         this.PC = (this.PC + hexValue) % _MemoryConstants.PROCESS_SIZE;
-
-                        console.log("New PC after branching: " + this.PC);
                     }
 
                     // Move to next instruction
@@ -334,8 +332,7 @@ var TSOS;
                     break;
 
                 default:
-                    console.log(nextInstruction);
-                    console.log("This shouldn't happen.");
+                    console.log("Unknown instruction: " + nextInstruction);
 
                     break;
             }
@@ -375,10 +372,17 @@ var TSOS;
 
             for (var i = 0; i < 5; i++) {
                 var key = Object.keys(_CPU)[i];
+
                 var value = _CPU[key];
+                var decimalValue = parseInt(value, 10);
+
+                // Don't show Z-flag in hex
+                if (i !== 4) {
+                    // Convert to hex and add appropriate padding
+                    value = TSOS.Utils.decimalToHex(decimalValue);
+                }
 
                 var newCell = newRow.insertCell(i);
-
                 newCell.innerHTML = value;
             }
         };

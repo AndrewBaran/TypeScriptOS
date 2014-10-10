@@ -73,7 +73,7 @@ var TSOS;
 
             for (var i = 0; i < hexString.length; i++) {
                 // Letter
-                if (hexString[i].match(/[a-zA-Z]/g)) {
+                if (hexString[i].match(/[a-fA-F]/g)) {
                     newString += hexString[i].toUpperCase();
                 } else {
                     newString += hexString[i];
@@ -81,6 +81,36 @@ var TSOS;
             }
 
             return newString;
+        };
+
+        Utils.decimalToHex = function (decimalValue) {
+            var returnString = "";
+
+            for (var position = _MiscConstants.NUM_HEX_DIGITS - 1; position >= 0; position--) {
+                for (var value = 15; value >= 0; value--) {
+                    var subtractAmount = value * (Math.pow(16, position));
+
+                    if (subtractAmount <= decimalValue) {
+                        // Number fits into the decimal value
+                        decimalValue -= subtractAmount;
+
+                        // Convert value used to hex and concat to returnString
+                        var valueString = value.toString(16);
+
+                        returnString += valueString;
+
+                        break;
+                    }
+                }
+            }
+
+            // Add 0x prefix
+            returnString = "0x" + returnString;
+
+            // Capitalize any hex digits
+            returnString = Utils.toUpperHex(returnString);
+
+            return returnString;
         };
         return Utils;
     })();

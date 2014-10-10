@@ -52,8 +52,13 @@ module TSOS {
 
 		public display() : void {
 
-			_StdOut.putText("PC = " + this.programCounter + " | Acc = " + this.accumulator + 
-					" | Xreg = " + this.Xreg + " | Yreg = " + this.Yreg + " | Zflag = " + this.Zflag);
+			var hexPC: string = Utils.decimalToHex(this.programCounter);
+			var hexAcc: string = Utils.decimalToHex(this.accumulator);
+			var hexXReg: string = Utils.decimalToHex(this.Xreg);
+			var hexYReg: string = Utils.decimalToHex(this.Yreg);
+
+			_StdOut.putText("PC = " + hexPC + " | Acc = " + hexAcc + " | Xreg = " + hexXReg + 
+				" | Yreg = " + hexYReg + " | Zflag = " + this.Zflag + " | Cycles completed = " + this.cyclesComplete);
 			_StdOut.newLine();
 		}
 

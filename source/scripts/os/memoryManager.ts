@@ -30,8 +30,6 @@ module TSOS {
 				var startingRow: number = baseAddress / _MemoryConstants.BYTES_PER_ROW;
 				var endingRow: number = Math.floor(limitAddress / 8);
 
-				console.log("Clearing rows " + startingRow + " - " + endingRow);
-
 				for(var i = startingRow; i <= endingRow; i++) {
 					for(var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
 						this.memoryObject.memoryList[i][j] = "00";
@@ -155,23 +153,16 @@ module TSOS {
 
 				case _MemoryType.INSTRUCTION:
 
-					console.log("Instruction");
-
 					cell.style.color = "red";
-
 					break;
 
 				case _MemoryType.DATA:
 
-					console.log("Data");
-
 					cell.style.color = "blue";
-
 					break;
 
 				default:
 
-					console.log("Not a valid memory type; not coloring.");
 					break;
 
 			} // switch

@@ -23,8 +23,6 @@ var TSOS;
                 var startingRow = baseAddress / _MemoryConstants.BYTES_PER_ROW;
                 var endingRow = Math.floor(limitAddress / 8);
 
-                console.log("Clearing rows " + startingRow + " - " + endingRow);
-
                 for (var i = startingRow; i <= endingRow; i++) {
                     for (var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
                         this.memoryObject.memoryList[i][j] = "00";
@@ -124,21 +122,14 @@ var TSOS;
 
             switch (memoryType) {
                 case _MemoryType.INSTRUCTION:
-                    console.log("Instruction");
-
                     cell.style.color = "red";
-
                     break;
 
                 case _MemoryType.DATA:
-                    console.log("Data");
-
                     cell.style.color = "blue";
-
                     break;
 
                 default:
-                    console.log("Not a valid memory type; not coloring.");
                     break;
             }
         };

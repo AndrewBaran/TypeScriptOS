@@ -8,6 +8,9 @@ Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 
 
 var _Constants = { APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1, SYSTEM_CALL_IRQ: 2 };
 
+// Constants that don't have a definitive category (I don't like magic numbers)
+var _MiscConstants = { NUM_HEX_DIGITS: 3 };
+
 var _MemoryConstants = { PROCESS_SIZE: 256, NUM_ROWS: 96, NUM_COLUMNS: 8, BYTES_PER_ROW: 8 };
 
 // Differentiating type of memory when coloring them during program execution

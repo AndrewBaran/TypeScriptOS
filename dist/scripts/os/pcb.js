@@ -35,7 +35,12 @@ var TSOS;
         };
 
         PCB.prototype.display = function () {
-            _StdOut.putText("PC = " + this.programCounter + " | Acc = " + this.accumulator + " | Xreg = " + this.Xreg + " | Yreg = " + this.Yreg + " | Zflag = " + this.Zflag);
+            var hexPC = TSOS.Utils.decimalToHex(this.programCounter);
+            var hexAcc = TSOS.Utils.decimalToHex(this.accumulator);
+            var hexXReg = TSOS.Utils.decimalToHex(this.Xreg);
+            var hexYReg = TSOS.Utils.decimalToHex(this.Yreg);
+
+            _StdOut.putText("PC = " + hexPC + " | Acc = " + hexAcc + " | Xreg = " + hexXReg + " | Yreg = " + hexYReg + " | Zflag = " + this.Zflag + " | Cycles completed = " + this.cyclesComplete);
             _StdOut.newLine();
         };
         return PCB;

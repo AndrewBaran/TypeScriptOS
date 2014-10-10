@@ -23,7 +23,6 @@ var TSOS;
         function Control() {
         }
         Control.hostInit = function () {
-            // Get a global reference to the canvas.  TODO: Move this stuff into a Display Device Driver, maybe?
             _Canvas = document.getElementById('display');
 
             // Get a global reference to the drawing context.
@@ -119,8 +118,6 @@ var TSOS;
 
         // Enables single step mode
         Control.hostBtnEnableStep_click = function (btn) {
-            console.log("Starting single stepping.");
-
             // Disable start and step button
             document.getElementById("btnStartOS").disabled = true;
             document.getElementById("btnEnableStep").disabled = true;
@@ -143,22 +140,24 @@ var TSOS;
             TSOS.Devices.hostClockPulse();
         };
 
+        // Loads a randomly selected program into the textbox taProgramInput
         Control.hostBtnLoadProgram_click = function (btn) {
-            var programs = [
+            var programList = [
                 { name: "3 + 4 = 7", code: "A9 03 8D 18 00 A9 04 6D 18 00 8D 19 00 A2 01 AC 19 00 FF 00" },
                 { name: "For loop from 1 to 5", code: "A9 01 8D 20 00 A2 05 EE 20 00 EC 20 00 D0 F8 AC 20 00 A2 01 FF 00" },
                 { name: "1 2 DONE", code: "A9 03 8D 41 00 A9 01 8D 40 00 AC 40 00 A2 01 FF EE 40 00 AE 40 00 EC 41 00 D0 EF A9 44 8D 42 00 A9 4F 8D 43 00 A9 4E 8D 44 00 A9 45 8D 45 00 A9 00 8D 46 00 A2 02 A0 42 FF 00" },
-                { name: "Tom's Memory Filling Program", code: "A9 AD A2 A9 EC 10 00 8D 10 00 EE 08 00 D0 F8 00 00" }
+                { name: "Tom's Memory Filling Program", code: "A9 AD A2 A9 EC 10 00 8D 10 00 EE 08 00 D0 F8 00 00" },
+                { name: "007", code: "A9 30 8D 70 00 8D 71 00 A9 37 8D 72 00 A2 02 A0 70 FF 00" }
             ];
 
-            var index = Math.floor(Math.random() * (programs.length));
-            var selectedProgram = programs[index];
+            var index = Math.floor(Math.random() * (programList.length));
+            var selectedProgram = programList[index];
 
             // Set name of program
             document.getElementById("programTitle").innerHTML = selectedProgram.name;
 
             // Load program into textbox
-            document.getElementById("taProgramInput").innerHTML = selectedProgram.code;
+            document.getElementById("taProgramInput").value = selectedProgram.code;
         };
         Control.singleStepEnabled = false;
         return Control;

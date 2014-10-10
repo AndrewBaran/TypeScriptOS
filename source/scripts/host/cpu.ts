@@ -336,8 +336,6 @@ module TSOS {
 
                         // Add new value to PC
                         this.PC = (this.PC + hexValue) % _MemoryConstants.PROCESS_SIZE;
-
-                        console.log("New PC after branching: " + this.PC);
                     }
 
                     // Move to next instruction
@@ -387,8 +385,7 @@ module TSOS {
 
             	default:
 
-                    console.log(nextInstruction);
-            		console.log("This shouldn't happen.");
+                    console.log("Unknown instruction: " + nextInstruction);
             		// TODO Make the CPU implode (or make the kernel panic)
 
             		break;
@@ -435,11 +432,20 @@ module TSOS {
 
             // Display each value in the CPU table
             for(var i: number = 0; i < 5; i++) {
+
                 var key: string = Object.keys(_CPU)[i];
+
                 var value: string = _CPU[key];
+                var decimalValue: number = parseInt(value, 10);
+
+                // Don't show Z-flag in hex
+                if(i !== 4) {
+
+                    // Convert to hex and add appropriate padding
+                    value = Utils.decimalToHex(decimalValue);
+                }
 
                 var newCell = newRow.insertCell(i);
-
                 newCell.innerHTML = value;
             }
 

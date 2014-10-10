@@ -79,7 +79,7 @@ module TSOS {
             for(var i: number = 0; i < hexString.length; i++) {
 
                 // Letter
-                if(hexString[i].match(/[a-zA-Z]/g)) {
+                if(hexString[i].match(/[a-fA-F]/g)) {
                     newString += hexString[i].toUpperCase();
                 }
 
@@ -91,6 +91,42 @@ module TSOS {
             }
 
             return newString;
+        }
+
+        public static decimalToHex(decimalValue: number): string {
+
+            var returnString: string = "";
+
+            for(var position: number = _MiscConstants.NUM_HEX_DIGITS - 1; position >= 0; position--) {
+
+                for(var value: number = 15; value >= 0; value--) {
+
+                	var subtractAmount: number = value * (Math.pow(16, position));
+
+                	if(subtractAmount <= decimalValue) {
+
+                		// Number fits into the decimal value
+                		decimalValue -= subtractAmount;
+
+                		// Convert value used to hex and concat to returnString
+                		var valueString: string = value.toString(16);
+
+                		returnString += valueString;
+
+                		break;
+                	}
+
+                } // Inner for
+
+            } // Outer for
+
+            // Add 0x prefix
+            returnString = "0x" + returnString;
+
+            // Capitalize any hex digits
+            returnString = Utils.toUpperHex(returnString);
+
+            return returnString;
         }
     }
 }
