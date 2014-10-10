@@ -193,7 +193,21 @@ var TSOS;
                 _StdOut.putText(_CPU.Yreg.toString(10));
                 _StdOut.newLine();
             } else if ((_CPU.Xreg.toString(10)) === "2") {
-                // TODO Print 00-terminated string in Y reg
+                var currentPC = _CPU.Yreg;
+                var data = "";
+
+                var printString = "";
+
+                while ((data = _MemoryManager.getByte(currentPC, _CurrentPCB.processID)) !== "00") {
+                    var dataValue = parseInt(data, 16);
+
+                    printString += String.fromCharCode(dataValue);
+
+                    currentPC++;
+                }
+
+                _StdOut.putText(printString);
+                _StdOut.newLine();
             } else {
                 TSOS.Control.hostLog("Attention! CPU state did not match any known system call.");
             }

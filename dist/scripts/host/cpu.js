@@ -49,9 +49,8 @@ var TSOS;
             if (this.PC >= 0 && this.PC < _MemoryConstants.PROCESS_SIZE) {
                 // Get real instruction from memory
                 var nextInstruction = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
-
                 // Color this byte in the table
-                _MemoryManager.colorCell(this.PC, _CurrentPCB.processID, _MemoryType.INSTRUCTION);
+                // _MemoryManager.colorCell(this.PC, _CurrentPCB.processID, _MemoryType.INSTRUCTION);
             } else {
                 // TODO Probably better to remove program instead
                 _Kernel.krnTrapError("Error! PC must be in range: 0 <= PC <= " + _MemoryConstants.PROCESS_SIZE);
@@ -110,7 +109,7 @@ var TSOS;
                     break;
 
                 case "8D":
-                    console.log("SDA");
+                    console.log("STA");
 
                     for (var i = 0; i < 2; i++) {
                         instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
@@ -269,6 +268,8 @@ var TSOS;
                     // Set Zflag if equal
                     if (hexValue === this.Xreg) {
                         this.Zflag = 1;
+                    } else {
+                        this.Zflag = 0;
                     }
 
                     this.PC += 2;
@@ -278,14 +279,22 @@ var TSOS;
                 case "D0":
                     console.log("BNE");
 
-                    // Read 1 byte
-                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    // Branch if they were not equal (set to 1 if equal)
+                    if (this.Zflag !== 1) {
+                        // Read 1 byte
+                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
 
-                    var hexString = instructionData.pop();
-                    var hexValue = parseInt(hexString, 16);
+                        var hexString = instructionData.pop();
+                        var hexValue = parseInt(hexString, 16);
 
-                    // Add new value to PC
-                    this.PC = (this.PC + hexValue) % _MemoryConstants.PROCESS_SIZE;
+                        // Add new value to PC
+                        this.PC = (this.PC + hexValue) % _MemoryConstants.PROCESS_SIZE;
+
+                        console.log("New PC after branching: " + this.PC);
+                    }
+
+                    // Move to next instruction
+                    this.PC++;
 
                     break;
 
@@ -304,7 +313,7 @@ var TSOS;
 
                     // Get the byte from memory
                     var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
-                    var hexValue = parseInt(hexString);
+                    var hexValue = parseInt(hexString, 16);
 
                     // Increment the byte
                     hexValue++;
@@ -325,6 +334,7 @@ var TSOS;
                     break;
 
                 default:
+                    console.log(nextInstruction);
                     console.log("This shouldn't happen.");
 
                     break;

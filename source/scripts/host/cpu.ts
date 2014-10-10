@@ -55,7 +55,7 @@ module TSOS {
                 var nextInstruction: string = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
 
                 // Color this byte in the table
-                _MemoryManager.colorCell(this.PC, _CurrentPCB.processID, _MemoryType.INSTRUCTION);
+                // _MemoryManager.colorCell(this.PC, _CurrentPCB.processID, _MemoryType.INSTRUCTION);
             }
 
             // Error
@@ -128,7 +128,7 @@ module TSOS {
             	// Store the accumulator in memory
             	case "8D":
 
-            		console.log("SDA");
+            		console.log("STA");
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
@@ -312,6 +312,10 @@ module TSOS {
                         this.Zflag = 1;
                     }
 
+                    else {
+                        this.Zflag = 0;
+                    }
+
             		this.PC += 2;
 
             		break;
@@ -321,16 +325,25 @@ module TSOS {
 
             		console.log("BNE");
 
-            		// Read 1 byte
-            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    // Branch if they were not equal (set to 1 if equal)
+                    if(this.Zflag !== 1) {
 
-                    var hexString: string = instructionData.pop();
-                    var hexValue: number = parseInt(hexString, 16);
+                		// Read 1 byte
+                		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
 
-                    // Add new value to PC
-                    this.PC = (this.PC + hexValue) % _MemoryConstants.PROCESS_SIZE;
+                        var hexString: string = instructionData.pop();
+                        var hexValue: number = parseInt(hexString, 16);
 
-            		break;
+                        // Add new value to PC
+                        this.PC = (this.PC + hexValue) % _MemoryConstants.PROCESS_SIZE;
+
+                        console.log("New PC after branching: " + this.PC);
+                    }
+
+                    // Move to next instruction
+                    this.PC++;
+
+                	break;
 
             	// Increment the value of a byte
             	case "EE":
@@ -350,7 +363,7 @@ module TSOS {
 
                     // Get the byte from memory
                     var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
-                    var hexValue: number = parseInt(hexString);
+                    var hexValue: number = parseInt(hexString, 16);
 
                     // Increment the byte
                     hexValue++;
@@ -374,6 +387,7 @@ module TSOS {
 
             	default:
 
+                    console.log(nextInstruction);
             		console.log("This shouldn't happen.");
             		// TODO Make the CPU implode (or make the kernel panic)
 

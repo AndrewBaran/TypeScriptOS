@@ -159,9 +159,15 @@
 			<textarea name="taProgramInput"
 				   		id  ="taProgramInput"
 				   		rows="8"
-				   		cols="48">A9 03 8D 18 00 A9 04 6D 18 00 8D 19 00 A2 01 AC 19 00 FF 00</textarea>
+				   		cols="48"></textarea>
 		</label>
 	</div>
+
+	<!-- For testing purposes, places random program in User Program Input Box -->
+	<input 	type="button"
+			value="Random Program"
+			onclick="TSOS.Control.hostBtnLoadProgram_click(this);">
+	<label id="programTitle">N/A</label>
 
 
 </div> <!-- divMain -->

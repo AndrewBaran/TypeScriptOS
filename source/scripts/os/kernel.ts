@@ -212,7 +212,22 @@ module TSOS {
             // 02 in X reg = print the 00-terminated string stored at the address in the Y register
             else if((_CPU.Xreg.toString(10)) === "2") {
 
-                // TODO Print 00-terminated string in Y reg
+                var currentPC: number = _CPU.Yreg;
+                var data: string = "";
+
+                var printString: string = "";
+
+                while((data = _MemoryManager.getByte(currentPC, _CurrentPCB.processID)) !== "00") {
+
+                    var dataValue: number = parseInt(data, 16);
+                    
+                    printString += String.fromCharCode(dataValue);
+
+                    currentPC++;
+                }
+
+                _StdOut.putText(printString);
+                _StdOut.newLine();
             }
 
             // Invalid system call
