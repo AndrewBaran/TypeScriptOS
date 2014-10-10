@@ -32,6 +32,13 @@ interface MemoryConstants {
 
 var _MemoryConstants: MemoryConstants = {PROCESS_SIZE: 256, NUM_ROWS: 96, NUM_COLUMNS: 8, BYTES_PER_ROW: 8};
 
+interface MemoryType {
+	INSTRUCTION: number;
+	DATA: number;
+}
+
+// Differentiating type of memory when coloring them during program execution
+var _MemoryType: MemoryType = {INSTRUCTION: 0, DATA: 1};
 
 // My Globals
 var _MONTH_NAMES: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

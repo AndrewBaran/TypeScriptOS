@@ -49,6 +49,9 @@ var TSOS;
             if (this.PC >= 0 && this.PC < _MemoryConstants.PROCESS_SIZE) {
                 // Get real instruction from memory
                 var nextInstruction = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
+
+                // Color this byte in the table
+                _MemoryManager.colorCell(this.PC, _CurrentPCB.processID, _MemoryType.INSTRUCTION);
             } else {
                 // TODO Probably better to remove program instead
                 _Kernel.krnTrapError("Error! PC must be in range: 0 <= PC <= " + _MemoryConstants.PROCESS_SIZE);

@@ -53,6 +53,9 @@ module TSOS {
 
                 // Get real instruction from memory
                 var nextInstruction: string = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
+
+                // Color this byte in the table
+                _MemoryManager.colorCell(this.PC, _CurrentPCB.processID, _MemoryType.INSTRUCTION);
             }
 
             // Error

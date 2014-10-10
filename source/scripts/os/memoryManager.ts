@@ -138,6 +138,46 @@ module TSOS {
 
 		} // displayMemory()
 
+		// Colors the cell in memory that is the current instruction and data
+		public colorCell(programCounter: number, processID: number, memoryType: number = 0): void {
+
+			var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+			rowNumber += Math.floor(programCounter / _MemoryConstants.BYTES_PER_ROW);
+
+			// Add 1 to compensate for first column of every table being the memory address
+			var columnNumber: number = (programCounter % _MemoryConstants.BYTES_PER_ROW) + 1;
+
+			var memoryTable = <HTMLTableElement>document.getElementById("mainMemory");
+			var row = <HTMLTableRowElement>memoryTable.rows[rowNumber];
+			var cell = <HTMLTableCellElement>row.cells[columnNumber];
+
+			switch(memoryType) {
+
+				case _MemoryType.INSTRUCTION:
+
+					console.log("Instruction");
+
+					cell.style.color = "red";
+
+					break;
+
+				case _MemoryType.DATA:
+
+					console.log("Data");
+
+					cell.style.color = "blue";
+
+					break;
+
+				default:
+
+					console.log("Not a valid memory type; not coloring.");
+					break;
+
+			} // switch
+
+		}
+
 		// Returns the value of the byte in memory using PC and PID
 		public getByte(programCounter: number, processID: number): string {
 

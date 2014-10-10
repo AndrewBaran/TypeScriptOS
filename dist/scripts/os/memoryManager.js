@@ -109,6 +109,40 @@ var TSOS;
             }
         };
 
+        // Colors the cell in memory that is the current instruction and data
+        MemoryManager.prototype.colorCell = function (programCounter, processID, memoryType) {
+            if (typeof memoryType === "undefined") { memoryType = 0; }
+            var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+            rowNumber += Math.floor(programCounter / _MemoryConstants.BYTES_PER_ROW);
+
+            // Add 1 to compensate for first column of every table being the memory address
+            var columnNumber = (programCounter % _MemoryConstants.BYTES_PER_ROW) + 1;
+
+            var memoryTable = document.getElementById("mainMemory");
+            var row = memoryTable.rows[rowNumber];
+            var cell = row.cells[columnNumber];
+
+            switch (memoryType) {
+                case _MemoryType.INSTRUCTION:
+                    console.log("Instruction");
+
+                    cell.style.color = "red";
+
+                    break;
+
+                case _MemoryType.DATA:
+                    console.log("Data");
+
+                    cell.style.color = "blue";
+
+                    break;
+
+                default:
+                    console.log("Not a valid memory type; not coloring.");
+                    break;
+            }
+        };
+
         // Returns the value of the byte in memory using PC and PID
         MemoryManager.prototype.getByte = function (programCounter, processID) {
             var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;

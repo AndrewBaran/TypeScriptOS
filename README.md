@@ -37,7 +37,7 @@ Project 2 Checklist
 	- [x] Assign a Process ID (PID)
 	- [x] Create a Process Control Block (PCB)
 	- [x] Return the PID to the console
-- [x] Add a shell command, run <pid>, to run a program already in memory (user should be able to execute many load/run cycles)
+- [x] Add a shell command, run (pid), to run a program already in memory (user should be able to execute many load/run cycles)
 - [x] Execute the running program (including displaying any output)
 	Note: Be sure to synchronize the CPU execution cycles with clock ticks
 - [x] As the programs executes, display Memory and the CPU status
@@ -57,10 +57,10 @@ Project 3 Checklist
 - [x] Add a shell command, clearmem, to clear all memory partitions
 - [ ] Allow the user to load three programs into memory at once
 - [ ] Add a shell command, runall, to execute all the programs at once
-- [ ] Add a shell command, quantum <int>, to let the user set the Round Robin quantum (measured in clock ticks)
-- [ ] Display the Ready queue and its (PCB) contents (including process state) in real time
+- [ ] Add a shell command, quantum (int), to let the user set the Round Robin quantum (measured in clock ticks)
+- [ ] Display the Ready queue and its PCB contents (including process state) in real time
 - [ ] Add a shell command, ps, to display the PIDs of all active processes
-- [ ] Add a shell command, kill <pid>, to kill an active process
+- [ ] Add a shell command, kill (pid), to kill an active process
 - [ ] Store multiple programs in memory, each in their own partition, allocated by the client OS
 - [ ] Add base and limit registers to your core memory access code in the host OS and to your PCB object in the client OS
 - [ ] Enforce memory partition boundaries at all times
@@ -77,10 +77,10 @@ Final Project Checklist
 =======================
 
 - [ ] Add shell commands for the following disk operations
-	- [ ] create <filename> - create the file filename and display a message denoting success or failure
-	- [ ] read <filename> - read and display the contents of filename or display an error if something went wrong
-	- [ ] write <filename> "data" - write the data inside the quotes to filename and display a message denoting success or failure
-	- [ ] delete <filename> - remove filename from storage and display a message denoting success or failure
+	- [ ] create (filename) - create the file filename and display a message denoting success or failure
+	- [ ] read (filename) - read and display the contents of filename or display an error if something went wrong
+	- [ ] write (filename) "data" - write the data inside the quotes to filename and display a message denoting success or failure
+	- [ ] delete (filename) - remove filename from storage and display a message denoting success or failure
 	- [ ] format - initialize all blocks in all sectors in all tracks and display a message denoting success or failure
 - [ ] Add a shell command, ls, to list the files currently stored on the disk
 - [ ] Add a shell command to allow the user to select a CPU scheduling algorithm - setschedule [rr, fcfs, priority]
