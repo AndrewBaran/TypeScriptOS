@@ -6,6 +6,7 @@ See [Alan's Website](http://www.labouseur.com/courses/os/) for details.
 
 [Access the OS](http://andrewbaran.github.io/TypeScriptOS/)
 ===========================================================
+Last updated: September 22nd, 2014
 
 Project 1 Checklist
 ===================
@@ -17,7 +18,7 @@ Project 1 Checklist
 	- [x] One more command of your choosing (007)
 - [x] Enhance the *host* display with a graphical task bar 
 	- [x] Current time and date
-	- [x] Status messages as specified by the user with a new shell command: status <string>
+	- [x] Status messages as specified by the user with a new shell command: status (string)
 - [x] Implement scrolling in the *client OS* console/CLI
 - [x] Other console / CLI enhancements 
 	- [x] Accept and display punctuation characters and symbols
