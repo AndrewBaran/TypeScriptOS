@@ -429,6 +429,9 @@ var TSOS;
 
                     // Clear CPU
                     _CPU.clear();
+
+                    // Display the ready queue
+                    _Kernel.displayReadyQueue();
                 } else {
                     _StdOut.putText("Error: Invalid process ID");
                 }

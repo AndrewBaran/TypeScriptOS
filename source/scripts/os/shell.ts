@@ -486,6 +486,9 @@ module TSOS {
                     
                     // Clear CPU
                     _CPU.clear();
+
+                    // Display the ready queue
+                    _Kernel.displayReadyQueue();
                 }
 
                 else {

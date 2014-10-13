@@ -100,7 +100,7 @@ h3
 {
 	height: 200px;
 	width: 300px;
-	margin-right: 100px;
+	margin-right: 150px;
 	overflow: auto;
 	float: right;
 	border: 1px solid black;
@@ -127,6 +127,7 @@ h3
 #cpuStatus
 {
 	border: 1px solid black;
+	text-align: center;
 }
 
 #cpuStatus td
@@ -139,6 +140,24 @@ h3
 	font-weight: normal;
 	text-align: center;
 }
+
+#divReadyQueue
+{
+	width: 350px;
+	float: right;
+	margin-right: 100px;
+}
+
+#tableReadyQueue
+{
+	border: 1px solid black;
+}
+
+#tableReadyQueue tr, #tableReadyQueue td
+{
+	border: 1px solid black;
+}
+
 
 /* Div containing footer content*/
 .footerText 

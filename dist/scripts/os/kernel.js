@@ -212,6 +212,32 @@ var TSOS;
                 TSOS.Control.hostLog("Attention! CPU state did not match any known system call.");
             }
         };
+
+        Kernel.prototype.displayReadyQueue = function () {
+            var readyTable = document.getElementById("tableReadyQueue");
+
+            while (readyTable.rows.length > 1) {
+                readyTable.deleteRow(-1);
+            }
+
+            var tableRowLength = readyTable.rows[0].cells.length;
+
+            for (var i = 0; i < _ReadyQueue.getSize(); i++) {
+                var currentPCB = _ReadyQueue.q[i];
+
+                var newRow = readyTable.insertRow();
+
+                for (var j = 0; j < tableRowLength; j++) {
+                    var key = Object.keys(currentPCB)[j];
+                    var decimalValue = parseInt(currentPCB[key], 10);
+
+                    var hexValue = TSOS.Utils.decimalToHex(decimalValue);
+
+                    var cell = newRow.insertCell(j);
+                    cell.innerHTML = hexValue;
+                }
+            }
+        };
         return Kernel;
     })();
     TSOS.Kernel = Kernel;

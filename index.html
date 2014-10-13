@@ -108,13 +108,11 @@
 		</table>
 	</div>
 
+
+
 	<div id="divCPUStatus">
+		CPU Status Information
 		<table id="cpuStatus">
-			<thead>
-				<tr colspan="5">
-					<th>CPU Status Information</th>
-				</tr>
-			</thead>
 			<tbody>
 				<tr>
 					<td>PC</td>
@@ -152,11 +150,30 @@
 	  	</label>
 	</div>
 
+	<div id="divReadyQueue">
+		Ready Queue
+		<table id="tableReadyQueue">
+			<tr>
+				<td>PID</td>
+				<td>Base</td>
+				<td>Limit</td>
+				<td>PC</td>
+				<td>Acc</td>
+				<td>X</td>
+				<td>Y</td>
+				<td>Z</td>
+			</tr>
+			<tr>
+				<td colspan="8" style="text-align: center;">No processes running</td>
+			</tr>
+		</table>
+	</div>
+
 	<div id="divUserProgramInput">
 		<label>
 			User Program Input
 			<br>
-			<textarea name="taProgramInput"
+			<textarea 	name="taProgramInput"
 				   		id  ="taProgramInput"
 				   		rows="8"
 				   		cols="48"></textarea>
@@ -168,7 +185,6 @@
 			value="Random Program"
 			onclick="TSOS.Control.hostBtnLoadProgram_click(this);">
 	<label id="programTitle">N/A</label>
-
 
 </div> <!-- divMain -->
 

@@ -401,11 +401,17 @@ module TSOS {
             var hexPC: string = this.PC.toString(16);
             this.PC = parseInt(hexPC, 16);
 
+            // Save CPU info back into PCB
+            _CurrentPCB.saveInfo();
+
             // Update CPU display
             _CPU.display();
 
             // Update memory display
             _MemoryManager.displayMemory();
+
+            // Update ready queue display
+            _Kernel.displayReadyQueue();
 
         } // cycle()
 
@@ -424,7 +430,7 @@ module TSOS {
             var cpuInfoTable = <HTMLTableElement>document.getElementById("cpuStatus");
 
             // Check if table has any rows and remove them
-            while(cpuInfoTable.rows.length > 2) {
+            while(cpuInfoTable.rows.length > 1) {
                 cpuInfoTable.deleteRow(-1);
             }
 

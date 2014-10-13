@@ -236,6 +236,40 @@ module TSOS {
                 Control.hostLog("Attention! CPU state did not match any known system call.");
             }
 
-        }
+        } // systemCall()
+
+        public displayReadyQueue(): void {
+
+            var readyTable = <HTMLTableElement>document.getElementById("tableReadyQueue");
+
+            // Delete any existing data in table
+            while(readyTable.rows.length > 1) {
+                readyTable.deleteRow(-1);
+            }
+
+            var tableRowLength = (<HTMLTableRowElement>readyTable.rows[0]).cells.length;
+
+            for(var i: number = 0; i < _ReadyQueue.getSize(); i++) {
+
+                var currentPCB: TSOS.PCB = _ReadyQueue.q[i];
+
+                var newRow = <HTMLTableRowElement>readyTable.insertRow();
+
+                for(var j: number = 0; j < tableRowLength; j++) {
+
+                    var key: string = Object.keys(currentPCB)[j];
+                    var decimalValue: number = parseInt(currentPCB[key], 10);
+
+                    var hexValue: string = Utils.decimalToHex(decimalValue);
+
+                    var cell = newRow.insertCell(j);
+                    cell.innerHTML = hexValue;
+
+                } // Inner for
+
+            }// Outer for
+
+        } // displayReadyQueue
+
     }
 }
