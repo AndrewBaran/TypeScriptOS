@@ -38,7 +38,7 @@ var _ReadyQueue;
 
 var _CurrentPCB;
 
-// Schedulers
+// Scheduler
 var _Scheduler;
 
 var _Canvas = null;

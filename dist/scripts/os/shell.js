@@ -92,9 +92,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellPS, "ps", " - Display the PIDs of all active processes.");
             this.commandList[this.commandList.length] = sc;
 
-            // processes - list the running processes and their IDs
-            // kill <id> - kills the specified process id.
-            //
+            // kill <id>
+            sc = new TSOS.ShellCommand(this.shellKill, "kill", " <id> - Kill the pid of the associated <id>.");
+            this.commandList[this.commandList.length] = sc;
+
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -472,6 +473,7 @@ var TSOS;
             }
         };
 
+        // Lists processes that are in the ready queue
         Shell.prototype.shellPS = function () {
             var printString = "Processes running: ";
 
@@ -480,6 +482,52 @@ var TSOS;
             }
 
             _StdOut.putText(printString);
+        };
+
+        // Kills an active process
+        Shell.prototype.shellKill = function (args) {
+            if (args.length !== 1) {
+                _StdOut.putText("Usage: kill <id> Please provide a valid PID.");
+            } else {
+                var processID = parseInt(args[0], 10);
+
+                var properIndex = -1;
+
+                for (var i = 0; i < _ReadyQueue.getSize(); i++) {
+                    if (_ReadyQueue.q[i].processID === processID) {
+                        properIndex = i;
+                        break;
+                    }
+                }
+
+                if (properIndex === -1) {
+                    _StdOut.putText("Error! Invalid Process ID.");
+                } else {
+                    var removedPCB = _ReadyQueue.q[properIndex];
+
+                    // Stop program from executing
+                    removedPCB.isExecuting = false;
+
+                    // Stop CPU from executing current PCB
+                    if (removedPCB === _CurrentPCB) {
+                        _CPU.isExecuting = false;
+                    }
+
+                    // Remove program from ready queue
+                    _ReadyQueue.q.splice(properIndex, 1);
+
+                    // Remove tracking the program
+                    _MemoryManager.programsInUse[removedPCB.processID] = 0;
+
+                    // Clear out memory for program
+                    _MemoryManager.clearMemory(removedPCB.processID);
+
+                    // Reload memory display
+                    _MemoryManager.displayMemory();
+
+                    _StdOut.putText("PID " + removedPCB.processID + " was successfully removed.");
+                }
+            }
         };
         return Shell;
     })();

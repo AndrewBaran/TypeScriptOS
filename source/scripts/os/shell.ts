@@ -113,10 +113,10 @@ module TSOS {
             sc = new ShellCommand(this.shellPS, "ps", " - Display the PIDs of all active processes.");
             this.commandList[this.commandList.length] = sc;
 
-            // processes - list the running processes and their IDs
-            // kill <id> - kills the specified process id.
+            // kill <id>
+            sc = new ShellCommand(this.shellKill, "kill", " <id> - Kill the pid of the associated <id>.");
+            this.commandList[this.commandList.length] = sc;
 
-            //
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -437,7 +437,7 @@ module TSOS {
                 _StdOut.putText("Error: Invalid program input. Only hex digits allowed.");
             }
 
-        }
+        } // shellLoad()
 
         public shellStatus(args : string[]): void {
             
@@ -503,7 +503,7 @@ module TSOS {
                 
             } // else
 
-        }
+        } // shellRun()
 
         // TODO Do I want to clear off resident queue?
         public shellClearMem(): void {
@@ -541,6 +541,7 @@ module TSOS {
 
         } // shellQuantum()
 
+        // Lists processes that are in the ready queue
         public shellPS(): void {
 
             var printString: string = "Processes running: ";
@@ -552,6 +553,67 @@ module TSOS {
 
             _StdOut.putText(printString);
 
+        }
+
+        // Kills an active process
+        public shellKill(args: string[]): void {
+
+            if(args.length !== 1) {
+
+                _StdOut.putText("Usage: kill <id> Please provide a valid PID.");
+            }
+
+            else {
+
+                var processID: number = parseInt(args[0], 10);
+
+                var properIndex: number = -1;
+
+                // Check for valid PID
+                for(var i: number = 0; i < _ReadyQueue.getSize(); i++) {
+
+                    if(_ReadyQueue.q[i].processID === processID) {
+
+                        properIndex = i;
+                        break;
+                    }
+
+                }
+
+                if(properIndex === -1) {
+
+                    _StdOut.putText("Error! Invalid Process ID.");
+                }
+
+                else {
+
+                    var removedPCB: TSOS.PCB = _ReadyQueue.q[properIndex];
+
+                    // Stop program from executing
+                    removedPCB.isExecuting = false;
+
+                    // Stop CPU from executing current PCB
+                    if(removedPCB === _CurrentPCB) {
+
+                        _CPU.isExecuting = false;
+                    }
+
+                    // Remove program from ready queue
+                    _ReadyQueue.q.splice(properIndex, 1);
+
+                    // Remove tracking the program
+                    _MemoryManager.programsInUse[removedPCB.processID] = 0;
+
+                    // Clear out memory for program
+                    _MemoryManager.clearMemory(removedPCB.processID);
+
+                    // Reload memory display
+                    _MemoryManager.displayMemory();
+
+                    _StdOut.putText("PID " + removedPCB.processID + " was successfully removed.");
+
+                }
+            }
         }
 
     }

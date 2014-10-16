@@ -100,7 +100,7 @@ h3
 {
 	height: 200px;
 	width: 300px;
-	margin-right: 150px;
+	margin-right: 100px;
 	overflow: auto;
 	float: right;
 	border: 1px solid black;
@@ -145,7 +145,7 @@ h3
 {
 	width: 350px;
 	float: right;
-	margin-right: 100px;
+	margin-right: 50px;
 }
 
 #tableReadyQueue

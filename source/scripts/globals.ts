@@ -69,7 +69,7 @@ var _ReadyQueue: TSOS.Queue; // Queue of processes that are in memory and runnin
 
 var _CurrentPCB: TSOS.PCB; // PCB of process that has CPU time
 
-// Schedulers
+// Scheduler
 var _Scheduler: TSOS.Scheduler; // CPU Scheduler
 
 var _Canvas: HTMLCanvasElement = null;  // Initialized in hostInit().
