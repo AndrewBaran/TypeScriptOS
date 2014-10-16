@@ -374,10 +374,9 @@ var TSOS;
                     // Load the program into memory at the opening found by the for loop above
                     if (_ResidentQueue.length !== 3) {
                         // Allows 1 program to be loaded
-                        _MemoryManager.loadProgram(byteList, 0);
-                        // TODO Buggy and needs fixing
+                        // _MemoryManager.loadProgram(byteList, 0);
                         // Allow 3 programs to be loaded
-                        // _MemoryManager.loadProgram(byteList, _ResidentQueue.length);
+                        _MemoryManager.loadProgram(byteList);
                     } else {
                         _StdOut.putText("Cannot load program - memory is full.");
                     }
@@ -407,18 +406,16 @@ var TSOS;
                 _StdOut.putText("Usage: run <pid> Please supply a program ID");
             } else {
                 var processID = parseInt(args[0], 10);
+                var properIndex = -1;
 
-                if (processID >= 0 && processID < _ResidentQueue.length) {
-                    // Set CPU to begin executing program
-                    _CPU.isExecuting = true;
-
-                    for (var i = 0; i < _ResidentQueue.length; i++) {
-                        if (_ResidentQueue[i].processID == processID) {
-                            var properIndex = i;
-                            break;
-                        }
+                for (var i = 0; i < _ResidentQueue.length; i++) {
+                    if (_ResidentQueue[i].processID === processID) {
+                        var properIndex = i;
+                        break;
                     }
+                }
 
+                if (properIndex !== -1) {
                     // Remove PCB from resident queue
                     var selectedPCB = _ResidentQueue[properIndex];
                     _ResidentQueue.splice(properIndex, 1);
@@ -426,6 +423,9 @@ var TSOS;
                     // Add PCB to ready queue
                     _ReadyQueue.enqueue(selectedPCB);
                     _CurrentPCB = selectedPCB;
+
+                    // Set CPU to execute
+                    _CPU.isExecuting = true;
 
                     // Clear CPU
                     _CPU.clear();
@@ -438,6 +438,7 @@ var TSOS;
             }
         };
 
+        // TODO Do I want to clear off resident queue?
         Shell.prototype.shellClearMem = function () {
             // Call this method without parameters to clear all partitions
             _MemoryManager.clearMemory();

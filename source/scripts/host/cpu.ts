@@ -285,6 +285,9 @@ module TSOS {
             		// Remove currentPCB from ready queue
                     _ReadyQueue.dequeue();
 
+                    // Remove program from tracking
+                    _MemoryManager.programsInUse[_CurrentPCB.processID] = 0;
+
             		break;
 
             	// Compare a byte in memory to X reg

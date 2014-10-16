@@ -4,6 +4,7 @@ var TSOS;
         // Constructors
         function MemoryManager() {
             this.memoryObject = null;
+            this.programsInUse = [0, 0, 0];
         }
         // Methods
         // Create new memory object and clear it out
@@ -38,8 +39,14 @@ var TSOS;
         };
 
         // Load the program into physical memory; default process block = 0
-        MemoryManager.prototype.loadProgram = function (byteList, processNumber) {
-            if (typeof processNumber === "undefined") { processNumber = 0; }
+        MemoryManager.prototype.loadProgram = function (byteList) {
+            for (var i = 0; i < this.programsInUse.length; i++) {
+                if (this.programsInUse[i] === 0) {
+                    var processNumber = i;
+                    break;
+                }
+            }
+
             // Clear memory
             this.clearMemory(processNumber);
 
@@ -66,6 +73,9 @@ var TSOS;
 
             var newPCB = new TSOS.PCB(processNumber, baseAddress, limitAddress);
             _ResidentQueue.push(newPCB);
+
+            // Keep track of where program is loaded
+            this.programsInUse[processNumber] = 1;
 
             _StdOut.putText("Program loaded | PID " + processNumber + " created");
         };

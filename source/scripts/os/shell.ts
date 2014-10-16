@@ -407,11 +407,10 @@ module TSOS {
                     if(_ResidentQueue.length !== 3) {
 
                         // Allows 1 program to be loaded
-                        _MemoryManager.loadProgram(byteList, 0);
+                        // _MemoryManager.loadProgram(byteList, 0);
 
-                        // TODO Buggy and needs fixing
                         // Allow 3 programs to be loaded
-                        // _MemoryManager.loadProgram(byteList, _ResidentQueue.length);
+                        _MemoryManager.loadProgram(byteList);
                     }
 
                     else {
@@ -459,22 +458,18 @@ module TSOS {
             else {
 
                 var processID: number = parseInt(args[0], 10);
+                var properIndex: number = -1;
 
-                if(processID >= 0 && processID < _ResidentQueue.length) {
+                for(var i: number = 0; i < _ResidentQueue.length; i++) {
 
-                    // Set CPU to begin executing program
-                    _CPU.isExecuting = true;
+                    if(_ResidentQueue[i].processID === processID) {
 
-                    // Move process from resident queue to ready queue
-                    // Find index of PCB with processID
-                    for(var i: number = 0; i < _ResidentQueue.length; i++) {
-
-                        if(_ResidentQueue[i].processID == processID) {
-
-                            var properIndex: number = i;
-                            break;
-                        }
+                        var properIndex = i;
+                        break;
                     }
+                }
+
+                if(properIndex !== -1) {
 
                     // Remove PCB from resident queue
                     var selectedPCB: TSOS.PCB = _ResidentQueue[properIndex];
@@ -483,7 +478,10 @@ module TSOS {
                     // Add PCB to ready queue
                     _ReadyQueue.enqueue(selectedPCB);
                     _CurrentPCB = selectedPCB;
-                    
+
+                    // Set CPU to execute
+                    _CPU.isExecuting = true;
+
                     // Clear CPU
                     _CPU.clear();
 
@@ -499,6 +497,7 @@ module TSOS {
 
         }
 
+        // TODO Do I want to clear off resident queue?
         public shellClearMem(): void {
 
             // Call this method without parameters to clear all partitions

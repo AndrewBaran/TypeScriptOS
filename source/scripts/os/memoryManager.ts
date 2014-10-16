@@ -2,10 +2,13 @@ module TSOS {
 	export class MemoryManager {
 
 		public memoryObject: TSOS.Memory;
+		public programsInUse: number[];
 
 		// Constructors
 		constructor() {
+
 			this.memoryObject = null;
+			this.programsInUse = [0, 0, 0];
 		}
 
 		// Methods
@@ -52,7 +55,17 @@ module TSOS {
 		} // clearMemory()
 
 		// Load the program into physical memory; default process block = 0
-		public loadProgram(byteList: string[], processNumber: number = 0) : void {
+		public loadProgram(byteList: string[]) : void {
+
+			// Find hole in memory to load program
+			for(var i: number = 0; i < this.programsInUse.length; i++) {
+
+				if(this.programsInUse[i] === 0) {
+
+					var processNumber: number = i;
+					break;
+				}
+			}
 
 			// Clear memory
 			this.clearMemory(processNumber);
@@ -82,6 +95,9 @@ module TSOS {
 
 			var newPCB: TSOS.PCB = new PCB(processNumber, baseAddress, limitAddress);
 			_ResidentQueue.push(newPCB);
+
+			// Keep track of where program is loaded
+			this.programsInUse[processNumber] = 1;
 
 			_StdOut.putText("Program loaded | PID " + processNumber + " created");
 		}
