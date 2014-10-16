@@ -101,6 +101,10 @@ module TSOS {
             sc = new ShellCommand(this.shellRun, "run", " <pid> - Runs the program <pid> in memory.");
             this.commandList[this.commandList.length] = sc;
 
+            // runall
+            sc = new ShellCommand(this.shellRunAll, "runall", " - Runs each program loaded in memory.");
+            this.commandList[this.commandList.length] = sc;
+
             // clearmem
             sc = new ShellCommand(this.shellClearMem, "clearmem", " - Clears all memory partitions in the system.");
             this.commandList[this.commandList.length] = sc;
@@ -504,6 +508,15 @@ module TSOS {
             } // else
 
         } // shellRun()
+
+        // TODO Implement
+        public shellRunAll(): void {
+
+            // Use scheduler to arrange processes
+            _Scheduler.schedule();
+
+            // Add ordered processes to ready queue
+        }
 
         // TODO Do I want to clear off resident queue?
         public shellClearMem(): void {

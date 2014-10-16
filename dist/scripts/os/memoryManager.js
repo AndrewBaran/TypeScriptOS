@@ -72,6 +72,8 @@ var TSOS;
             this.displayMemory();
 
             var newPCB = new TSOS.PCB(processNumber, baseAddress, limitAddress);
+            newPCB.timeArrived = _OSclock; // Used in scheduling
+
             _ResidentQueue.push(newPCB);
 
             // Keep track of where program is loaded

@@ -2,7 +2,7 @@ var TSOS;
 (function (TSOS) {
     var PCB = (function () {
         // Constructor
-        function PCB(processID, baseRegister, limitRegister, programCounter, accumulator, Xreg, Yreg, Zflag, isExecuting, cyclesComplete) {
+        function PCB(processID, baseRegister, limitRegister, programCounter, accumulator, Xreg, Yreg, Zflag, timeArrived, isExecuting, cyclesComplete) {
             if (typeof processID === "undefined") { processID = -1; }
             if (typeof baseRegister === "undefined") { baseRegister = 0; }
             if (typeof limitRegister === "undefined") { limitRegister = 0; }
@@ -11,6 +11,7 @@ var TSOS;
             if (typeof Xreg === "undefined") { Xreg = 0; }
             if (typeof Yreg === "undefined") { Yreg = 0; }
             if (typeof Zflag === "undefined") { Zflag = 0; }
+            if (typeof timeArrived === "undefined") { timeArrived = 0; }
             if (typeof isExecuting === "undefined") { isExecuting = false; }
             if (typeof cyclesComplete === "undefined") { cyclesComplete = 0; }
             this.processID = processID;
@@ -21,6 +22,7 @@ var TSOS;
             this.Xreg = Xreg;
             this.Yreg = Yreg;
             this.Zflag = Zflag;
+            this.timeArrived = timeArrived;
             this.isExecuting = isExecuting;
             this.cyclesComplete = cyclesComplete;
         }

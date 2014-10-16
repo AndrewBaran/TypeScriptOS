@@ -11,6 +11,7 @@ module TSOS {
 		public Xreg: number;
 		public Yreg: number;
 		public Zflag: number;
+		public timeArrived: number;
 		public isExecuting: boolean;
 
 		public cyclesComplete: number;
@@ -24,7 +25,8 @@ module TSOS {
 					accumulator = 0, 
 					Xreg = 0, 
 					Yreg = 0, 
-					Zflag = 0, 
+					Zflag = 0,
+					timeArrived = 0,
 					isExecuting = false,
 					cyclesComplete = 0) {
 			this.processID = processID;
@@ -35,6 +37,7 @@ module TSOS {
 			this.Xreg = Xreg;
 			this.Yreg = Yreg;
 			this.Zflag = Zflag;
+			this.timeArrived = timeArrived;
 			this.isExecuting = isExecuting;
 			this.cyclesComplete = cyclesComplete;
 		}

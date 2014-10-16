@@ -130,7 +130,6 @@ module TSOS {
             this.krnTrace("Handling IRQ~" + irq);
 
             // Invoke the requested Interrupt Service Routine via Switch/Case rather than an Interrupt Vector.
-            // TODO: Consider using an Interrupt Vector in the future.
             // Note: There is no need to "dismiss" or acknowledge the interrupts in our design here.
             //       Maybe the hardware simulation will grow to support/require that in the future.
             switch (irq) {

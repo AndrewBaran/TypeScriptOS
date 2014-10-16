@@ -16,5 +16,37 @@ module TSOS {
 			this.quantum = newQuantum;
 		}
 
+		// TODO Implement
+		public schedule(): void {
+
+			// Select appropriate scheduling depending on type
+			switch(this.schedulingType) {
+
+				// Round robin
+				case "rr":
+
+					console.log("Round robin scheduling");
+					break;
+
+				// First-come first-serve
+				case "fcfs":
+
+					console.log("First-come first-serve scheduling");
+					break;
+
+				// Priority
+				case "priority":
+
+					console.log("Priority scheduling");
+					break;
+
+				case "default":
+
+					console.log("This shouldn't happen");
+					break;
+
+			} // switch
+		}
+
 	}
 }
