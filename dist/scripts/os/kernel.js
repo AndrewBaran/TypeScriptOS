@@ -50,6 +50,10 @@ var TSOS;
             _ResidentQueue = [];
             _ReadyQueue = new TSOS.Queue();
 
+            // Initialize CPU scheduler
+            this.krnTrace("Initializing the CPU scheduler.");
+            _Scheduler = new TSOS.Scheduler();
+
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();

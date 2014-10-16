@@ -52,6 +52,10 @@ module TSOS {
             _ResidentQueue = [];
             _ReadyQueue = new Queue();
 
+            // Initialize CPU scheduler
+            this.krnTrace("Initializing the CPU scheduler.");
+            _Scheduler = new Scheduler();
+
             // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
             this.krnTrace("Enabling the interrupts.");
             this.krnEnableInterrupts();

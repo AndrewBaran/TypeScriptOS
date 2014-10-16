@@ -58,9 +58,9 @@ Project 3 Checklist
 - [x] Add a shell command, clearmem, to clear all memory partitions
 - [x] Allow the user to load three programs into memory at once
 - [ ] Add a shell command, runall, to execute all the programs at once
-- [ ] Add a shell command, quantum (int), to let the user set the Round Robin quantum (measured in clock ticks)
+- [x] Add a shell command, quantum (int), to let the user set the Round Robin quantum (measured in clock ticks)
 - [x] Display the Ready queue and its PCB contents (including process state) in real time
-- [ ] Add a shell command, ps, to display the PIDs of all active processes
+- [x] Add a shell command, ps, to display the PIDs of all active processes
 - [ ] Add a shell command, kill (pid), to kill an active process
 - [ ] Store multiple programs in memory, each in their own partition, allocated by the client OS
 - [ ] Add base and limit registers to your core memory access code in the host OS and to your PCB object in the client OS

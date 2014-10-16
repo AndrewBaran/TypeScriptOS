@@ -67,7 +67,10 @@ var _MemoryManager: TSOS.MemoryManager; // Abstraction layer above main memory
 var _ResidentQueue: TSOS.PCB[]; // List of processes in memory but not running
 var _ReadyQueue: TSOS.Queue; // Queue of processes that are in memory and running
 
-var _CurrentPCB: TSOS.PCB;
+var _CurrentPCB: TSOS.PCB; // PCB of process that has CPU time
+
+// Schedulers
+var _Scheduler: TSOS.Scheduler; // CPU Scheduler
 
 var _Canvas: HTMLCanvasElement = null;  // Initialized in hostInit().
 var _DrawingContext = null;             // Initialized in hostInit().

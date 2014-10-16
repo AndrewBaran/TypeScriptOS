@@ -105,6 +105,14 @@ module TSOS {
             sc = new ShellCommand(this.shellClearMem, "clearmem", " - Clears all memory partitions in the system.");
             this.commandList[this.commandList.length] = sc;
 
+            // quantum <int>
+            sc = new ShellCommand(this.shellQuantum, "quantum", " <num> - Sets the quantum amount for RR scheduling.");
+            this.commandList[this.commandList.length] = sc;
+
+            // ps
+            sc = new ShellCommand(this.shellPS, "ps", " - Display the PIDs of all active processes.");
+            this.commandList[this.commandList.length] = sc;
+
             // processes - list the running processes and their IDs
             // kill <id> - kills the specified process id.
 
@@ -505,6 +513,45 @@ module TSOS {
             _MemoryManager.displayMemory();
 
             _StdOut.putText("Memory has been cleared.");
+        }
+
+        // Sets the quantum time length for round robin scheduling
+        public shellQuantum(args: string[]): void {
+
+            if(args.length !== 1) {
+                _StdOut.putText("Usage: quantum <num> Please supply a positive number.")
+            }
+
+            else {
+
+                var quantumValue: number = parseInt(args[0], 10);
+
+                // Valid quantum value
+                if(quantumValue > 0) {
+
+                    _Scheduler.setQuantum(quantumValue);
+                    _StdOut.putText("Quantum has been set to " + quantumValue);
+                }
+
+                else {
+                    _StdOut.putText("Error! Quantum must be > 0.");
+                }
+
+            }
+
+        } // shellQuantum()
+
+        public shellPS(): void {
+
+            var printString: string = "Processes running: ";
+
+            for(var i: number = 0; i < _ReadyQueue.getSize(); i++) {
+
+                printString += _ReadyQueue.q[i].processID + " ";
+            }
+
+            _StdOut.putText(printString);
+
         }
 
     }

@@ -38,6 +38,9 @@ var _ReadyQueue;
 
 var _CurrentPCB;
 
+// Schedulers
+var _Scheduler;
+
 var _Canvas = null;
 var _DrawingContext = null;
 var _DefaultFontFamily = "sans";
