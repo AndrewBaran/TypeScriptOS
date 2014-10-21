@@ -415,19 +415,28 @@ module TSOS {
 
                 if(validInput) {
 
-                    // Load the program into memory at the opening found by the for loop above
-                    if(_ResidentQueue.length !== 3) {
+                    if(byteList.length <= _MemoryConstants.PROCESS_SIZE) {
 
-                        // Allows 1 program to be loaded
-                        // _MemoryManager.loadProgram(byteList, 0);
+                        // Load the program into memory at the opening found by the for loop above
+                        if(_ResidentQueue.length !== 3) {
 
-                        // Allow 3 programs to be loaded
-                        _MemoryManager.loadProgram(byteList);
+                            // Allows 1 program to be loaded
+                            // _MemoryManager.loadProgram(byteList, 0);
+
+                            // Allow 3 programs to be loaded
+                            _MemoryManager.loadProgram(byteList);
+                        }
+
+                        else {
+                            _StdOut.putText("Cannot load program - memory is full.");
+                        }
+                        
                     }
 
                     else {
-                        _StdOut.putText("Cannot load program - memory is full.");
+                        _StdOut.putText("Invalid program input. Program code too large.");
                     }
+
 
                 }
 
@@ -518,12 +527,14 @@ module TSOS {
             // Add ordered processes to ready queue
         }
 
-        // TODO Do I want to clear off resident queue?
         public shellClearMem(): void {
 
             // Call this method without parameters to clear all partitions
             _MemoryManager.clearMemory();
             _MemoryManager.displayMemory();
+
+            // Clear resident queue
+            _ResidentQueue = [];
 
             _StdOut.putText("Memory has been cleared.");
         }

@@ -67,7 +67,7 @@ Project 3 Checklist
 - [ ] Enforce memory partition boundaries at all times
 - [x] Create a Resident list for the loaded processes
 - [x] Create a Ready queue for the running processes
-- [ ] Instantiate a PCB for each loaded program and put it in the Resident list
+- [x] Instantiate a PCB for each loaded program and put it in the Resident list
 - [ ] Develop a CPU scheduler in the client OS using **Round Robin** scheduling with the user-specified quantum measured in clock ticks (default = 6)
 	- [ ] Make the client OS control the host CPU for the client OS CPU scheduler
 	- [ ] Log all scheduling events
