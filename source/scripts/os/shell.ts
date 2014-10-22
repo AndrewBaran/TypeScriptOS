@@ -531,6 +531,8 @@ module TSOS {
 
             // Call this method without parameters to clear all partitions
             _MemoryManager.clearMemory();
+
+            // Reload memory display
             _MemoryManager.displayMemory();
 
             // Clear resident queue

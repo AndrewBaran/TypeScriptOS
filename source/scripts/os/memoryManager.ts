@@ -39,6 +39,9 @@ module TSOS {
 					}
 				}
 
+				// Clear tracking of used memory
+				this.programsInUse[processID] = 0;
+
 			}
 
 			// Clear all of memory
@@ -50,6 +53,10 @@ module TSOS {
 						this.memoryObject.memoryList[i][j] = "00";
 					}
 				}
+
+				// Clear tracking of used memory
+				this.programsInUse = [0, 0, 0];
+
 			} // else
 
 		} // clearMemory()

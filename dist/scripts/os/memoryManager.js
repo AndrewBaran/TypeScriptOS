@@ -29,12 +29,18 @@ var TSOS;
                         this.memoryObject.memoryList[i][j] = "00";
                     }
                 }
+
+                // Clear tracking of used memory
+                this.programsInUse[processID] = 0;
             } else {
                 for (var i = 0; i < _MemoryConstants.NUM_ROWS; i++) {
                     for (var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
                         this.memoryObject.memoryList[i][j] = "00";
                     }
                 }
+
+                // Clear tracking of used memory
+                this.programsInUse = [0, 0, 0];
             }
         };
 
