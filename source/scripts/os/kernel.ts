@@ -90,24 +90,28 @@ module TSOS {
 
 
         public krnOnCPUClockPulse(): void {
-            /* This gets called from the host hardware sim every time there is a hardware clock pulse.
-               This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
-               This, on the other hand, is the clock pulse from the hardware (or host) that tells the kernel
-               that it has to look for interrupts and process them if it finds any.                           */
-            // Check for an interrupt, are any. Page 560
 
+            // Check for an interrupt
             if (_KernelInterruptQueue.getSize() > 0) {
+
                 // Process the first interrupt on the interrupt queue.
                 // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
-            } else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed. {
+            } 
+
+            // No interrupts, then run one CPU cycle if there is a program executing
+            // TODO Implement a try-catch around this command to catch memory out of bounds errors; termiante program when caught
+            else if (_CPU.isExecuting) {
                 _CPU.cycle();
-            } else {                      // If there are no interrupts and there is nothing being executed then just be idle. {
+            }
+
+            // No interrupts and no programs running, then just idle
+            else {
                 this.krnTrace("Idle");
             }
-        }
 
+        }
 
         //
         // Interrupt Handling

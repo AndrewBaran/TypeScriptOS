@@ -271,21 +271,7 @@ module TSOS {
 
             		console.log("BRK");
 
-            		// Program is complete; stop CPU
-            		this.isExecuting = false;
-
-                    // Save the contents of CPU into PCB
-                    _CurrentPCB.saveInfo();
-
-            		// Display PCB in console
-            		_CurrentPCB.display();
-
-                    // TODO THIS MAY BE BUGGY IN THE FUTURE. FUTURE ME, LOOK HERE
-            		// Remove currentPCB from ready queue
-                    _ReadyQueue.dequeue();
-
-                    // Remove program from tracking
-                    _MemoryManager.programsInUse[_CurrentPCB.processID] = 0;
+            		this.removeProgram();
 
             		break;
 
@@ -385,17 +371,19 @@ module TSOS {
 
             		break;
 
+            	// Invalid OP code
             	default:
 
-            		// TODO Make the CPU implode (or make the kernel panic)
-                    console.log("Unknown instruction: " + nextInstruction);
+                    _StdOut.putText("Error! Invalid OP code detected: " + nextInstruction);
+                    _Kernel.krnTrace("Error! Invalid OP code detected. Program termianted");
+
+                    // Remove program
+                    this.removeProgram();
 
             		break;
 
             }
             
-            // TODO: Accumulate CPU usage and profiling statistics here.
-
             // Clear out instruction data buffer
             instructionData = [];
 
@@ -459,6 +447,26 @@ module TSOS {
             }
 
         } // displayCPU()
+
+        private removeProgram(): void {
+
+            // Program is complete; stop CPU
+            this.isExecuting = false;
+
+            // Save the contents of CPU into PCB
+            _CurrentPCB.saveInfo();
+
+            // Display PCB in console
+            // TODO Remove when no longer needed
+            _CurrentPCB.display();
+
+            // TODO THIS MAY BE BUGGY IN THE FUTURE. FUTURE ME, LOOK HERE
+            // Remove currentPCB from ready queue
+            _ReadyQueue.dequeue();
+
+            // Remove program from tracking
+            _MemoryManager.programsInUse[_CurrentPCB.processID] = 0;
+        }
 
     }
 }

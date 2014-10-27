@@ -6,7 +6,7 @@ See [Alan's Website](http://www.labouseur.com/courses/os/) for details.
 
 [Access the OS](http://andrewbaran.github.io/TypeScriptOS/)
 ===========================================================
-Last updated for **Project Two**: October 11th, 2014
+Last updated for **Project 2**: October 11th, 2014
 
 Project 1 Checklist
 ===================
