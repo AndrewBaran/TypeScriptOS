@@ -1,6 +1,7 @@
 module TSOS {
 	export class MemoryManager {
 
+		// Fields
 		public memoryObject: TSOS.Memory;
 		public programsInUse: number[];
 
@@ -19,7 +20,6 @@ module TSOS {
 			this.memoryObject = new Memory();
 			this.clearMemory();
 		}
-
 
 		// Takes an optional parameter that clears a specific part of memory; otherwise, clear all memory
 		public clearMemory(processID: number = -1): void {
@@ -47,7 +47,7 @@ module TSOS {
 			// Clear all of memory
 			else {
 
-				// Loop through all of memory, making the values the empty string ""
+				// Loop through all of memory, making the values "00"
 				for(var i: number = 0; i < _MemoryConstants.NUM_ROWS; i++) {
 					for(var j: number = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
 						this.memoryObject.memoryList[i][j] = "00";
@@ -61,7 +61,7 @@ module TSOS {
 
 		} // clearMemory()
 
-		// Load the program into physical memory; default process block = 0
+		// Loads the program into physical memory
 		public loadProgram(byteList: string[]) : void {
 
 			// Find hole in memory to load program
@@ -91,6 +91,7 @@ module TSOS {
 				for(var colNumber: number = 0; colNumber < _MemoryConstants.NUM_COLUMNS; colNumber++) {
 
 					if(index < byteList.length) {
+
 						this.memoryObject.memoryList[startingRow][colNumber] = byteList[index];
 						index++;
 					}
@@ -177,6 +178,12 @@ module TSOS {
 
 			// Invalid address
 			else {
+
+				// Kill program
+				// Stop CPU from executing
+				// Stop CPU from executing current instruction
+				// Remove program from ready queue
+				// Remove track of program in memory
 
 			}
 		}

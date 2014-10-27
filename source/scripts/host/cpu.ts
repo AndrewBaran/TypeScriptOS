@@ -147,7 +147,6 @@ module TSOS {
 
             		break;
 
-            	// Add with carry
                 // Add contents of address to accumlator and keep result in accumulator
             	case "6D":
 
@@ -388,8 +387,8 @@ module TSOS {
 
             	default:
 
-                    console.log("Unknown instruction: " + nextInstruction);
             		// TODO Make the CPU implode (or make the kernel panic)
+                    console.log("Unknown instruction: " + nextInstruction);
 
             		break;
 
@@ -418,6 +417,7 @@ module TSOS {
 
         } // cycle()
 
+        // Resets the state of the CPU
         public clear(): void {
 
             this.PC = 0;
