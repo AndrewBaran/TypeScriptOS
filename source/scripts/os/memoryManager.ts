@@ -164,53 +164,114 @@ module TSOS {
 		// Returns the value of the byte in memory using PC and PID
 		public getByte(programCounter: number, processID: number): string {
 
-			var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
-			rowNumber += Math.floor(programCounter / _MemoryConstants.BYTES_PER_ROW);
+			// Valid address
+			if(this.validateAddress(programCounter, processID)) {
 
-			var columnNumber: number = programCounter % _MemoryConstants.BYTES_PER_ROW;
+				var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+				rowNumber += Math.floor(programCounter / _MemoryConstants.BYTES_PER_ROW);
 
-			return this.memoryObject.memoryList[rowNumber][columnNumber];
+				var columnNumber: number = programCounter % _MemoryConstants.BYTES_PER_ROW;
+
+				return this.memoryObject.memoryList[rowNumber][columnNumber];
+			}
+
+			// Invalid address
+			else {
+
+			}
 		}
 
 		// TODO BSOD or something if invalid memory access
 		public writeData(address: string, inputValue: number, processID: number): void {
 
-			// Convert memoryAddress to hex
-			var hexAddress: number = parseInt(address, 16);
+			// Valid address
+			if(this.validateAddress(address, processID)) {
 
-			var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
-			rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
+				// Convert memoryAddress to hex
+				var hexAddress: number = parseInt(address, 16);
 
-			var columnNumber: number = hexAddress % _MemoryConstants.BYTES_PER_ROW;
+				var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+				rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
 
-			// Convert input value to hex
-			var valueString: string = inputValue.toString(16);
+				var columnNumber: number = hexAddress % _MemoryConstants.BYTES_PER_ROW;
 
-			// Pad inputValue if necessary
-			if(valueString.length === 1) {
-				valueString = "0" + valueString;
+				// Convert input value to hex
+				var valueString: string = inputValue.toString(16);
+
+				// Pad inputValue if necessary
+				if(valueString.length === 1) {
+					valueString = "0" + valueString;
+				}
+
+				var properString: string = Utils.toUpperHex(valueString);
+
+				// Write value to memory
+				this.memoryObject.memoryList[rowNumber][columnNumber] = properString;
 			}
 
-			var properString: string = Utils.toUpperHex(valueString);
+			// Invalid address
+			else {
 
-			// Write value to memory
-			this.memoryObject.memoryList[rowNumber][columnNumber] = properString;
+
+			}
 
 		} // writeData()
 
 		// TODO BSOD or something if invalid memory access
-		// TODO This seems unnecessary
 		public getData(address: string, processID: number): string {
 
-			var hexAddress: number = parseInt(address, 16);
+			// Valid address
+			if(this.validateAddress(address, processID)) {
 
-			var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
-			rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
+				var hexAddress: number = parseInt(address, 16);
 
-			var columnNumber: number = hexAddress % _MemoryConstants.BYTES_PER_ROW;
+				var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+				rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
 
-			return this.memoryObject.memoryList[rowNumber][columnNumber];
+				var columnNumber: number = hexAddress % _MemoryConstants.BYTES_PER_ROW;
+
+				return this.memoryObject.memoryList[rowNumber][columnNumber];
+			}
+
+			// Invalid address
+			else {
+
+			}
+
 		}
+
+		// Determines if a given address is within a processID's memory limit
+		private validateAddress(address: string, processID: number): boolean {
+
+			var pcbBase: number = _CurrentPCB.baseRegister;
+			var pcbLimit: number = _CurrentPCB.limitRegister;
+
+			// Parse address as decimal
+			var addressValue: number = parseInt(address, 16);
+			var adjustedAddress: number = (_MemoryConstants.PROCESS_SIZE * processID) + addressValue;
+
+			console.log("addressValue = " + addressValue);
+			console.log("adjustedAddress = " adjustedAddress);
+			console.log("Base = " + pcbBase);
+			console.log("Limit = " + pcbLimit);
+
+			// Valid address
+			if(adjustedAddress >= pcbBase && adjustedAddress <= pcbLimit) {
+
+				console.log(addressValue + " is valid.");
+
+				return true;
+			}
+
+			// Invalid address
+			else {
+
+				console.log(addressValue + " is valid.");
+
+				return false;
+			}
+
+		} // validateAddress()
 
 	}
 }
