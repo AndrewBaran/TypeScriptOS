@@ -33,13 +33,13 @@ var TSOS;
             return this.schedulingType;
         };
 
-        // TODO Implement
+        // Takes PCBs in the resident queue and arranges them in the ready queue accordingly
         Scheduler.prototype.schedule = function () {
             switch (this.schedulingType) {
                 case "rr":
-                    console.log("Round robin scheduling");
+                    _Kernel.krnTrace("Scheduling programs using round robin.");
 
-                    // Take items off resident queue and into ready queue
+                    // Take items off resident queue and put into ready queue
                     var queueLength = _ResidentQueue.length;
 
                     for (var i = 0; i < queueLength; i++) {
@@ -48,17 +48,15 @@ var TSOS;
                         _ReadyQueue.enqueue(currentPCB);
                     }
 
-                    // Clear residentQueue
+                    // Clear the resident queue
                     _ResidentQueue = [];
-
-                    console.log(_ReadyQueue);
 
                     // Reset quantum (used if someone loads during runall)
                     if (!_CPU.isExecuting) {
                         this.resetQuantum();
                     }
 
-                    _CurrentPCB = _ReadyQueue.q[0];
+                    _CurrentPCB = _ReadyQueue.peek();
                     _CurrentPCB.status = _ProcessStates.RUNNING;
 
                     // Set scheduler flag

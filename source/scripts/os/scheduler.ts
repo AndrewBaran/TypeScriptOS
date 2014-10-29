@@ -41,7 +41,7 @@ module TSOS {
 			return this.schedulingType;
 		}
 
-		// TODO Implement
+		// Takes PCBs in the resident queue and arranges them in the ready queue accordingly
 		public schedule(): void {
 
 			// Select appropriate scheduling depending on type
@@ -50,9 +50,9 @@ module TSOS {
 				// Round robin
 				case "rr":
 
-					console.log("Round robin scheduling");
+					_Kernel.krnTrace("Scheduling programs using round robin.");
 
-					// Take items off resident queue and into ready queue
+					// Take items off resident queue and put into ready queue
 					var queueLength: number = _ResidentQueue.length;
 
 					for(var i: number = 0; i < queueLength; i++) {
@@ -62,17 +62,15 @@ module TSOS {
 						_ReadyQueue.enqueue(currentPCB);
 					}
 
-					// Clear residentQueue
+					// Clear the resident queue
 					_ResidentQueue = [];
-
-					console.log(_ReadyQueue);
 
 					// Reset quantum (used if someone loads during runall)
 					if(!_CPU.isExecuting) {
 						this.resetQuantum();
 					}
 
-					_CurrentPCB = _ReadyQueue.q[0];
+					_CurrentPCB = _ReadyQueue.peek();
 					_CurrentPCB.status = _ProcessStates.RUNNING;
 
 					// Set scheduler flag

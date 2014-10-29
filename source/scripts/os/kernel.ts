@@ -306,8 +306,6 @@ module TSOS {
         // Switches from one running process to another, saving and loading info accordingly
         private contextSwitch(): void {
 
-            console.log("In contextSwitch");
-
             this.krnTrace("Executing a context switch.");
 
             if(_Scheduler.inUse) {
@@ -341,32 +339,34 @@ module TSOS {
 
             // Save PCB
             _CurrentPCB.saveInfo();
-            console.log(_CurrentPCB);
+            this.krnTrace("Saving state of PID " + _CurrentPCB.processID);
 
-            // Remove currentPCB from Ready queue
+            // Remove currentPCB from ready queue
             _ReadyQueue.dequeue();
 
             if(_CurrentPCB.status !== _ProcessStates.FINISHED) {
 
-                console.log("Process not finished.");
-
-                // Add to end of ready queue
+                // Add PCB to end of ready queue
                 _ReadyQueue.enqueue(_CurrentPCB);
                 
             }
 
-
             // Load new PCB
             if(_ReadyQueue.getSize() > 0) {
-                _CurrentPCB = _ReadyQueue.q[0];
+
+                // Get item at front of queue, don't remove
+                _CurrentPCB = _ReadyQueue.peek();
 
                 // Load new CPU state
                 _CPU.loadState(_CurrentPCB);
+                this.krnTrace("Process state of PID " + _CurrentPCB.processID + " loaded.");
             }
 
             else {
+
                 // Stop CPU from executing
                 _CPU.isExecuting = false;
+                this.krnTrace("No more programs to run.");
 
                 // Reset scheduling flag
                 _Scheduler.inUse = false;

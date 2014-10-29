@@ -330,7 +330,6 @@ var TSOS;
 
             // If round-robin scheduling
             if (_Scheduler.getSchedulingType() === "rr" && _Scheduler.inUse) {
-                console.log("RR scheduling");
                 _Scheduler.incrementQuantum();
             }
 
@@ -390,6 +389,7 @@ var TSOS;
             }
         };
 
+        // Gets a process state to finished, remove from tracking, and log a Context Switch on next clock tick
         Cpu.prototype.removeProgram = function () {
             // Set program to finished
             _CurrentPCB.status = _ProcessStates.FINISHED;

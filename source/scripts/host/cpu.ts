@@ -383,8 +383,6 @@ module TSOS {
 
             // If round-robin scheduling
             if(_Scheduler.getSchedulingType() === "rr" && _Scheduler.inUse) {
-
-                console.log("RR scheduling");
                 _Scheduler.incrementQuantum();
             }
             
@@ -453,6 +451,7 @@ module TSOS {
 
         } // displayCPU()
 
+        // Gets a process state to finished, remove from tracking, and log a Context Switch on next clock tick
         public removeProgram(): void {
 
             // Set program to finished

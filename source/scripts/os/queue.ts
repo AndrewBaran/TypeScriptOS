@@ -14,11 +14,11 @@ module TSOS {
 
         }
 
-        public getSize() {
+        public getSize(): number {
             return this.q.length;
         }
 
-        public isEmpty(){
+        public isEmpty(): boolean {
             return (this.q.length == 0);
         }
 
@@ -40,6 +40,11 @@ module TSOS {
                 retVal += "[" + this.q[i] + "] ";
             }
             return retVal;
+        }
+
+        // Returns the item, without removing it, from the front of the queue
+        public peek() {
+            return this.q[0];
         }
     }
 }

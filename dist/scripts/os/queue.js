@@ -39,6 +39,11 @@ var TSOS;
             }
             return retVal;
         };
+
+        // Returns the item, without removing it, from the front of the queue
+        Queue.prototype.peek = function () {
+            return this.q[0];
+        };
         return Queue;
     })();
     TSOS.Queue = Queue;
