@@ -202,7 +202,7 @@ module TSOS {
         // OS Utility Routines
         //
         public krnTrace(msg: string): void {
-            
+
              // Check globals to see if trace is set ON.  If so, then (maybe) log the message.
              if (_Trace) {
                 if (msg === "Idle") {
@@ -287,10 +287,15 @@ module TSOS {
                     var key: string = Object.keys(currentPCB)[j];
                     var decimalValue: number = parseInt(currentPCB[key], 10);
 
-                    var hexValue: string = Utils.decimalToHex(decimalValue);
+                    var value: string = Utils.decimalToHex(decimalValue);
+
+                    // Don't display PID or Z-flag in hex
+                    if(key === "processID" || key === "Zflag") {
+                        value = decimalValue.toString(10);
+                    }
 
                     var cell = newRow.insertCell(j);
-                    cell.innerHTML = hexValue;
+                    cell.innerHTML = value;
 
                 } // Inner for
 

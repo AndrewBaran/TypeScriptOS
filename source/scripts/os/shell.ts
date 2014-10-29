@@ -507,7 +507,7 @@ module TSOS {
                     _CPU.clear();
 
                     // Display the ready queue
-                    _Kernel.displayReadyQueue();
+                    Control.updateDisplays();
                 }
 
                 else {
@@ -545,7 +545,7 @@ module TSOS {
             _MemoryManager.clearMemory();
 
             // Reload memory display
-            _MemoryManager.displayMemory();
+            Control.updateDisplays();
 
             // Clear resident queue
             _ResidentQueue = [];
@@ -649,8 +649,8 @@ module TSOS {
                     // Clear out memory for program
                     _MemoryManager.clearMemory(removedPCB.processID);
 
-                    // Reload memory display
-                    _MemoryManager.displayMemory();
+                    // Reload displays
+                    Control.updateDisplays();
 
                     _StdOut.putText("PID " + removedPCB.processID + " was successfully removed.");
 

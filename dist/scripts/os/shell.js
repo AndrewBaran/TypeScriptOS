@@ -448,7 +448,7 @@ var TSOS;
                     _CPU.clear();
 
                     // Display the ready queue
-                    _Kernel.displayReadyQueue();
+                    TSOS.Control.updateDisplays();
                 } else {
                     _StdOut.putText("Error: Invalid process ID");
                 }
@@ -475,7 +475,7 @@ var TSOS;
             _MemoryManager.clearMemory();
 
             // Reload memory display
-            _MemoryManager.displayMemory();
+            TSOS.Control.updateDisplays();
 
             // Clear resident queue
             _ResidentQueue = [];
@@ -553,8 +553,8 @@ var TSOS;
                     // Clear out memory for program
                     _MemoryManager.clearMemory(removedPCB.processID);
 
-                    // Reload memory display
-                    _MemoryManager.displayMemory();
+                    // Reload displays
+                    TSOS.Control.updateDisplays();
 
                     _StdOut.putText("PID " + removedPCB.processID + " was successfully removed.");
                 }

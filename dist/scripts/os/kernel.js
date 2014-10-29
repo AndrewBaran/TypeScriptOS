@@ -244,10 +244,15 @@ var TSOS;
                     var key = Object.keys(currentPCB)[j];
                     var decimalValue = parseInt(currentPCB[key], 10);
 
-                    var hexValue = TSOS.Utils.decimalToHex(decimalValue);
+                    var value = TSOS.Utils.decimalToHex(decimalValue);
+
+                    // Don't display PID or Z-flag in hex
+                    if (key === "processID" || key === "Zflag") {
+                        value = decimalValue.toString(10);
+                    }
 
                     var cell = newRow.insertCell(j);
-                    cell.innerHTML = hexValue;
+                    cell.innerHTML = value;
                 }
             }
         };
