@@ -1,19 +1,44 @@
 module TSOS {
 	export class Scheduler {
 
-		public schedulingType: string;
-		public quantum: number;
+		private schedulingType: string;
+		private quantum: number;
+		private quantumUsed: number;
+
+		public inUse: boolean;
 
 		// Default scheduling type is round robin
 		constructor() {
 
 			this.schedulingType = "rr";
 			this.quantum = 6;
+			this.quantumUsed = 0;
+
+			this.inUse = false;
 		}
 
-		public setQuantum(newQuantum: number): void {
-			
+		public setQuantumValue(newQuantum: number): void {
 			this.quantum = newQuantum;
+		}
+
+		public incrementQuantum(): void {
+			this.quantumUsed++;
+
+			// Check if quantum has reached its limit
+			if(this.quantumUsed === this.quantum) {
+				console.log("Context swtich now.");
+
+				// Log an interrupt to context switch
+				_KernelInterruptQueue.enqueue(new Interrupt(_InterruptConstants.CONTEXT_SWITCH_IRQ, ""));
+			}
+		}
+
+		public resetQuantum(): void {
+			this.quantumUsed = 0;
+		}
+
+		public getSchedulingType(): string {
+			return this.schedulingType;
 		}
 
 		// TODO Implement
@@ -27,7 +52,30 @@ module TSOS {
 
 					console.log("Round robin scheduling");
 
-					// Take items off resident queue
+					// Take items off resident queue and into ready queue
+					var queueLength: number = _ResidentQueue.length;
+
+					for(var i: number = 0; i < queueLength; i++) {
+
+						var currentPCB: TSOS.PCB = _ResidentQueue[i];
+
+						_ReadyQueue.enqueue(currentPCB);
+					}
+
+					// Clear residentQueue
+					_ResidentQueue = [];
+
+					console.log(_ReadyQueue);
+
+					// Reset quantum (used if someone loads during runall)
+					if(!_CPU.isExecuting) {
+						this.resetQuantum();
+					}
+
+					_CurrentPCB = _ReadyQueue.q[0];
+
+					// Set scheduler flag
+					this.inUse = true;
 
 					break;
 

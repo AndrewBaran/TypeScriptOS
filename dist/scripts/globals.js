@@ -6,7 +6,9 @@ This code references page numbers in the text book:
 Operating System Concepts 8th edition by Silberschatz, Galvin, and Gagne.  ISBN 978-0-470-12872-5
 ------------ */
 
-var _Constants = { APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1, SYSTEM_CALL_IRQ: 2 };
+var _Constants = { APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100 };
+
+var _InterruptConstants = { TIMER_IRQ: 0, KEYBOARD_IRQ: 1, SYSTEM_CALL_IRQ: 2, CONTEXT_SWITCH_IRQ: 3 };
 
 // Constants that don't have a definitive category (I don't like magic numbers)
 var _MiscConstants = { NUM_HEX_DIGITS: 3 };

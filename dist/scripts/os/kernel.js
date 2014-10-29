@@ -134,17 +134,21 @@ var TSOS;
             this.krnTrace("Handling IRQ~" + irq);
 
             switch (irq) {
-                case _Constants.TIMER_IRQ:
+                case _InterruptConstants.TIMER_IRQ:
                     this.krnTimerISR(); // Kernel built-in routine for timers (not the clock).
                     break;
 
-                case _Constants.KEYBOARD_IRQ:
+                case _InterruptConstants.KEYBOARD_IRQ:
                     _krnKeyboardDriver.isr(params); // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
 
-                case _Constants.SYSTEM_CALL_IRQ:
+                case _InterruptConstants.SYSTEM_CALL_IRQ:
                     this.systemCall();
+                    break;
+
+                case _InterruptConstants.CONTEXT_SWITCH_IRQ:
+                    this.contextSwitch();
                     break;
 
                 default:
@@ -180,8 +184,6 @@ var TSOS;
                 if (msg === "Idle") {
                     // We can't log every idle clock pulse because it would lag the browser very quickly.
                     if (_OSclock % 10 == 0 || TSOS.Control.singleStepEnabled) {
-                        // Check the CPU_CLOCK_INTERVAL in globals.ts for an
-                        // idea of the tick rate and adjust this line accordingly.
                         TSOS.Control.hostLog(msg, "OS");
                     }
                 } else {
@@ -248,6 +250,11 @@ var TSOS;
                     cell.innerHTML = hexValue;
                 }
             }
+        };
+
+        // Switches from one running process to another, saving and loading info accordingly
+        Kernel.prototype.contextSwitch = function () {
+            console.log("In contextSwitch");
         };
         return Kernel;
     })();

@@ -14,6 +14,10 @@ module TSOS {
 		public timeArrived: number;
 		public isExecuting: boolean;
 
+		public status: string;
+		public location: string;
+		public priority: number;
+
 		public cyclesComplete: number;
 
 
@@ -28,6 +32,9 @@ module TSOS {
 					Zflag = 0,
 					timeArrived = 0,
 					isExecuting = false,
+					status = "New",
+					location = "",
+					priority = -1,
 					cyclesComplete = 0) {
 			this.processID = processID;
 			this.baseRegister = baseRegister;
@@ -39,6 +46,9 @@ module TSOS {
 			this.Zflag = Zflag;
 			this.timeArrived = timeArrived;
 			this.isExecuting = isExecuting;
+			this.status = status;
+			this.location = location;
+			this.priority = priority;
 			this.cyclesComplete = cyclesComplete;
 		}
 

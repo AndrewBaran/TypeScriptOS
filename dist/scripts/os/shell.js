@@ -457,9 +457,16 @@ var TSOS;
 
         // TODO Implement
         Shell.prototype.shellRunAll = function () {
-            // Use scheduler to arrange processes
-            _Scheduler.schedule();
-            // Add ordered processes to ready queue
+            // Make sure residentQueue is not empty
+            if (_ResidentQueue.length > 0) {
+                // Use scheduler to arrange processes
+                _Scheduler.schedule();
+
+                // Set CPU to execute
+                _CPU.isExecuting = true;
+            } else {
+                _StdOut.putText("Error: No programs available to run.");
+            }
         };
 
         // Clears out the entire memory array and resident queue
@@ -485,7 +492,7 @@ var TSOS;
 
                 // Valid quantum value
                 if (quantumValue > 0) {
-                    _Scheduler.setQuantum(quantumValue);
+                    _Scheduler.setQuantumValue(quantumValue);
                     _StdOut.putText("Quantum has been set to " + quantumValue);
                 } else {
                     _StdOut.putText("Error! Quantum must be > 0.");

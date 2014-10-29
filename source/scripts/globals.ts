@@ -16,12 +16,18 @@ interface Constants {
 	APP_VERSION: string;
 
 	CPU_CLOCK_INTERVAL: number; // This is in ms, so 1000 = 1 second.
+}
+
+var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100};
+
+interface InterruptConstants {
 	TIMER_IRQ: number; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 	KEYBOARD_IRQ: number;
 	SYSTEM_CALL_IRQ: number;
+	CONTEXT_SWITCH_IRQ: number;
 }
 
-var _Constants: Constants = {APP_NAME: "cOSmOS", APP_VERSION: "3.14", CPU_CLOCK_INTERVAL: 100, TIMER_IRQ: 0, KEYBOARD_IRQ: 1, SYSTEM_CALL_IRQ: 2};
+var _InterruptConstants: InterruptConstants = {TIMER_IRQ: 0, KEYBOARD_IRQ: 1, SYSTEM_CALL_IRQ: 2, CONTEXT_SWITCH_IRQ: 3}
 
 interface MiscConstants {
 	NUM_HEX_DIGITS: number;

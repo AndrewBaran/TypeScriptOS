@@ -521,10 +521,21 @@ module TSOS {
         // TODO Implement
         public shellRunAll(): void {
 
-            // Use scheduler to arrange processes
-            _Scheduler.schedule();
+            // Make sure residentQueue is not empty
+            if(_ResidentQueue.length > 0) {
+                
+                // Use scheduler to arrange processes
+                _Scheduler.schedule();
 
-            // Add ordered processes to ready queue
+                // Set CPU to execute
+                _CPU.isExecuting = true;
+            }
+
+            else {
+                _StdOut.putText("Error: No programs available to run.");
+            }
+
+
         }
 
         // Clears out the entire memory array and resident queue
@@ -556,7 +567,7 @@ module TSOS {
                 // Valid quantum value
                 if(quantumValue > 0) {
 
-                    _Scheduler.setQuantum(quantumValue);
+                    _Scheduler.setQuantumValue(quantumValue);
                     _StdOut.putText("Quantum has been set to " + quantumValue);
                 }
 

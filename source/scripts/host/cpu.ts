@@ -367,7 +367,7 @@ module TSOS {
             		console.log("SYS");
 
             		// Enqueue a new interrupt to do a system call on the next cycle
-                    _KernelInterruptQueue.enqueue(new Interrupt(_Constants.SYSTEM_CALL_IRQ, ""));
+                    _KernelInterruptQueue.enqueue(new Interrupt(_InterruptConstants.SYSTEM_CALL_IRQ, ""));
 
             		break;
 
@@ -382,6 +382,13 @@ module TSOS {
 
             		break;
 
+            }
+
+            // If round-robin scheduling
+            if(_Scheduler.getSchedulingType() === "rr" && _Scheduler.inUse) {
+
+                console.log("RR scheduling");
+                _Scheduler.incrementQuantum();
             }
             
             // Clear out instruction data buffer
