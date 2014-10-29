@@ -462,6 +462,7 @@ var TSOS;
             // Add ordered processes to ready queue
         };
 
+        // Clears out the entire memory array and resident queue
         Shell.prototype.shellClearMem = function () {
             // Call this method without parameters to clear all partitions
             _MemoryManager.clearMemory();

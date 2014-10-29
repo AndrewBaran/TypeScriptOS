@@ -15,6 +15,7 @@ var TSOS;
             switch (this.schedulingType) {
                 case "rr":
                     console.log("Round robin scheduling");
+
                     break;
 
                 case "fcfs":

@@ -26,6 +26,9 @@ module TSOS {
 				case "rr":
 
 					console.log("Round robin scheduling");
+
+					// Take items off resident queue
+
 					break;
 
 				// First-come first-serve

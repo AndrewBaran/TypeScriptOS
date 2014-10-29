@@ -448,7 +448,7 @@ module TSOS {
 
         } // displayCPU()
 
-        private removeProgram(): void {
+        public removeProgram(): void {
 
             // Program is complete; stop CPU
             this.isExecuting = false;
@@ -457,8 +457,7 @@ module TSOS {
             _CurrentPCB.saveInfo();
 
             // Display PCB in console
-            // TODO Remove when no longer needed
-            _CurrentPCB.display();
+            //_CurrentPCB.display();
 
             // TODO THIS MAY BE BUGGY IN THE FUTURE. FUTURE ME, LOOK HERE
             // Remove currentPCB from ready queue

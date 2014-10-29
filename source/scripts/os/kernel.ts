@@ -101,12 +101,26 @@ module TSOS {
             } 
 
             // No interrupts, then run one CPU cycle if there is a program executing
-            // TODO Implement a try-catch around this command to catch memory out of bounds errors; termiante program when caught
+            // Uses try-catch, as we want exception to propogate up call stack 
+            // instead of executing current instruction and then erroring out
             else if (_CPU.isExecuting) {
-                _CPU.cycle();
+
+                try {
+                    _CPU.cycle();
+                }
+
+                catch(error) {
+
+                    _StdOut.putText("Error occured: " + error.message + ". Shutting down PID " + _CurrentPCB.processID);
+                    _StdOut.newLine();
+
+                    this.krnTrace("Error occured! Program must be shut down.");
+
+                    _CPU.removeProgram();
+                }
             }
 
-            // No interrupts and no programs running, then just idle
+            // No interrupts and no programs running, so just idle
             else {
                 this.krnTrace("Idle");
             }

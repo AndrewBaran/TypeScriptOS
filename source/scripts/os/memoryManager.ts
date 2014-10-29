@@ -178,24 +178,18 @@ module TSOS {
 
 			// Invalid address
 			else {
-
-				// Kill program
-				// Stop CPU from executing
-				// Stop CPU from executing current instruction
-				// Remove program from ready queue
-				// Remove track of program in memory
-
+				throw new SystemException("Out of bounds memory access");
 			}
 		}
 
-		// TODO BSOD or something if invalid memory access
+		// Writes a byte at the given address
 		public writeData(address: string, inputValue: number, processID: number): void {
 
-			// Valid address
-			if(this.validateAddress(address, processID)) {
+			// Convert memoryAddress to hex
+			var hexAddress: number = parseInt(address, 16);
 
-				// Convert memoryAddress to hex
-				var hexAddress: number = parseInt(address, 16);
+			// Valid address
+			if(this.validateAddress(hexAddress, processID)) {
 
 				var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
 				rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
@@ -218,19 +212,22 @@ module TSOS {
 
 			// Invalid address
 			else {
-
-
+				throw new SystemException("Out of bounds memory access");
 			}
 
 		} // writeData()
 
-		// TODO BSOD or something if invalid memory access
+		// Returns the byte at the given address
 		public getData(address: string, processID: number): string {
 
-			// Valid address
-			if(this.validateAddress(address, processID)) {
+			// Convert address to hex
+			var hexAddress: number = parseInt(address, 16);
 
-				var hexAddress: number = parseInt(address, 16);
+			console.log("Address = " + address);
+			console.log("Hex address = " + hexAddress);
+
+			// Valid address
+			if(this.validateAddress(hexAddress, processID)) {
 
 				var rowNumber: number = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
 				rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
@@ -242,39 +239,26 @@ module TSOS {
 
 			// Invalid address
 			else {
-
+				throw new SystemException("Out of bounds memory access");
 			}
 
 		}
 
 		// Determines if a given address is within a processID's memory limit
-		private validateAddress(address: string, processID: number): boolean {
+		private validateAddress(address: number, processID: number): boolean {
 
 			var pcbBase: number = _CurrentPCB.baseRegister;
 			var pcbLimit: number = _CurrentPCB.limitRegister;
 
-			// Parse address as decimal
-			var addressValue: number = parseInt(address, 16);
-			var adjustedAddress: number = (_MemoryConstants.PROCESS_SIZE * processID) + addressValue;
-
-			console.log("addressValue = " + addressValue);
-			console.log("adjustedAddress = " adjustedAddress);
-			console.log("Base = " + pcbBase);
-			console.log("Limit = " + pcbLimit);
+			var adjustedAddress: number = pcbBase + address;
 
 			// Valid address
 			if(adjustedAddress >= pcbBase && adjustedAddress <= pcbLimit) {
-
-				console.log(addressValue + " is valid.");
-
 				return true;
 			}
 
 			// Invalid address
 			else {
-
-				console.log(addressValue + " is valid.");
-
 				return false;
 			}
 

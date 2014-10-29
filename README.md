@@ -64,7 +64,7 @@ Project 3 Checklist
 - [x] Add a shell command, kill (pid), to kill an active process
 - [x] Store multiple programs in memory, each in their own partition, allocated by the client OS
 - [x] Add base and limit registers to your core memory access code in the host OS and to your PCB object in the client OS
-- [ ] Enforce memory partition boundaries at all times
+- [x] Enforce memory partition boundaries at all times
 - [x] Create a Resident list for the loaded processes
 - [x] Create a Ready queue for the running processes
 - [x] Instantiate a PCB for each loaded program and put it in the Resident list
@@ -72,7 +72,7 @@ Project 3 Checklist
 	- [ ] Make the client OS control the host CPU for the client OS CPU scheduler
 	- [ ] Log all scheduling events
 - [ ] Implement context switches with software interrupts (Remember to update mode bit appropriately)
-- [ ] Detect and handle errors like invalid op codes, missing operands, and memory out of bounds access attempts
+- [x] Detect and handle errors like invalid op codes, missing operands, and memory out of bounds access attempts
 
 Final Project Checklist
 =======================

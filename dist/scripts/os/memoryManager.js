@@ -44,7 +44,7 @@ var TSOS;
             }
         };
 
-        // Load the program into physical memory; default process block = 0
+        // Loads the program into physical memory
         MemoryManager.prototype.loadProgram = function (byteList) {
             for (var i = 0; i < this.programsInUse.length; i++) {
                 if (this.programsInUse[i] === 0) {
@@ -127,49 +127,82 @@ var TSOS;
 
         // Returns the value of the byte in memory using PC and PID
         MemoryManager.prototype.getByte = function (programCounter, processID) {
-            var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
-            rowNumber += Math.floor(programCounter / _MemoryConstants.BYTES_PER_ROW);
+            // Valid address
+            if (this.validateAddress(programCounter, processID)) {
+                var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+                rowNumber += Math.floor(programCounter / _MemoryConstants.BYTES_PER_ROW);
 
-            var columnNumber = programCounter % _MemoryConstants.BYTES_PER_ROW;
+                var columnNumber = programCounter % _MemoryConstants.BYTES_PER_ROW;
 
-            return this.memoryObject.memoryList[rowNumber][columnNumber];
+                return this.memoryObject.memoryList[rowNumber][columnNumber];
+            } else {
+                throw new TSOS.SystemException("Out of bounds memory access");
+            }
         };
 
-        // TODO BSOD or something if invalid memory access
+        // Writes a byte at the given address
         MemoryManager.prototype.writeData = function (address, inputValue, processID) {
             // Convert memoryAddress to hex
             var hexAddress = parseInt(address, 16);
 
-            var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
-            rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
+            // Valid address
+            if (this.validateAddress(hexAddress, processID)) {
+                var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+                rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
 
-            var columnNumber = hexAddress % _MemoryConstants.BYTES_PER_ROW;
+                var columnNumber = hexAddress % _MemoryConstants.BYTES_PER_ROW;
 
-            // Convert input value to hex
-            var valueString = inputValue.toString(16);
+                // Convert input value to hex
+                var valueString = inputValue.toString(16);
 
-            // Pad inputValue if necessary
-            if (valueString.length === 1) {
-                valueString = "0" + valueString;
+                // Pad inputValue if necessary
+                if (valueString.length === 1) {
+                    valueString = "0" + valueString;
+                }
+
+                var properString = TSOS.Utils.toUpperHex(valueString);
+
+                // Write value to memory
+                this.memoryObject.memoryList[rowNumber][columnNumber] = properString;
+            } else {
+                throw new TSOS.SystemException("Out of bounds memory access");
             }
-
-            var properString = TSOS.Utils.toUpperHex(valueString);
-
-            // Write value to memory
-            this.memoryObject.memoryList[rowNumber][columnNumber] = properString;
         };
 
-        // TODO BSOD or something if invalid memory access
-        // TODO This seems unnecessary
+        // Returns the byte at the given address
         MemoryManager.prototype.getData = function (address, processID) {
+            // Convert address to hex
             var hexAddress = parseInt(address, 16);
 
-            var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
-            rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
+            console.log("Address = " + address);
+            console.log("Hex address = " + hexAddress);
 
-            var columnNumber = hexAddress % _MemoryConstants.BYTES_PER_ROW;
+            // Valid address
+            if (this.validateAddress(hexAddress, processID)) {
+                var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;
+                rowNumber += Math.floor(hexAddress / _MemoryConstants.BYTES_PER_ROW);
 
-            return this.memoryObject.memoryList[rowNumber][columnNumber];
+                var columnNumber = hexAddress % _MemoryConstants.BYTES_PER_ROW;
+
+                return this.memoryObject.memoryList[rowNumber][columnNumber];
+            } else {
+                throw new TSOS.SystemException("Out of bounds memory access");
+            }
+        };
+
+        // Determines if a given address is within a processID's memory limit
+        MemoryManager.prototype.validateAddress = function (address, processID) {
+            var pcbBase = _CurrentPCB.baseRegister;
+            var pcbLimit = _CurrentPCB.limitRegister;
+
+            var adjustedAddress = pcbBase + address;
+
+            // Valid address
+            if (adjustedAddress >= pcbBase && adjustedAddress <= pcbLimit) {
+                return true;
+            } else {
+                return false;
+            }
         };
         return MemoryManager;
     })();

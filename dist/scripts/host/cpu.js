@@ -234,21 +234,7 @@ var TSOS;
                 case "00":
                     console.log("BRK");
 
-                    // Program is complete; stop CPU
-                    this.isExecuting = false;
-
-                    // Save the contents of CPU into PCB
-                    _CurrentPCB.saveInfo();
-
-                    // Display PCB in console
-                    _CurrentPCB.display();
-
-                    // TODO THIS MAY BE BUGGY IN THE FUTURE. FUTURE ME, LOOK HERE
-                    // Remove currentPCB from ready queue
-                    _ReadyQueue.dequeue();
-
-                    // Remove program from tracking
-                    _MemoryManager.programsInUse[_CurrentPCB.processID] = 0;
+                    this.removeProgram();
 
                     break;
 
@@ -335,12 +321,15 @@ var TSOS;
                     break;
 
                 default:
-                    console.log("Unknown instruction: " + nextInstruction);
+                    _StdOut.putText("Error! Invalid OP code detected: " + nextInstruction);
+                    _Kernel.krnTrace("Error! Invalid OP code detected. Program termianted");
+
+                    // Remove program
+                    this.removeProgram();
 
                     break;
             }
 
-            // TODO: Accumulate CPU usage and profiling statistics here.
             // Clear out instruction data buffer
             instructionData = [];
 
@@ -361,6 +350,7 @@ var TSOS;
             _Kernel.displayReadyQueue();
         };
 
+        // Resets the state of the CPU
         Cpu.prototype.clear = function () {
             this.PC = 0;
             this.Acc = 0;
@@ -394,6 +384,23 @@ var TSOS;
                 var newCell = newRow.insertCell(i);
                 newCell.innerHTML = value;
             }
+        };
+
+        Cpu.prototype.removeProgram = function () {
+            // Program is complete; stop CPU
+            this.isExecuting = false;
+
+            // Save the contents of CPU into PCB
+            _CurrentPCB.saveInfo();
+
+            // Display PCB in console
+            //_CurrentPCB.display();
+            // TODO THIS MAY BE BUGGY IN THE FUTURE. FUTURE ME, LOOK HERE
+            // Remove currentPCB from ready queue
+            _ReadyQueue.dequeue();
+
+            // Remove program from tracking
+            _MemoryManager.programsInUse[_CurrentPCB.processID] = 0;
         };
         return Cpu;
     })();

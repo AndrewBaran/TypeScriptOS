@@ -89,18 +89,23 @@ var TSOS;
         };
 
         Kernel.prototype.krnOnCPUClockPulse = function () {
-            /* This gets called from the host hardware sim every time there is a hardware clock pulse.
-            This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
-            This, on the other hand, is the clock pulse from the hardware (or host) that tells the kernel
-            that it has to look for interrupts and process them if it finds any.                           */
-            // Check for an interrupt, are any. Page 560
+            // Check for an interrupt
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
                 // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
-                _CPU.cycle();
+                try  {
+                    _CPU.cycle();
+                } catch (error) {
+                    _StdOut.putText("Error occured: " + error.message + ". Shutting down PID " + _CurrentPCB.processID);
+                    _StdOut.newLine();
+
+                    this.krnTrace("Error occured! Program must be shut down.");
+
+                    _CPU.removeProgram();
+                }
             } else {
                 this.krnTrace("Idle");
             }
