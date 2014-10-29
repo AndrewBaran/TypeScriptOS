@@ -420,9 +420,6 @@ module TSOS {
                         // Load the program into memory at the opening found by the for loop above
                         if(_ResidentQueue.length !== 3) {
 
-                            // Allows 1 program to be loaded
-                            // _MemoryManager.loadProgram(byteList, 0);
-
                             // Allow 3 programs to be loaded
                             _MemoryManager.loadProgram(byteList);
                         }

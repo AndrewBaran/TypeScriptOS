@@ -13,7 +13,7 @@ var TSOS;
             if (typeof Zflag === "undefined") { Zflag = 0; }
             if (typeof timeArrived === "undefined") { timeArrived = 0; }
             if (typeof isExecuting === "undefined") { isExecuting = false; }
-            if (typeof status === "undefined") { status = "New"; }
+            if (typeof status === "undefined") { status = ""; }
             if (typeof location === "undefined") { location = ""; }
             if (typeof priority === "undefined") { priority = -1; }
             if (typeof cyclesComplete === "undefined") { cyclesComplete = 0; }

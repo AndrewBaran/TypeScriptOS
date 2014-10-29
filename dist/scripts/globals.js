@@ -15,8 +15,7 @@ var _MiscConstants = { NUM_HEX_DIGITS: 3 };
 
 var _MemoryConstants = { PROCESS_SIZE: 256, NUM_ROWS: 96, NUM_COLUMNS: 8, BYTES_PER_ROW: 8 };
 
-// Differentiating type of memory when coloring them during program execution
-var _MemoryType = { INSTRUCTION: 0, DATA: 1 };
+var _ProcessStates = { NEW: "new", READY: "ready", RUNNING: "running", FINISHED: "finished" };
 
 // My Globals
 var _MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

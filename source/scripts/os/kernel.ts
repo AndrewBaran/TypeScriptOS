@@ -307,6 +307,73 @@ module TSOS {
         private contextSwitch(): void {
 
             console.log("In contextSwitch");
+
+            this.krnTrace("Executing a context switch.");
+
+            if(_Scheduler.inUse) {
+
+                switch(_Scheduler.getSchedulingType()) {
+
+                    case "rr":
+
+                        // Reset quantum
+                        _Scheduler.resetQuantum();
+                        console.log("Quantum is now reset.");
+
+                        break;
+
+                    case "fcfs":
+
+                        break;
+
+                    case "priority":
+
+                        break;
+
+                    default:
+
+                        console.log("Shouldn't happen");
+                        break;
+
+                } // switch
+                
+            }
+
+            // Save PCB
+            _CurrentPCB.saveInfo();
+            console.log(_CurrentPCB);
+
+            // Remove currentPCB from Ready queue
+            _ReadyQueue.dequeue();
+
+            if(_CurrentPCB.status !== _ProcessStates.FINISHED) {
+
+                console.log("Process not finished.");
+
+                // Add to end of ready queue
+                _ReadyQueue.enqueue(_CurrentPCB);
+                
+            }
+
+
+            // Load new PCB
+            if(_ReadyQueue.getSize() > 0) {
+                _CurrentPCB = _ReadyQueue.q[0];
+
+                // Load new CPU state
+                _CPU.loadState(_CurrentPCB);
+            }
+
+            else {
+                // Stop CPU from executing
+                _CPU.isExecuting = false;
+
+                // Reset scheduling flag
+                _Scheduler.inUse = false;
+            }
+
+            // Load displays
+            Control.updateDisplays();
         }
 
     }

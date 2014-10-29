@@ -32,7 +32,7 @@ module TSOS {
 					Zflag = 0,
 					timeArrived = 0,
 					isExecuting = false,
-					status = "New",
+					status = "",
 					location = "",
 					priority = -1,
 					cyclesComplete = 0) {

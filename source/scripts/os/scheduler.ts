@@ -73,6 +73,7 @@ module TSOS {
 					}
 
 					_CurrentPCB = _ReadyQueue.q[0];
+					_CurrentPCB.status = _ProcessStates.RUNNING;
 
 					// Set scheduler flag
 					this.inUse = true;

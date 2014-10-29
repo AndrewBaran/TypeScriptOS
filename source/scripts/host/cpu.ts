@@ -53,9 +53,6 @@ module TSOS {
 
                 // Get real instruction from memory
                 var nextInstruction: string = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
-
-                // Color this byte in the table
-                // _MemoryManager.colorCell(this.PC, _CurrentPCB.processID, _MemoryType.INSTRUCTION);
             }
 
             // Error
@@ -271,7 +268,7 @@ module TSOS {
 
             		console.log("BRK");
 
-            		this.removeProgram();
+                    this.removeProgram();
 
             		break;
 
@@ -377,7 +374,7 @@ module TSOS {
                     _StdOut.putText("Error! Invalid OP code detected: " + nextInstruction);
                     _Kernel.krnTrace("Error! Invalid OP code detected. Program termianted");
 
-                    // Remove program
+                    // Remove program by context switching
                     this.removeProgram();
 
             		break;
@@ -411,6 +408,16 @@ module TSOS {
             this.Xreg = 0;
             this.Yreg = 0;
             this.Zflag = 0;
+        }
+
+        // Loads the CPU state with a new PCB
+        public loadState(pcb: TSOS.PCB): void {
+
+            this.PC = pcb.programCounter;
+            this.Acc = pcb.accumulator;
+            this.Xreg = pcb.Xreg;
+            this.Yreg = pcb.Yreg;
+            this.Zflag = pcb.Zflag;
         }
 
         // Displays the CPU information in the browser
@@ -448,21 +455,14 @@ module TSOS {
 
         public removeProgram(): void {
 
-            // Program is complete; stop CPU
-            this.isExecuting = false;
+            // Set program to finished
+            _CurrentPCB.status = _ProcessStates.FINISHED;
 
-            // Save the contents of CPU into PCB
-            _CurrentPCB.saveInfo();
-
-            // Display PCB in console (only for Project 2)
-            //_CurrentPCB.display();
-
-            // TODO THIS MAY BE BUGGY IN THE FUTURE. FUTURE ME, LOOK HERE
-            // Remove currentPCB from ready queue
-            _ReadyQueue.dequeue();
-
-            // Remove program from tracking
+            // Stop tracking program in memory
             _MemoryManager.programsInUse[_CurrentPCB.processID] = 0;
+
+            // Add an interrupt to context switch which will remove process and may stop CPU
+            _KernelInterruptQueue.enqueue(new Interrupt(_InterruptConstants.CONTEXT_SWITCH_IRQ, ""));
         }
 
     }

@@ -78,7 +78,8 @@ var TSOS;
             this.displayMemory();
 
             var newPCB = new TSOS.PCB(processNumber, baseAddress, limitAddress);
-            newPCB.timeArrived = _OSclock; // Used in scheduling
+            newPCB.timeArrived = _OSclock; // Used in FCFS scheduling
+            newPCB.status = _ProcessStates.NEW; // Used for scheduling
 
             _ResidentQueue.push(newPCB);
 
