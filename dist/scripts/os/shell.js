@@ -501,6 +501,10 @@ var TSOS;
                 printString += _ReadyQueue.q[i].processID + " ";
             }
 
+            if (_ReadyQueue.getSize() === 0) {
+                printString += "None";
+            }
+
             _StdOut.putText(printString);
         };
 

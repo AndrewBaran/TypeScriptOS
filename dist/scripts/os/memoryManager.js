@@ -174,9 +174,6 @@ var TSOS;
             // Convert address to hex
             var hexAddress = parseInt(address, 16);
 
-            console.log("Address = " + address);
-            console.log("Hex address = " + hexAddress);
-
             // Valid address
             if (this.validateAddress(hexAddress, processID)) {
                 var rowNumber = (processID * _MemoryConstants.PROCESS_SIZE) / _MemoryConstants.BYTES_PER_ROW;

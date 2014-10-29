@@ -223,9 +223,6 @@ module TSOS {
 			// Convert address to hex
 			var hexAddress: number = parseInt(address, 16);
 
-			console.log("Address = " + address);
-			console.log("Hex address = " + hexAddress);
-
 			// Valid address
 			if(this.validateAddress(hexAddress, processID)) {
 

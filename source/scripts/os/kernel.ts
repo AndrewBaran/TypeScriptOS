@@ -118,6 +118,10 @@ module TSOS {
 
                     _CPU.removeProgram();
                 }
+
+                finally {
+                    Control.updateDisplays();
+                }
             }
 
             // No interrupts and no programs running, so just idle

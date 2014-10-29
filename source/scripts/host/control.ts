@@ -169,5 +169,17 @@ module TSOS {
             // Load program into textbox
             (<HTMLInputElement>document.getElementById("taProgramInput")).value = selectedProgram.code;
         }
+
+        public static updateDisplays(): void {
+            
+            // Update CPU display
+            _CPU.display();
+
+            // Update memory display
+            _MemoryManager.displayMemory();
+
+            // Update ready queue display
+            _Kernel.displayReadyQueue();
+        }
     }
 }

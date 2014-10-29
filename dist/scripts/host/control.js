@@ -159,6 +159,17 @@ var TSOS;
             // Load program into textbox
             document.getElementById("taProgramInput").value = selectedProgram.code;
         };
+
+        Control.updateDisplays = function () {
+            // Update CPU display
+            _CPU.display();
+
+            // Update memory display
+            _MemoryManager.displayMemory();
+
+            // Update ready queue display
+            _Kernel.displayReadyQueue();
+        };
         Control.singleStepEnabled = false;
         return Control;
     })();

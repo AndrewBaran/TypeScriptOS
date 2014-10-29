@@ -105,6 +105,8 @@ var TSOS;
                     this.krnTrace("Error occured! Program must be shut down.");
 
                     _CPU.removeProgram();
+                } finally {
+                    TSOS.Control.updateDisplays();
                 }
             } else {
                 this.krnTrace("Idle");

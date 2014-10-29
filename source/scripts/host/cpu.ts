@@ -394,15 +394,6 @@ module TSOS {
             // Save CPU info back into PCB
             _CurrentPCB.saveInfo();
 
-            // Update CPU display
-            _CPU.display();
-
-            // Update memory display
-            _MemoryManager.displayMemory();
-
-            // Update ready queue display
-            _Kernel.displayReadyQueue();
-
         } // cycle()
 
         // Resets the state of the CPU
@@ -456,7 +447,7 @@ module TSOS {
             // Save the contents of CPU into PCB
             _CurrentPCB.saveInfo();
 
-            // Display PCB in console
+            // Display PCB in console (only for Project 2)
             //_CurrentPCB.display();
 
             // TODO THIS MAY BE BUGGY IN THE FUTURE. FUTURE ME, LOOK HERE
