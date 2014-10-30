@@ -28,7 +28,8 @@ var _CANVAS_COLOR = "#DFDBC3";
 var _CPU;
 var _OSclock = 0;
 
-var _Mode = 0;
+var _Mode_Bit = 0;
+var _Modes = { KERNEL: 1, USER: 0 };
 
 // Main memory
 var _MemoryManager;

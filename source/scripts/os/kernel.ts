@@ -105,13 +105,14 @@ module TSOS {
             // instead of executing current instruction and then erroring out
             else if (_CPU.isExecuting) {
 
+                // Catch any memory access exceptions
                 try {
                     _CPU.cycle();
                 }
 
                 catch(error) {
 
-                    _StdOut.putText("Error occured: " + error.message + ". Shutting down PID " + _CurrentPCB.processID);
+                    _StdOut.putText("Error occured: " + error.message + ". Removing PID " + _CurrentPCB.processID);
                     _StdOut.newLine();
 
                     this.krnTrace("Error occured! Program must be shut down.");
@@ -149,7 +150,7 @@ module TSOS {
         public krnInterruptHandler(irq, params): void {
             // This is the Interrupt Handler Routine.  Pages 8 and 560. {
             // Trace our entrance here so we can compute Interrupt Latency by analyzing the log file later on.  Page 766.
-            this.krnTrace("Handling IRQ~" + irq);
+            this.krnTrace("Handling IRQ " + irq);
 
             // Invoke the requested Interrupt Service Routine via Switch/Case rather than an Interrupt Vector.
             // Note: There is no need to "dismiss" or acknowledge the interrupts in our design here.
@@ -229,6 +230,9 @@ module TSOS {
         // Performs a system call, depending on the contents of the X register
         public systemCall(): void {
 
+            // Flip the mode bit
+            _Mode_Bit = _Modes.KERNEL;
+
             // 01 in X reg = print integer stored in Y register
             if((_CPU.Xreg.toString(10)) === "1") {
 
@@ -262,6 +266,9 @@ module TSOS {
 
                 Control.hostLog("Attention! CPU state did not match any known system call.");
             }
+
+            // Flip mode bit back
+            _Mode_Bit = _Modes.USER;
 
         } // systemCall()
 
@@ -310,6 +317,9 @@ module TSOS {
 
         // Switches from one running process to another, saving and loading info accordingly
         private contextSwitch(): void {
+
+            // Flip the mode bit
+            _Mode_Bit = _Modes.KERNEL;
 
             this.krnTrace("Executing a context switch.");
 
@@ -381,7 +391,11 @@ module TSOS {
 
             // Load displays
             Control.updateDisplays();
-        }
+
+            // Flip mode bit back
+            _Mode_Bit = _Modes.USER;
+
+        } // contextSwitch()
 
     }
 }

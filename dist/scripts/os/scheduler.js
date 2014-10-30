@@ -18,8 +18,6 @@ var TSOS;
 
             // Check if quantum has reached its limit
             if (this.quantumUsed === this.quantum) {
-                console.log("Context swtich now.");
-
                 // Log an interrupt to context switch
                 _KernelInterruptQueue.enqueue(new TSOS.Interrupt(_InterruptConstants.CONTEXT_SWITCH_IRQ, ""));
             }
@@ -67,6 +65,9 @@ var TSOS;
                     // Set scheduler flag
                     this.inUse = true;
 
+                    // Log the scheduling event
+                    _Kernel.krnTrace("Process state of PID " + _CurrentPCB.processID + " loaded.");
+
                     break;
 
                 case "fcfs":
@@ -77,7 +78,7 @@ var TSOS;
                     console.log("Priority scheduling");
                     break;
 
-                case "default":
+                default:
                     console.log("This shouldn't happen");
                     break;
             }

@@ -65,7 +65,13 @@ var _CANVAS_COLOR : string = "#DFDBC3";
 var _CPU: TSOS.Cpu;  // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 var _OSclock: number = 0;  // Page 23.
 
-var _Mode: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
+interface Modes {
+	KERNEL: number;
+	USER: number;
+}
+
+var _Mode_Bit: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
+var _Modes: Modes = {KERNEL: 1, USER: 0}; // States that the mode bit can be in (spoiler: there are 2)
 
 // Main memory
 var _MemoryManager: TSOS.MemoryManager; // Abstraction layer above main memory

@@ -68,10 +68,10 @@ Project 3 Checklist
 - [x] Create a Resident list for the loaded processes
 - [x] Create a Ready queue for the running processes
 - [x] Instantiate a PCB for each loaded program and put it in the Resident list
-- [ ] Develop a CPU scheduler in the client OS using **Round Robin** scheduling with the user-specified quantum measured in clock ticks (default = 6)
-	- [ ] Make the client OS control the host CPU for the client OS CPU scheduler
-	- [ ] Log all scheduling events
-- [ ] Implement context switches with software interrupts (Remember to update mode bit appropriately)
+- [x] Develop a CPU scheduler in the client OS using **Round Robin** scheduling with the user-specified quantum measured in clock ticks (default = 6)
+	- [x] Make the client OS control the host CPU for the client OS CPU scheduler
+	- [x] Log all scheduling events
+- [x] Implement context switches with software interrupts (Remember to update mode bit appropriately)
 - [x] Detect and handle errors like invalid op codes, missing operands, and memory out of bounds access attempts
 
 Final Project Checklist

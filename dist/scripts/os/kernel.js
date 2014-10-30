@@ -99,7 +99,7 @@ var TSOS;
                 try  {
                     _CPU.cycle();
                 } catch (error) {
-                    _StdOut.putText("Error occured: " + error.message + ". Shutting down PID " + _CurrentPCB.processID);
+                    _StdOut.putText("Error occured: " + error.message + ". Removing PID " + _CurrentPCB.processID);
                     _StdOut.newLine();
 
                     this.krnTrace("Error occured! Program must be shut down.");
@@ -131,7 +131,7 @@ var TSOS;
         Kernel.prototype.krnInterruptHandler = function (irq, params) {
             // This is the Interrupt Handler Routine.  Pages 8 and 560. {
             // Trace our entrance here so we can compute Interrupt Latency by analyzing the log file later on.  Page 766.
-            this.krnTrace("Handling IRQ~" + irq);
+            this.krnTrace("Handling IRQ " + irq);
 
             switch (irq) {
                 case _InterruptConstants.TIMER_IRQ:
@@ -201,6 +201,9 @@ var TSOS;
 
         // Performs a system call, depending on the contents of the X register
         Kernel.prototype.systemCall = function () {
+            // Flip the mode bit
+            _Mode_Bit = _Modes.KERNEL;
+
             // 01 in X reg = print integer stored in Y register
             if ((_CPU.Xreg.toString(10)) === "1") {
                 _StdOut.putText(_CPU.Yreg.toString(10));
@@ -224,6 +227,9 @@ var TSOS;
             } else {
                 TSOS.Control.hostLog("Attention! CPU state did not match any known system call.");
             }
+
+            // Flip mode bit back
+            _Mode_Bit = _Modes.USER;
         };
 
         Kernel.prototype.displayReadyQueue = function () {
@@ -264,6 +270,9 @@ var TSOS;
 
         // Switches from one running process to another, saving and loading info accordingly
         Kernel.prototype.contextSwitch = function () {
+            // Flip the mode bit
+            _Mode_Bit = _Modes.KERNEL;
+
             this.krnTrace("Executing a context switch.");
 
             if (_Scheduler.inUse) {
@@ -321,6 +330,9 @@ var TSOS;
 
             // Load displays
             TSOS.Control.updateDisplays();
+
+            // Flip mode bit back
+            _Mode_Bit = _Modes.USER;
         };
         return Kernel;
     })();
