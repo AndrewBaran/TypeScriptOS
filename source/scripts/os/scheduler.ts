@@ -70,6 +70,12 @@ module TSOS {
 						this.resetQuantum();
 					}
 
+					// Set each process in ready queue to ready state
+					for(var j: number = 0; j < _ReadyQueue.getSize(); j++) {
+						_ReadyQueue.q[j].status = _ProcessStates.READY;
+					}
+
+					// Seek currentPCB to running
 					_CurrentPCB = _ReadyQueue.peek();
 					_CurrentPCB.status = _ProcessStates.RUNNING;
 

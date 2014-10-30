@@ -453,7 +453,7 @@ var TSOS;
             }
         };
 
-        // TODO Implement
+        // Runs all the programs in the resident queue
         Shell.prototype.shellRunAll = function () {
             // Make sure residentQueue is not empty
             if (_ResidentQueue.length > 0) {
@@ -539,22 +539,29 @@ var TSOS;
 
                     // Stop CPU from executing current PCB
                     if (removedPCB === _CurrentPCB) {
-                        _CPU.isExecuting = false;
+                        // Set currentPCB to finished
+                        _CurrentPCB.status = _ProcessStates.FINISHED;
+
+                        // Stop tracking it
+                        _MemoryManager.programsInUse[_CurrentPCB.processID] = 0;
+
+                        // Enqueue an interrupt to context switch to a new process
+                        _KernelInterruptQueue.enqueue(new TSOS.Interrupt(_InterruptConstants.CONTEXT_SWITCH_IRQ, ""));
+                    } else {
+                        // Remove program from ready queue
+                        _ReadyQueue.q.splice(properIndex, 1);
+
+                        // Remove tracking the program
+                        _MemoryManager.programsInUse[removedPCB.processID] = 0;
+
+                        // Clear out memory for program
+                        _MemoryManager.clearMemory(removedPCB.processID);
+
+                        // Reload displays
+                        TSOS.Control.updateDisplays();
+
+                        _StdOut.putText("PID " + removedPCB.processID + " was successfully removed.");
                     }
-
-                    // Remove program from ready queue
-                    _ReadyQueue.q.splice(properIndex, 1);
-
-                    // Remove tracking the program
-                    _MemoryManager.programsInUse[removedPCB.processID] = 0;
-
-                    // Clear out memory for program
-                    _MemoryManager.clearMemory(removedPCB.processID);
-
-                    // Reload displays
-                    TSOS.Control.updateDisplays();
-
-                    _StdOut.putText("PID " + removedPCB.processID + " was successfully removed.");
                 }
             }
         };

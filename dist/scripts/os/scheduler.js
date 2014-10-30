@@ -56,6 +56,11 @@ var TSOS;
                         this.resetQuantum();
                     }
 
+                    for (var j = 0; j < _ReadyQueue.getSize(); j++) {
+                        _ReadyQueue.q[j].status = _ProcessStates.READY;
+                    }
+
+                    // Seek currentPCB to running
                     _CurrentPCB = _ReadyQueue.peek();
                     _CurrentPCB.status = _ProcessStates.RUNNING;
 

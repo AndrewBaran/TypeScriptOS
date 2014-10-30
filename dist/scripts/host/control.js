@@ -51,16 +51,12 @@ var TSOS;
             // Note the OS CLOCK.
             var clock = _OSclock;
 
-            // Note the REAL clock in milliseconds since January 1, 1970.
-            var now = new Date().getTime();
-
             // Build the log string.
-            var str = "({ clock:" + clock + ", source:" + source + ", msg:" + msg + ", now:" + now + " })" + "\n";
+            var str = "Clock: " + clock + " | " + msg + "\n";
 
             // Update the log console.
             var taLog = document.getElementById("taHostLog");
             taLog.value = str + taLog.value;
-            // Optionally update a log database or some streaming service.
         };
 
         Control.displayTimer = function () {

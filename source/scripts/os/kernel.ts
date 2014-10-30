@@ -294,6 +294,11 @@ module TSOS {
                         value = decimalValue.toString(10);
                     }
 
+                    // Display status and location as strings
+                    if(key === "status" || key === "location") {
+                        value = currentPCB[key];
+                    }
+
                     var cell = newRow.insertCell(j);
                     cell.innerHTML = value;
 
@@ -314,9 +319,8 @@ module TSOS {
 
                     case "rr":
 
-                        // Reset quantum
+                        // Reset quantum for next process
                         _Scheduler.resetQuantum();
-                        console.log("Quantum is now reset.");
 
                         break;
 
@@ -347,8 +351,8 @@ module TSOS {
             if(_CurrentPCB.status !== _ProcessStates.FINISHED) {
 
                 // Add PCB to end of ready queue
+                _CurrentPCB.status = _ProcessStates.READY;
                 _ReadyQueue.enqueue(_CurrentPCB);
-                
             }
 
             // Load new PCB
@@ -360,6 +364,9 @@ module TSOS {
                 // Load new CPU state
                 _CPU.loadState(_CurrentPCB);
                 this.krnTrace("Process state of PID " + _CurrentPCB.processID + " loaded.");
+
+                // Set state to running
+                _CurrentPCB.status = _ProcessStates.RUNNING;
             }
 
             else {

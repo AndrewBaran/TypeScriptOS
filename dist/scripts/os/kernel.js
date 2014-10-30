@@ -251,6 +251,11 @@ var TSOS;
                         value = decimalValue.toString(10);
                     }
 
+                    // Display status and location as strings
+                    if (key === "status" || key === "location") {
+                        value = currentPCB[key];
+                    }
+
                     var cell = newRow.insertCell(j);
                     cell.innerHTML = value;
                 }
@@ -264,9 +269,8 @@ var TSOS;
             if (_Scheduler.inUse) {
                 switch (_Scheduler.getSchedulingType()) {
                     case "rr":
-                        // Reset quantum
+                        // Reset quantum for next process
                         _Scheduler.resetQuantum();
-                        console.log("Quantum is now reset.");
 
                         break;
 
@@ -291,6 +295,7 @@ var TSOS;
 
             if (_CurrentPCB.status !== _ProcessStates.FINISHED) {
                 // Add PCB to end of ready queue
+                _CurrentPCB.status = _ProcessStates.READY;
                 _ReadyQueue.enqueue(_CurrentPCB);
             }
 
@@ -302,6 +307,9 @@ var TSOS;
                 // Load new CPU state
                 _CPU.loadState(_CurrentPCB);
                 this.krnTrace("Process state of PID " + _CurrentPCB.processID + " loaded.");
+
+                // Set state to running
+                _CurrentPCB.status = _ProcessStates.RUNNING;
             } else {
                 // Stop CPU from executing
                 _CPU.isExecuting = false;

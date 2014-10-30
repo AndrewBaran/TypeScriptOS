@@ -11,13 +11,14 @@ module TSOS {
 		public Xreg: number;
 		public Yreg: number;
 		public Zflag: number;
-		public timeArrived: number;
-		public isExecuting: boolean;
 
 		public status: string;
 		public location: string;
 		public priority: number;
+		
+		public isExecuting: boolean;
 
+		public timeArrived: number;
 		public cyclesComplete: number;
 
 
@@ -30,11 +31,11 @@ module TSOS {
 					Xreg = 0, 
 					Yreg = 0, 
 					Zflag = 0,
-					timeArrived = 0,
-					isExecuting = false,
 					status = "",
 					location = "",
 					priority = -1,
+					isExecuting = false,
+					timeArrived = 0,
 					cyclesComplete = 0) {
 			this.processID = processID;
 			this.baseRegister = baseRegister;
@@ -44,11 +45,11 @@ module TSOS {
 			this.Xreg = Xreg;
 			this.Yreg = Yreg;
 			this.Zflag = Zflag;
-			this.timeArrived = timeArrived;
-			this.isExecuting = isExecuting;
 			this.status = status;
 			this.location = location;
 			this.priority = priority;
+			this.isExecuting = isExecuting;
+			this.timeArrived = timeArrived;
 			this.cyclesComplete = cyclesComplete;
 		}
 
