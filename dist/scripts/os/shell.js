@@ -419,7 +419,7 @@ var TSOS;
             // Invalid arguments
             if (args.length != 1) {
                 _StdOut.putText("Usage: run <pid> Please supply a program ID");
-            } else if (_Scheduler.inUse) {
+            } else if (_Scheduler.inUse && _ResidentQueue.length !== 0) {
                 // Adding processes to end of queue
                 _Scheduler.schedule();
             } else {

@@ -474,7 +474,7 @@ module TSOS {
             }
 
             // If runall is already running
-            else if(_Scheduler.inUse) {
+            else if(_Scheduler.inUse && _ResidentQueue.length !== 0) {
 
                 // Adding processes to end of queue
                 _Scheduler.schedule();

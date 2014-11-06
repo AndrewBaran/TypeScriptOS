@@ -96,12 +96,19 @@ var TSOS;
             Control.hostLog("Emergency halt", "host");
             Control.hostLog("Attempting Kernel shutdown.", "host");
 
+            // Disable halt button
+            document.getElementById("btnHaltOS").disabled = true;
+
+            // Disable stepping buttons
+            document.getElementById("btnEnableStep").disabled = true;
+            document.getElementById("btnStep").disabled = true;
+            document.getElementById("btnStop").disabled = true;
+
             // Call the OS shutdown routine.
             _Kernel.krnShutdown();
 
             // Stop the interval that's simulating our clock pulse.
             clearInterval(_hardwareClockID);
-            // TODO: Is there anything else we need to do here?
         };
 
         Control.hostBtnReset_click = function (btn) {

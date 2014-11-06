@@ -76,15 +76,28 @@ var TSOS;
         Kernel.prototype.krnShutdown = function () {
             this.krnTrace("Begin shutdown of OS.");
 
-            // TODO: Check for running processes.  Alert if there are some, alert and stop.  Else...
-            // ... Disable the Interrupts.
+            this.krnTrace("Clearing memory.");
+            _MemoryManager.clearMemory();
+
+            this.krnTrace("Clearing CPU.");
+            _CPU.clear();
+            _CPU.isExecuting = false;
+
+            // Clear ready queue and resident queue
+            this.krnTrace("Clearing resident queue.");
+            _ResidentQueue = [];
+
+            this.krnTrace("Clearing ready queue.");
+            _ReadyQueue.q = [];
+
+            // Reload displays with blank entries
+            TSOS.Control.updateDisplays();
+
+            // Else, disable the Interrupts
             this.krnTrace("Disabling the interrupts.");
             this.krnDisableInterrupts();
 
-            //
             // Unload the Device Drivers?
-            // More?
-            //
             this.krnTrace("Ending the shutdown of OS");
         };
 
