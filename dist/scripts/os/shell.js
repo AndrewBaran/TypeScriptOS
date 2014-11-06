@@ -108,7 +108,7 @@ var TSOS;
         };
 
         Shell.prototype.handleInput = function (buffer) {
-            _Kernel.krnTrace("Shell Command~" + buffer);
+            _Kernel.krnTrace("Shell Command: " + buffer);
 
             //
             // Parse the input...
@@ -385,7 +385,7 @@ var TSOS;
                 if (validInput) {
                     if (byteList.length <= _MemoryConstants.PROCESS_SIZE) {
                         // Load the program into memory at the opening found by the for loop above
-                        if (_ResidentQueue.length !== 3) {
+                        if (_ResidentQueue.length !== 3 && _ReadyQueue.getSize() != 3) {
                             // Allow 3 programs to be loaded
                             _MemoryManager.loadProgram(byteList);
                         } else {
