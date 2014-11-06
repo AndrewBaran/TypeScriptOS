@@ -118,8 +118,9 @@ var TSOS;
             document.getElementById("btnStartOS").disabled = true;
             document.getElementById("btnEnableStep").disabled = true;
 
-            // Enable step button
+            // Enable step and stop button
             document.getElementById("btnStep").disabled = false;
+            document.getElementById("btnStop").disabled = false;
 
             // Set flag
             Control.singleStepEnabled = true;
@@ -134,6 +135,21 @@ var TSOS;
         // Executes 1 cycle in single step mode
         Control.hostBtnStep_click = function (btn) {
             TSOS.Devices.hostClockPulse();
+        };
+
+        // Stops single step mode
+        Control.hostBtnStop_click = function (btn) {
+            // Disable step and stop button
+            document.getElementById("btnStep").disabled = true;
+            Control.singleStepEnabled = false;
+
+            document.getElementById("btnStop").disabled = true;
+
+            // Enable start button
+            document.getElementById("btnEnableStep").disabled = false;
+
+            // Start up hardwareClock interval again
+            _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, _Constants.CPU_CLOCK_INTERVAL);
         };
 
         // Loads a randomly selected program into the textbox taProgramInput
