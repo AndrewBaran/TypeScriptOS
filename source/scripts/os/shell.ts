@@ -8,7 +8,6 @@
    The OS Shell - The "command line interface" (CLI) for the console.
    ------------ */
 
-// TODO: Write a base class / prototype for system services and let Shell inherit from it.
 module TSOS {
     export class Shell {
         // Properties
@@ -469,10 +468,19 @@ module TSOS {
 
         public shellRun(args: string[]): void {
 
+            // Invalid arguments
             if(args.length != 1) {
                 _StdOut.putText("Usage: run <pid> Please supply a program ID");
             }
 
+            // If runall is already running
+            else if(_Scheduler.inUse) {
+
+                // Adding processes to end of queue
+                _Scheduler.schedule();
+            }
+
+            // Regular ole run command
             else {
 
                 var processID: number = parseInt(args[0], 10);

@@ -5,7 +5,6 @@
 Shell.ts
 The OS Shell - The "command line interface" (CLI) for the console.
 ------------ */
-// TODO: Write a base class / prototype for system services and let Shell inherit from it.
 var TSOS;
 (function (TSOS) {
     var Shell = (function () {
@@ -417,8 +416,12 @@ var TSOS;
         };
 
         Shell.prototype.shellRun = function (args) {
+            // Invalid arguments
             if (args.length != 1) {
                 _StdOut.putText("Usage: run <pid> Please supply a program ID");
+            } else if (_Scheduler.inUse) {
+                // Adding processes to end of queue
+                _Scheduler.schedule();
             } else {
                 var processID = parseInt(args[0], 10);
                 var properIndex = -1;
