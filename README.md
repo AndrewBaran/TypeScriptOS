@@ -84,8 +84,8 @@ Final Project Checklist
 	- [ ] delete (filename) - remove filename from storage and display a message denoting success or failure
 	- [ ] format - initialize all blocks in all sectors in all tracks and display a message denoting success or failure
 - [ ] Add a shell command, ls, to list the files currently stored on the disk
-- [ ] Add a shell command to allow the user to select a CPU scheduling algorithm - setschedule [rr, fcfs, priority]
-- [ ] Add a shell command, getschedule, to return the currently selected CPU scheduling algorithm
+- [x] Add a shell command to allow the user to select a CPU scheduling algorithm - setschedule [rr, fcfs, priority]
+- [x] Add a shell command, getschedule, to return the currently selected CPU scheduling algorithm
 - [ ] Implement a file system in HTML5 web storage
 - [ ] Include a file system viewer in your OS interface
 

@@ -99,6 +99,14 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellKill, "kill", " <id> - Kill the pid of the associated <id>.");
             this.commandList[this.commandList.length] = sc;
 
+            // setSchedule <rr | fcfs | priority>
+            sc = new TSOS.ShellCommand(this.shellSetSchedule, "setschedule", "<type> - Set scheduling algorithm to (rr, fcfs, priority).");
+            this.commandList[this.commandList.length] = sc;
+
+            // getSchedule
+            sc = new TSOS.ShellCommand(this.shellGetSchedule, "getschedule", " - Displays the current scheduling algorithm.");
+            this.commandList[this.commandList.length] = sc;
+
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -567,6 +575,32 @@ var TSOS;
                     }
                 }
             }
+        };
+
+        // Sets the scheduling algorithm
+        Shell.prototype.shellSetSchedule = function (args) {
+            // Invalid number of arguments
+            if (args.length !== 1) {
+                _StdOut.putText("Usage: setschedule <type>  Please supply a scheduling algorithm.");
+            } else {
+                var schedulingType = args[0];
+                console.log(schedulingType);
+
+                if (schedulingType === "rr" || schedulingType === "fcfs" || schedulingType === "priority") {
+                    _Scheduler.setSchedulingType(schedulingType);
+
+                    _StdOut.putText("Scheduling algorithm set to: " + schedulingType);
+                } else {
+                    _StdOut.putText("Error! Invalid scheduling type.");
+                }
+            }
+        };
+
+        // Returns the scheduling algorithm type
+        Shell.prototype.shellGetSchedule = function () {
+            var schedulingType = _Scheduler.getSchedulingType();
+
+            _StdOut.putText("Scheduling algorithm: " + schedulingType);
         };
         return Shell;
     })();

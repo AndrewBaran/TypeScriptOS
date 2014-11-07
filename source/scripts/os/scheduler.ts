@@ -41,6 +41,10 @@ module TSOS {
 			return this.schedulingType;
 		}
 
+		public setSchedulingType(schedulingType: string): void {
+			this.schedulingType = schedulingType;
+		}
+
 		// Takes PCBs in the resident queue and arranges them in the ready queue accordingly
 		public schedule(): void {
 

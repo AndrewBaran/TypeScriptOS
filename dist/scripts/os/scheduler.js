@@ -31,6 +31,10 @@ var TSOS;
             return this.schedulingType;
         };
 
+        Scheduler.prototype.setSchedulingType = function (schedulingType) {
+            this.schedulingType = schedulingType;
+        };
+
         // Takes PCBs in the resident queue and arranges them in the ready queue accordingly
         Scheduler.prototype.schedule = function () {
             switch (this.schedulingType) {
