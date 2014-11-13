@@ -54,6 +54,17 @@ interface ProcessStates {
 
 var _ProcessStates: ProcessStates = {NEW: "new", READY: "ready", RUNNING: "running", FINISHED: "finished"};
 
+interface FileConstants {
+	NUM_TRACKS: number;
+	NUM_SECTORS: number;
+	NUM_BLOCKS: number;
+
+	BLOCK_SIZE: number;
+}
+
+var _FileConstants: FileConstants = {NUM_TRACKS: 4, NUM_SECTORS: 8, NUM_BLOCKS: 8, BLOCK_SIZE: 64};
+
+
 // My Globals
 var _MONTH_NAMES: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -108,7 +119,11 @@ var _Console: TSOS.Console;
 var _OsShell: TSOS.Shell;
 
 // Global Device Driver Objects - page 12
+// Keyboard
 var _krnKeyboardDriver = null;
+
+// File system
+var _KrnFileSystemDriver = null;
 
 var _hardwareClockID: number = null;
 var _hostClockDisplay: number = null;

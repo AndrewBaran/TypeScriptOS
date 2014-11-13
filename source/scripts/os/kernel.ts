@@ -35,7 +35,14 @@ module TSOS {
             this.krnTrace("Loading the keyboard device driver.");
             _krnKeyboardDriver = new DeviceDriverKeyboard();     // Construct it.
             _krnKeyboardDriver.driverEntry();                    // Call the driverEntry() initialization routine.
-            this.krnTrace(_krnKeyboardDriver.status);
+            this.krnTrace("Keyboard driver: " + _krnKeyboardDriver.status);
+
+            // Load the File System Device Driver
+            this.krnTrace("Loading the file system device driver.");
+            _KrnFileSystemDriver = new DeviceDriverFileSystem();
+            _KrnFileSystemDriver.driverEntry();
+            _KrnFileSystemDriver.initializeStorage();
+            this.krnTrace("File system driver: " + _KrnFileSystemDriver.status);
 
             // Initialize and display memory
             this.krnTrace("Initializing and displaying memory.");
@@ -155,7 +162,9 @@ module TSOS {
         public krnEnableInterrupts(): void {
             // Keyboard
             Devices.hostEnableKeyboardInterrupt();
-            // Put more here.
+
+            // TODO File System
+
         }
 
         public krnDisableInterrupts(): void {

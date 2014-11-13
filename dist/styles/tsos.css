@@ -158,6 +158,27 @@ h3
 	border: 1px solid black;
 }
 
+#divFileSystem
+{
+	height: 50px;
+	width: 400px;
+	clear: both;
+}
+
+#tableFileSystem:
+{
+	border: 1px solid black;
+}
+
+#tableFileSystem tr, #tableFileSystem td
+{
+	border: 1px solid black;
+}
+
+#tableFileSystem tr td
+{
+	text-align: center;
+}
 
 /* Div containing footer content*/
 .footerText 
