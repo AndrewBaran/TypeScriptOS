@@ -60,9 +60,10 @@ interface FileConstants {
 	NUM_BLOCKS: number;
 
 	BLOCK_SIZE: number;
+	DATA_SIZE: number;
 }
 
-var _FileConstants: FileConstants = {NUM_TRACKS: 4, NUM_SECTORS: 8, NUM_BLOCKS: 8, BLOCK_SIZE: 64};
+var _FileConstants: FileConstants = {NUM_TRACKS: 4, NUM_SECTORS: 8, NUM_BLOCKS: 8, BLOCK_SIZE: 64, DATA_SIZE: 60};
 
 
 // My Globals

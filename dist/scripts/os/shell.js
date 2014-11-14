@@ -107,6 +107,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellGetSchedule, "getschedule", " - Displays the current scheduling algorithm.");
             this.commandList[this.commandList.length] = sc;
 
+            // create <filename>
+            sc = new TSOS.ShellCommand(this.shellCreate, "create", " <filename> - Creates a new file with the name <filename>.");
+            this.commandList[this.commandList.length] = sc;
+
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -601,6 +605,26 @@ var TSOS;
             var schedulingType = _Scheduler.getSchedulingType();
 
             _StdOut.putText("Scheduling algorithm: " + schedulingType);
+        };
+
+        // Creates a new file in the file system with the name <filename>
+        Shell.prototype.shellCreate = function (args) {
+            var fileName = args[0];
+
+            // Invalid arguments
+            if (args.length !== 1) {
+                _StdOut.putText("Usage: create <filename>  Please supply a filename.");
+            } else if (!TSOS.Utils.isValidFileName(fileName)) {
+                _StdOut.putText("Error! Invalid filename. Only alphanumeric characters allowed.");
+            } else {
+                var result = _KrnFileSystemDriver.createFile(fileName);
+
+                if (result) {
+                    _StdOut.putText("File " + fileName + " successfully created.");
+                } else {
+                    _StdOut.putText("File could not be created. Secondary memory is full.");
+                }
+            }
         };
         return Shell;
     })();

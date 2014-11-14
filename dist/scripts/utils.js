@@ -112,6 +112,25 @@ var TSOS;
 
             return returnString;
         };
+
+        // Checks to see if a file name has the correct characters and size
+        Utils.isValidFileName = function (fileName) {
+            // Check if valid size
+            if (fileName.length > _FileConstants.DATA_SIZE) {
+                return false;
+            } else {
+                var regEx = /[a-z|A-Z|0-9]/;
+
+                for (var i = 0; i < fileName.length; i++) {
+                    // Invalid character
+                    if (!regEx.test(fileName[i])) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        };
         return Utils;
     })();
     TSOS.Utils = Utils;

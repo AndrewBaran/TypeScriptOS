@@ -127,6 +127,32 @@ module TSOS {
             returnString = Utils.toUpperHex(returnString);
 
             return returnString;
-        }
+
+        } // decimalToHex()
+
+        // Checks to see if a file name has the correct characters and size
+        public static isValidFileName(fileName: string): boolean {
+
+            // Check if valid size
+            if(fileName.length > _FileConstants.DATA_SIZE) {
+                return false;
+            }
+
+            else {
+
+                var regEx = /[a-z|A-Z|0-9]/;
+
+                for(var i: number = 0; i < fileName.length; i++) {
+
+                    // Invalid character
+                    if(!regEx.test(fileName[i])) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            
+        } // isValidFileName()
     }
 }

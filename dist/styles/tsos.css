@@ -163,7 +163,7 @@ h3
 	border: 1px solid black;
 
 	height: 200px;
-	width: 400px;
+	width: 450px;
 	clear: both;
 	overflow: auto;
 }
@@ -172,7 +172,7 @@ h3
 {
 	border: 1px solid black;
 	height: 200px;
-	width: 400px;
+	width: 450px;
 }
 
 #tableFileSystem tr, #tableFileSystem td

@@ -52,26 +52,35 @@ var TSOS;
                         var newRow = table.insertRow();
 
                         // Track
-                        var track = newRow.insertCell();
-                        track.innerHTML = trackNumber.toString();
+                        var trackCell = newRow.insertCell();
+                        trackCell.innerHTML = trackNumber.toString();
 
                         // Sector
-                        var sector = newRow.insertCell();
-                        sector.innerHTML = sectorNumber.toString();
+                        var sectorCell = newRow.insertCell();
+                        sectorCell.innerHTML = sectorNumber.toString();
 
                         // Block
-                        var block = newRow.insertCell();
-                        block.innerHTML = blockNumber.toString();
+                        var blockCell = newRow.insertCell();
+                        blockCell.innerHTML = blockNumber.toString();
+
+                        // In Use
+                        var inUseCell = newRow.insertCell();
+                        inUseCell.innerHTML = "0";
 
                         // Data
                         var dataKey = trackNumber.toString() + sectorNumber.toString() + blockNumber.toString();
                         var dataValue = sessionStorage.getItem(dataKey);
 
-                        var data = newRow.insertCell();
-                        data.innerHTML = dataValue.toString();
+                        var dataCell = newRow.insertCell();
+                        dataCell.innerHTML = dataValue.toString();
                     }
                 }
             }
+        };
+
+        // Creates a file in the file system
+        DeviceDriverFileSystem.prototype.createFile = function (fileName) {
+            return true;
         };
         return DeviceDriverFileSystem;
     })(TSOS.DeviceDriver);

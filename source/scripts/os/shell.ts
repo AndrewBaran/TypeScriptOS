@@ -10,6 +10,7 @@
 
 module TSOS {
     export class Shell {
+
         // Properties
         public promptStr: string = ">";
         public commandList = [];
@@ -127,7 +128,11 @@ module TSOS {
             // getSchedule
             sc = new ShellCommand(this.shellGetSchedule, "getschedule", " - Displays the current scheduling algorithm.");
             this.commandList[this.commandList.length] = sc;
-            
+
+            // create <filename>
+            sc = new ShellCommand(this.shellCreate, "create", " <filename> - Creates a new file with the name <filename>.");
+            this.commandList[this.commandList.length] = sc;
+
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -715,6 +720,36 @@ module TSOS {
 
             _StdOut.putText("Scheduling algorithm: " + schedulingType); 
         }
+
+        // Creates a new file in the file system with the name <filename>
+        public shellCreate(args: string[]): void {
+
+            var fileName: string = args[0];
+
+            // Invalid arguments
+            if(args.length !== 1) {
+                _StdOut.putText("Usage: create <filename>  Please supply a filename.");
+            }
+
+            // Invalid file name
+            else if(!Utils.isValidFileName(fileName)) {
+                _StdOut.putText("Error! Invalid filename. Only alphanumeric characters allowed.");
+            }
+
+            // Valid filename; create the file
+            else {
+
+                var result: boolean = _KrnFileSystemDriver.createFile(fileName);
+
+                if(result) {
+                    _StdOut.putText("File " + fileName + " successfully created.");
+                }
+
+                else {
+                    _StdOut.putText("File could not be created. Secondary memory is full.");
+                }
+            }
+        } // shellCreate()
 
     }
 }

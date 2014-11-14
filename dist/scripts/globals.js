@@ -17,7 +17,7 @@ var _MemoryConstants = { PROCESS_SIZE: 256, NUM_ROWS: 96, NUM_COLUMNS: 8, BYTES_
 
 var _ProcessStates = { NEW: "new", READY: "ready", RUNNING: "running", FINISHED: "finished" };
 
-var _FileConstants = { NUM_TRACKS: 4, NUM_SECTORS: 8, NUM_BLOCKS: 8, BLOCK_SIZE: 64 };
+var _FileConstants = { NUM_TRACKS: 4, NUM_SECTORS: 8, NUM_BLOCKS: 8, BLOCK_SIZE: 64, DATA_SIZE: 60 };
 
 // My Globals
 var _MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
