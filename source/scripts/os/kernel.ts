@@ -42,7 +42,9 @@ module TSOS {
             _KrnFileSystemDriver = new DeviceDriverFileSystem();
             _KrnFileSystemDriver.driverEntry();
             _KrnFileSystemDriver.initializeStorage();
+            _KrnFileSystemDriver.displayFileSystem();
             this.krnTrace("File system driver: " + _KrnFileSystemDriver.status);
+
 
             // Initialize and display memory
             this.krnTrace("Initializing and displaying memory.");

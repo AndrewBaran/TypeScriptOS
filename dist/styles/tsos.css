@@ -160,14 +160,19 @@ h3
 
 #divFileSystem
 {
-	height: 50px;
+	border: 1px solid black;
+
+	height: 200px;
 	width: 400px;
 	clear: both;
+	overflow: auto;
 }
 
 #tableFileSystem:
 {
 	border: 1px solid black;
+	height: 200px;
+	width: 400px;
 }
 
 #tableFileSystem tr, #tableFileSystem td

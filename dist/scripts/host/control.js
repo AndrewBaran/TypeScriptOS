@@ -188,6 +188,9 @@ var TSOS;
 
             // Update ready queue display
             _Kernel.displayReadyQueue();
+
+            // Update file system display
+            _KrnFileSystemDriver.displayFileSystem();
         };
         Control.singleStepEnabled = false;
         return Control;

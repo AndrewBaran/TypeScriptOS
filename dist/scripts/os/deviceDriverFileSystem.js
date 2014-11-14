@@ -17,6 +17,12 @@ var TSOS;
         };
 
         DeviceDriverFileSystem.prototype.initializeStorage = function () {
+            var defaultValue = "";
+
+            for (var i = 0; i < _FileConstants.BLOCK_SIZE; i++) {
+                defaultValue += "-";
+            }
+
             for (var trackNumber = 0; trackNumber < _FileConstants.NUM_TRACKS; trackNumber++) {
                 for (var sectorNumber = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
                     for (var blockNumber = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
@@ -26,10 +32,43 @@ var TSOS;
                         key += sectorNumber.toString();
                         key += blockNumber.toString();
 
-                        // Create value as default string of 64 -'s
-                        // TODO
-                        console.log(key);
-                        sessionStorage.setItem(key, "");
+                        sessionStorage.setItem(key, defaultValue);
+                    }
+                }
+            }
+        };
+
+        DeviceDriverFileSystem.prototype.displayFileSystem = function () {
+            var table = document.getElementById("tableFileSystem");
+
+            while (table.rows.length > 1) {
+                table.deleteRow(-1);
+            }
+
+            for (var trackNumber = 0; trackNumber < _FileConstants.NUM_TRACKS; trackNumber++) {
+                for (var sectorNumber = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+                    for (var blockNumber = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+                        // Create new row
+                        var newRow = table.insertRow();
+
+                        // Track
+                        var track = newRow.insertCell();
+                        track.innerHTML = trackNumber.toString();
+
+                        // Sector
+                        var sector = newRow.insertCell();
+                        sector.innerHTML = sectorNumber.toString();
+
+                        // Block
+                        var block = newRow.insertCell();
+                        block.innerHTML = blockNumber.toString();
+
+                        // Data
+                        var dataKey = trackNumber.toString() + sectorNumber.toString() + blockNumber.toString();
+                        var dataValue = sessionStorage.getItem(dataKey);
+
+                        var data = newRow.insertCell();
+                        data.innerHTML = dataValue.toString();
                     }
                 }
             }

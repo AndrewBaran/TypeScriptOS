@@ -40,6 +40,7 @@ var TSOS;
             _KrnFileSystemDriver = new TSOS.DeviceDriverFileSystem();
             _KrnFileSystemDriver.driverEntry();
             _KrnFileSystemDriver.initializeStorage();
+            _KrnFileSystemDriver.displayFileSystem();
             this.krnTrace("File system driver: " + _KrnFileSystemDriver.status);
 
             // Initialize and display memory

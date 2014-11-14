@@ -87,10 +87,10 @@ Final Project Checklist
 - [x] Add a shell command to allow the user to select a CPU scheduling algorithm - setschedule [rr, fcfs, priority]
 - [x] Add a shell command, getschedule, to return the currently selected CPU scheduling algorithm
 - [ ] Implement a file system in HTML5 web storage
-- [ ] Include a file system viewer in your OS interface
+- [x] Include a file system viewer in your OS interface
 
 - [ ] Develop a FIle System Device Driver (fsDD) for all of the functional requirements noted above
-	- [ ] Load the fsDD in a similar manner as the keyboard device driver
+	- [x] Load the fsDD in a similar manner as the keyboard device driver
 	- [ ] Develop your fsDD to insulate and encapsulate the implementation of the kernel-level I/O operations from the byte-level details of your individual blocks on the local storage
 - [ ] Add new scheduling algorithms to youe CPU scheduler (Default is RR)
 	- [ ] First-come, first-served (FCFS)
