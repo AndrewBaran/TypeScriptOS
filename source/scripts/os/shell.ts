@@ -734,14 +734,24 @@ module TSOS {
 
             _Mode_Bit = _Modes.USER;
 
-            _StdOut.putText("Files on disk: ");
-            _StdOut.advanceLine();
+            // No files found
+            if(fileNameList.length === 0) {
 
-            // Display files
-            for(var i: number = 0; i < fileNameList.length; i++) {
-
-                _StdOut.putText(fileNameList[i]);
+                _StdOut.putText("No files found on disk.");
                 _StdOut.advanceLine();
+            }
+
+            else {
+
+	            _StdOut.putText("Files on disk: ");
+	            _StdOut.advanceLine();
+
+	            // Display files
+	            for(var i: number = 0; i < fileNameList.length; i++) {
+
+	                _StdOut.putText(fileNameList[i]);
+	                _StdOut.advanceLine();
+	            }
             }
         }
 
