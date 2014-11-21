@@ -134,6 +134,7 @@ module TSOS {
         public static isValidFileName(fileName: string): boolean {
 
             // Check if valid size
+            // TODO Make it so only 30 hex symbols allowed (1 letter = 1 bytes = 2 hex symbols * 30 = 60 bytes)?
             if(fileName.length > _FileConstants.DATA_SIZE) {
                 return false;
             }

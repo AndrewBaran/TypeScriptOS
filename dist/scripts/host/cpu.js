@@ -320,6 +320,7 @@ var TSOS;
 
                 default:
                     _StdOut.putText("Error! Invalid OP code detected: " + nextInstruction);
+                    _StdOut.newLine();
                     _Kernel.krnTrace("Error! Invalid OP code detected. Program termianted");
 
                     // Remove program by context switching

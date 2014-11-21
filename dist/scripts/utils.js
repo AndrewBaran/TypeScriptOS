@@ -116,6 +116,7 @@ var TSOS;
         // Checks to see if a file name has the correct characters and size
         Utils.isValidFileName = function (fileName) {
             // Check if valid size
+            // TODO Make it so only 30 hex symbols allowed (1 letter = 1 bytes = 2 hex symbols * 30 = 60 bytes)?
             if (fileName.length > _FileConstants.DATA_SIZE) {
                 return false;
             } else {
