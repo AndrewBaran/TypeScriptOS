@@ -739,10 +739,18 @@ module TSOS {
             // Valid filename; create the file
             else {
 
+                _Mode_Bit = _Modes.KERNEL;
+
                 var result: boolean = _KrnFileSystemDriver.createFile(fileName);
 
+                _Mode_Bit = _Modes.USER;
+
                 if(result) {
+
                     _StdOut.putText("File " + fileName + " successfully created.");
+
+                    // Update the displays
+                    _KrnFileSystemDriver.displayFileSystem();
                 }
 
                 else {

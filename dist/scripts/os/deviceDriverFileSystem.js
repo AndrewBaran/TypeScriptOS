@@ -24,7 +24,7 @@ var TSOS;
                 if (i >= 0 && i <= 3) {
                     defaultValue += "0";
                 } else {
-                    defaultValue += "-";
+                    defaultValue += "00";
                 }
             }
 
@@ -159,15 +159,30 @@ var TSOS;
 
             // Add file to system
             if (directoryBlockFound && dataBlockFound) {
-                // TODO Implement
                 // Convert the fileName to hex
+                var hexString = TSOS.Utils.stringToHex(fileName);
+
                 // Set directoryBlock.data to the hex fileName
-                // Set directoryBlock to in use
-                // Set directoryBlock to point to dataBlock
+                currentDirectoryBlock.data = hexString;
+
+                // Set currentDirectoryBlock to in use
+                currentDirectoryBlock.inUse = true;
+
+                // Set currentDirectoryBlock to point to dataBlock
+                currentDirectoryBlock.nextTrack = currentDataBlock.track.toString();
+                currentDirectoryBlock.nextSector = currentDataBlock.sector.toString();
+                currentDirectoryBlock.nextBlock = currentDataBlock.block.toString();
+
                 // Set dataBlock to in use
+                currentDataBlock.inUse = true;
+
+                // Update storage of these two blocks
+                this.updateBlock(currentDirectoryBlock);
+                this.updateBlock(currentDataBlock);
+
                 return true;
             } else {
-                // Let shell.ts handle error messages
+                // Let shell.ts handle error message
                 return false;
             }
         };
@@ -180,6 +195,32 @@ var TSOS;
             var newBlock = new TSOS.Block(key, blockData);
 
             return newBlock;
+        };
+
+        // Takes a Block object and updates the session storage version of it
+        DeviceDriverFileSystem.prototype.updateBlock = function (inputBlock) {
+            var blockData = "";
+
+            if (inputBlock.inUse) {
+                blockData += "1";
+            } else {
+                blockData += "0";
+            }
+
+            blockData += inputBlock.nextTrack;
+            blockData += inputBlock.nextSector;
+            blockData += inputBlock.nextBlock;
+
+            blockData += inputBlock.data;
+
+            for (var i = inputBlock.data.length / 2; i < _FileConstants.DATA_SIZE; i++) {
+                blockData += "00";
+            }
+
+            var key = inputBlock.track.toString() + inputBlock.sector.toString() + inputBlock.block.toString();
+            sessionStorage.setItem(key, blockData);
+
+            return true;
         };
         return DeviceDriverFileSystem;
     })(TSOS.DeviceDriver);

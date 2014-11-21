@@ -23,8 +23,9 @@ module TSOS {
 					defaultValue += "0";
 				}
 
+				// Pad with twice the hex symbols, as 1 byte = 2 hex
 				else {
-					defaultValue += "-";
+					defaultValue += "00";
 				}
 			}
 
@@ -179,13 +180,26 @@ module TSOS {
 			// Add file to system
 			if(directoryBlockFound && dataBlockFound) {
 
-				// TODO Implement
 				// Convert the fileName to hex
-				// Set directoryBlock.data to the hex fileName
-				// Set directoryBlock to in use
-				// Set directoryBlock to point to dataBlock
-				// Set dataBlock to in use
+				var hexString: string = Utils.stringToHex(fileName);
 
+				// Set directoryBlock.data to the hex fileName
+				currentDirectoryBlock.data = hexString;
+
+				// Set currentDirectoryBlock to in use
+				currentDirectoryBlock.inUse = true;
+
+				// Set currentDirectoryBlock to point to dataBlock
+				currentDirectoryBlock.nextTrack = currentDataBlock.track.toString();
+				currentDirectoryBlock.nextSector = currentDataBlock.sector.toString();
+				currentDirectoryBlock.nextBlock = currentDataBlock.block.toString();
+
+				// Set dataBlock to in use
+				currentDataBlock.inUse = true;
+
+				// Update storage of these two blocks
+				this.updateBlock(currentDirectoryBlock);
+				this.updateBlock(currentDataBlock);
 
 				return true;
 			}
@@ -193,7 +207,7 @@ module TSOS {
 			// No room to add file to system
 			else {
 
-				// Let shell.ts handle error messages
+				// Let shell.ts handle error message
 				return false;
 			}
 
@@ -208,6 +222,36 @@ module TSOS {
 			var newBlock: TSOS.Block = new Block(key, blockData);
 
 			return newBlock;
+		}
+
+		// Takes a Block object and updates the session storage version of it
+		private updateBlock(inputBlock: TSOS.Block): boolean {
+
+			var blockData: string = "";
+
+			if(inputBlock.inUse) {
+				blockData += "1";
+			}
+
+			else {
+				blockData += "0";
+			}
+
+			blockData += inputBlock.nextTrack;
+			blockData += inputBlock.nextSector;
+			blockData += inputBlock.nextBlock;
+
+			blockData += inputBlock.data;
+
+			// Pad until data block is full
+			for(var i: number = inputBlock.data.length / 2; i < _FileConstants.DATA_SIZE; i++) {
+				blockData += "00";
+			}
+
+			var key: string = inputBlock.track.toString() + inputBlock.sector.toString() + inputBlock.block.toString();
+			sessionStorage.setItem(key, blockData);
+
+			return true;
 		}
 	}
 }

@@ -116,7 +116,7 @@ var TSOS;
         // Checks to see if a file name has the correct characters and size
         Utils.isValidFileName = function (fileName) {
             // Check if valid size
-            // TODO Make it so only 30 hex symbols allowed (1 letter = 1 bytes = 2 hex symbols * 30 = 60 bytes)?
+            // 60 bytes = 120 hex symbols allowed
             if (fileName.length > _FileConstants.DATA_SIZE) {
                 return false;
             } else {
@@ -133,10 +133,17 @@ var TSOS;
             }
         };
 
-        // TODO Implement
         // Takes a string and converts it into a string of hex symbols
         Utils.stringToHex = function (inputString) {
-            return null;
+            var outputString = "";
+
+            for (var i = 0; i < inputString.length; i++) {
+                var hexValue = inputString.charCodeAt(i).toString(16);
+
+                outputString += hexValue;
+            }
+
+            return outputString;
         };
         return Utils;
     })();

@@ -617,10 +617,17 @@ var TSOS;
             } else if (!TSOS.Utils.isValidFileName(fileName)) {
                 _StdOut.putText("Error! Invalid filename. Only alphanumeric characters allowed.");
             } else {
+                _Mode_Bit = _Modes.KERNEL;
+
                 var result = _KrnFileSystemDriver.createFile(fileName);
+
+                _Mode_Bit = _Modes.USER;
 
                 if (result) {
                     _StdOut.putText("File " + fileName + " successfully created.");
+
+                    // Update the displays
+                    _KrnFileSystemDriver.displayFileSystem();
                 } else {
                     _StdOut.putText("File could not be created. Secondary memory is full.");
                 }

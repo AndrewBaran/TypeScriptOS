@@ -134,7 +134,7 @@ module TSOS {
         public static isValidFileName(fileName: string): boolean {
 
             // Check if valid size
-            // TODO Make it so only 30 hex symbols allowed (1 letter = 1 bytes = 2 hex symbols * 30 = 60 bytes)?
+            // 60 bytes = 120 hex symbols allowed
             if(fileName.length > _FileConstants.DATA_SIZE) {
                 return false;
             }
@@ -156,11 +156,20 @@ module TSOS {
             
         } // isValidFileName()
 
-        // TODO Implement
         // Takes a string and converts it into a string of hex symbols
         public static stringToHex(inputString: string): string {
 
-            return null;
+            var outputString: string = "";
+
+            // Parse each character (1 byte), turning it into two hex symbols
+            for(var i: number = 0; i < inputString.length; i++) {
+
+                var hexValue: string = inputString.charCodeAt(i).toString(16);
+
+                outputString += hexValue;
+            }
+
+            return outputString;
         }
     }
 }

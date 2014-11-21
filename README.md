@@ -78,7 +78,7 @@ Final Project Checklist
 =======================
 
 - [ ] Add shell commands for the following disk operations
-	- [ ] create (filename) - create the file filename and display a message denoting success or failure
+	- [x] create (filename) - create the file filename and display a message denoting success or failure
 	- [ ] read (filename) - read and display the contents of filename or display an error if something went wrong
 	- [ ] write (filename) "data" - write the data inside the quotes to filename and display a message denoting success or failure
 	- [ ] delete (filename) - remove filename from storage and display a message denoting success or failure

@@ -11,6 +11,10 @@ var TSOS;
                 this.inUse = true;
             }
 
+            this.track = parseInt(key.charAt(0), 10);
+            this.sector = parseInt(key.charAt(1), 10);
+            this.block = parseInt(key.charAt(2), 10);
+
             this.nextTrack = blockData.charAt(1);
             this.nextSector = blockData.charAt(2);
             this.nextBlock = blockData.charAt(3);
