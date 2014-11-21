@@ -82,7 +82,7 @@ Final Project Checklist
 	- [ ] read (filename) - read and display the contents of filename or display an error if something went wrong
 	- [ ] write (filename) "data" - write the data inside the quotes to filename and display a message denoting success or failure
 	- [ ] delete (filename) - remove filename from storage and display a message denoting success or failure
-	- [ ] format - initialize all blocks in all sectors in all tracks and display a message denoting success or failure
+	- [x] format - initialize all blocks in all sectors in all tracks and display a message denoting success or failure
 - [x] Add a shell command, ls, to list the files currently stored on the disk
 - [x] Add a shell command to allow the user to select a CPU scheduling algorithm - setschedule [rr, fcfs, priority]
 - [x] Add a shell command, getschedule, to return the currently selected CPU scheduling algorithm
