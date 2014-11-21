@@ -228,6 +228,11 @@ var TSOS;
             }
         };
 
+        // Resets the disk to default state
+        DeviceDriverFileSystem.prototype.formatDisk = function () {
+            this.initializeStorage();
+        };
+
         // Gets the block at the specified track, sector, and block
         DeviceDriverFileSystem.prototype.getBlock = function (track, sector, block) {
             var key = track.toString() + sector.toString() + block.toString();

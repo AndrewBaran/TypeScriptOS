@@ -259,6 +259,12 @@ module TSOS {
 
 		} // createFile
 
+		// Resets the disk to default state
+		public formatDisk(): void {
+
+			this.initializeStorage();
+		}
+
 		// Gets the block at the specified track, sector, and block
 		private getBlock(track: number, sector: number, block: number): TSOS.Block {
 

@@ -137,6 +137,10 @@ module TSOS {
             sc = new ShellCommand(this.shellCreate, "create", " <filename> - Creates a new file with the name <filename>.");
             this.commandList[this.commandList.length] = sc;
 
+            // format
+            sc = new ShellCommand(this.shellFormat, "format", " - Formats the disk back to its default state.");
+            this.commandList[this.commandList.length] = sc;
+
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -753,7 +757,8 @@ module TSOS {
 	                _StdOut.advanceLine();
 	            }
             }
-        }
+
+        } // shellLS()
 
         // Creates a new file in the file system with the name <filename>
         public shellCreate(args: string[]): void {
@@ -793,6 +798,32 @@ module TSOS {
             }
 
         } // shellCreate()
+
+        // Formats the disk back to its default state
+        public shellFormat(): void {
+
+        	// Protection against Alan
+        	if(_Scheduler.inUse || _CPU.isExecuting) {
+
+        		_StdOut.putText("Error! Cannot format as programs are running.");
+        	}
+
+        	else {
+
+        		_Mode_Bit = _Modes.KERNEL;
+
+        		_KrnFileSystemDriver.formatDisk();
+
+        		_Mode_Bit = _Modes.USER;
+
+        		_StdOut.putText("Disk successfully formatted.");
+        		_Kernel.krnTrace("Formatted disk.");
+
+        		// Update file system display
+        		_KrnFileSystemDriver.displayFileSystem();
+        	}
+
+        } // shellFormat()
 
     }
 }

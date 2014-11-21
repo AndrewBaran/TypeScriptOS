@@ -115,6 +115,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellCreate, "create", " <filename> - Creates a new file with the name <filename>.");
             this.commandList[this.commandList.length] = sc;
 
+            // format
+            sc = new TSOS.ShellCommand(this.shellFormat, "format", " - Formats the disk back to its default state.");
+            this.commandList[this.commandList.length] = sc;
+
             // Display the initial prompt.
             this.putPrompt();
         };
@@ -658,6 +662,26 @@ var TSOS;
                 } else {
                     _StdOut.putText("File could not be created. Secondary memory is full.");
                 }
+            }
+        };
+
+        // Formats the disk back to its default state
+        Shell.prototype.shellFormat = function () {
+            // Protection against Alan
+            if (_Scheduler.inUse || _CPU.isExecuting) {
+                _StdOut.putText("Error! Cannot format as programs are running.");
+            } else {
+                _Mode_Bit = _Modes.KERNEL;
+
+                _KrnFileSystemDriver.formatDisk();
+
+                _Mode_Bit = _Modes.USER;
+
+                _StdOut.putText("Disk successfully formatted.");
+                _Kernel.krnTrace("Formatted disk.");
+
+                // Update file system display
+                _KrnFileSystemDriver.displayFileSystem();
             }
         };
         return Shell;
