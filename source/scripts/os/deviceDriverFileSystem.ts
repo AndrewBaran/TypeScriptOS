@@ -16,8 +16,16 @@ module TSOS {
 
 			var defaultValue: string = "";
 
-			for(var i = 0; i < _FileConstants.BLOCK_SIZE; i++) {
-				defaultValue += "-";
+			for(var i: number = 0; i < _FileConstants.BLOCK_SIZE; i++) {
+
+				// Set inuse, and next t,s,b to 0
+				if(i >= 0 && i <= 3) {
+					defaultValue += "0";
+				}
+
+				else {
+					defaultValue += "-";
+				}
 			}
 
 			for(var trackNumber: number = 0; trackNumber < _FileConstants.NUM_TRACKS; trackNumber++) {
@@ -116,7 +124,7 @@ module TSOS {
 
 						if(!currentDataBlock.inUse) {
 
-							console.log("Block at (" + trackNumber + ", " + sectorNumber + ", " + blockNumber + ") is free.");
+							console.log("Data block at (" + trackNumber + ", " + sectorNumber + ", " + blockNumber + ") is free.");
 							dataBlockFound = true;
 
 							break;
@@ -141,9 +149,16 @@ module TSOS {
 				for(var sectorNumber: number = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
 					for(var blockNumber: number = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
 
+						// Skip master boot record
+						if(trackNumber === 0 && sectorNumber === 0 && blockNumber === 0) {
+							continue;
+						}
+
 						var currentDirectoryBlock: TSOS.Block = this.getBlock(trackNumber, sectorNumber, blockNumber);
 
 						if(!currentDirectoryBlock.inUse) {
+
+							console.log("Directory block at (" + trackNumber + ", " + sectorNumber + ", " + blockNumber + ") is free.");
 							directoryBlockFound = true;
 
 							break;
@@ -164,6 +179,7 @@ module TSOS {
 			// Add file to system
 			if(directoryBlockFound && dataBlockFound) {
 
+				// TODO Implement
 				// Convert the fileName to hex
 				// Set directoryBlock.data to the hex fileName
 				// Set directoryBlock to in use
@@ -183,6 +199,7 @@ module TSOS {
 
 		} // createFile
 
+		// Gets the block at the specified track, sector, and block
 		private getBlock(track: number, sector: number, block: number): TSOS.Block {
 
 			var key: string = track.toString() + sector.toString() + block.toString();

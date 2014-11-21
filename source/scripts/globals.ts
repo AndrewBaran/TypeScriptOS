@@ -52,7 +52,7 @@ interface ProcessStates {
 	FINISHED: string;
 }
 
-var _ProcessStates: ProcessStates = {NEW: "new", READY: "ready", RUNNING: "running", FINISHED: "finished"};
+var _ProcessStates: ProcessStates = {NEW: "New", READY: "Ready", RUNNING: "Running", FINISHED: "Finished"};
 
 interface FileConstants {
 	NUM_TRACKS: number;

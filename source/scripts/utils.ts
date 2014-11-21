@@ -155,5 +155,12 @@ module TSOS {
             }
             
         } // isValidFileName()
+
+        // TODO Implement
+        // Takes a string and converts it into a string of hex symbols
+        public static stringToHex(inputString: string): string {
+
+            return null;
+        }
     }
 }

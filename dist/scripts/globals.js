@@ -15,7 +15,7 @@ var _MiscConstants = { NUM_HEX_DIGITS: 3 };
 
 var _MemoryConstants = { PROCESS_SIZE: 256, NUM_ROWS: 96, NUM_COLUMNS: 8, BYTES_PER_ROW: 8 };
 
-var _ProcessStates = { NEW: "new", READY: "ready", RUNNING: "running", FINISHED: "finished" };
+var _ProcessStates = { NEW: "New", READY: "Ready", RUNNING: "Running", FINISHED: "Finished" };
 
 var _FileConstants = { NUM_TRACKS: 4, NUM_SECTORS: 8, NUM_BLOCKS: 8, BLOCK_SIZE: 64, DATA_SIZE: 60 };
 

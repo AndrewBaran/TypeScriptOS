@@ -132,6 +132,12 @@ var TSOS;
                 return true;
             }
         };
+
+        // TODO Implement
+        // Takes a string and converts it into a string of hex symbols
+        Utils.stringToHex = function (inputString) {
+            return null;
+        };
         return Utils;
     })();
     TSOS.Utils = Utils;

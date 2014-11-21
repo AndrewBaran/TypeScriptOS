@@ -20,7 +20,12 @@ var TSOS;
             var defaultValue = "";
 
             for (var i = 0; i < _FileConstants.BLOCK_SIZE; i++) {
-                defaultValue += "-";
+                // Set inuse, and next t,s,b to 0
+                if (i >= 0 && i <= 3) {
+                    defaultValue += "0";
+                } else {
+                    defaultValue += "-";
+                }
             }
 
             for (var trackNumber = 0; trackNumber < _FileConstants.NUM_TRACKS; trackNumber++) {
@@ -105,7 +110,7 @@ var TSOS;
                         var currentDataBlock = this.getBlock(trackNumber, sectorNumber, blockNumber);
 
                         if (!currentDataBlock.inUse) {
-                            console.log("Block at (" + trackNumber + ", " + sectorNumber + ", " + blockNumber + ") is free.");
+                            console.log("Data block at (" + trackNumber + ", " + sectorNumber + ", " + blockNumber + ") is free.");
                             dataBlockFound = true;
 
                             break;
@@ -127,9 +132,15 @@ var TSOS;
             for (var trackNumber = 0; trackNumber < 1; trackNumber++) {
                 for (var sectorNumber = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
                     for (var blockNumber = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+                        // Skip master boot record
+                        if (trackNumber === 0 && sectorNumber === 0 && blockNumber === 0) {
+                            continue;
+                        }
+
                         var currentDirectoryBlock = this.getBlock(trackNumber, sectorNumber, blockNumber);
 
                         if (!currentDirectoryBlock.inUse) {
+                            console.log("Directory block at (" + trackNumber + ", " + sectorNumber + ", " + blockNumber + ") is free.");
                             directoryBlockFound = true;
 
                             break;
@@ -148,6 +159,7 @@ var TSOS;
 
             // Add file to system
             if (directoryBlockFound && dataBlockFound) {
+                // TODO Implement
                 // Convert the fileName to hex
                 // Set directoryBlock.data to the hex fileName
                 // Set directoryBlock to in use
@@ -160,6 +172,7 @@ var TSOS;
             }
         };
 
+        // Gets the block at the specified track, sector, and block
         DeviceDriverFileSystem.prototype.getBlock = function (track, sector, block) {
             var key = track.toString() + sector.toString() + block.toString();
             var blockData = sessionStorage.getItem(key);

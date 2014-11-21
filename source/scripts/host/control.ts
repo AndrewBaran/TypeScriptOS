@@ -205,7 +205,8 @@ module TSOS {
             _Kernel.displayReadyQueue();
 
             // Update file system display
-            _KrnFileSystemDriver.displayFileSystem();
+            // TODO Commented out; very slow
+            // _KrnFileSystemDriver.displayFileSystem();
         }
     }
 }
