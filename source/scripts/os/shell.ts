@@ -137,6 +137,10 @@ module TSOS {
             sc = new ShellCommand(this.shellCreate, "create", " <filename> - Creates a new file with the name <filename>.");
             this.commandList[this.commandList.length] = sc;
 
+            // read <filename>
+            sc = new ShellCommand(this.shellRead, "read", " <filename> - Read the contents of the file <filename>.");
+            this.commandList[this.commandList.length] = sc;
+
             // format
             sc = new ShellCommand(this.shellFormat, "format", " - Formats the disk back to its default state.");
             this.commandList[this.commandList.length] = sc;
@@ -798,6 +802,49 @@ module TSOS {
             }
 
         } // shellCreate()
+
+        public shellRead(args: string[]): void {
+
+        	// Invalid arguments
+        	if(args.length !== 1) {
+        		_StdOut.putText("Usage: read <filename> - Please supply a filename.");
+        	}
+
+        	else {
+
+        		var fileName: string = args[0];
+        		var directoryFiles: string[] = _KrnFileSystemDriver.getFileNames();
+
+        		var fileFound: boolean = false;
+
+        		// See if the file exists on the disk
+        		for(var i: number = 0; i < directoryFiles.length; i++) {
+
+        			if(directoryFiles[i] === fileName) {
+
+        				fileFound = true;
+        				break;
+        			}
+        		}
+
+        		if(fileFound) {
+
+        			console.log("File found on disk. Read it.");
+        			var fileContents: string = _KrnFileSystemDriver.readFile(fileName);
+
+	        		_StdOut.putText("Contents of file " + fileName + ": ");
+	        		_StdOut.advanceLine();
+
+	        		_StdOut.putText(fileContents);
+	        		_StdOut.advanceLine();
+        		}
+
+        		else {
+					_StdOut.putText("Error! File not found on disk.");        			
+        		}
+        	}
+
+        } // shellRead()
 
         // Formats the disk back to its default state
         public shellFormat(): void {

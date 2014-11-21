@@ -83,6 +83,7 @@ var TSOS;
             return newString;
         };
 
+        // Converts a decimal value to a string of the hex representation
         Utils.decimalToHex = function (decimalValue) {
             var returnString = "";
 
@@ -146,6 +147,26 @@ var TSOS;
             return outputString;
         };
 
+        Utils.isHex = function (inputString) {
+            var regex = /[a-f|A-F|0-9]/;
+            var isValid = true;
+
+            if (inputString.length !== 0) {
+                for (var i = 0; i < inputString.length; i++) {
+                    if (!regex.test(inputString[i])) {
+                        isValid = false;
+                        break;
+                    }
+                }
+            } else {
+                return false;
+            }
+
+            console.log("Is " + inputString + " valid: " + isValid);
+
+            return isValid;
+        };
+
         // Takes in a string of hex symbols and returns a string with the corresponding character values
         Utils.hexToString = function (inputString) {
             // Parse two hex values at a time, turning them into characters
@@ -155,16 +176,26 @@ var TSOS;
             var correctCharacter = "";
 
             var outputString = "";
+            var errorOccured = false;
 
-            while (index < inputString.length) {
+            while ((index < inputString.length) && (!errorOccured)) {
                 currentSymbols = inputString.charAt(index) + inputString.charAt(index + 1);
                 index += 2;
 
-                characterValue = parseInt(currentSymbols, 16);
-                correctCharacter = String.fromCharCode(characterValue);
+                console.log("Hex: " + currentSymbols);
 
-                outputString += correctCharacter;
+                if (Utils.isHex(currentSymbols)) {
+                    characterValue = parseInt(currentSymbols, 16);
+                    correctCharacter = String.fromCharCode(characterValue);
+
+                    outputString += correctCharacter;
+                } else {
+                    console.log("Hex was not valid. Break");
+                    errorOccured = true;
+                }
             }
+
+            console.log("Returning string: " + outputString);
 
             return outputString;
         };

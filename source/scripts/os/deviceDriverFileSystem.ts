@@ -97,7 +97,7 @@ module TSOS {
 						nextBlock.innerHTML = block.nextBlock;
 
 						// Replace all the occurences of - with 0 to display
-						// block.data.replace(/-/g, "0");
+						block.data = block.data.replace(/-/g, "0");
 						
 						// Data
 						var dataCell = newRow.insertCell();
@@ -243,6 +243,11 @@ module TSOS {
 				// Set dataBlock to in use
 				currentDataBlock.inUse = true;
 
+				// Set dataBlock next t,s,b to -
+				currentDataBlock.nextTrack = "-";
+				currentDataBlock.nextSector = "-";
+				currentDataBlock.nextBlock = "-";
+
 				// Update storage of these two blocks
 				this.updateBlock(currentDirectoryBlock);
 				this.updateBlock(currentDataBlock);
@@ -257,7 +262,85 @@ module TSOS {
 				return false;
 			}
 
-		} // createFile
+		} // createFile()
+
+		// Reads the inputFile and returns its contents to the caller
+		public readFile(fileName: string): string {
+
+			var directoryBlockFound: boolean = false;
+
+			// Find key for the directory entry of the block
+			for(var trackNumber: number = 0; trackNumber < 1; trackNumber++) {
+				for(var sectorNumber: number = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+					for(var blockNumber: number = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+
+						// Skip master boot record
+						if(trackNumber === 0 && sectorNumber === 0 && blockNumber === 0) {
+							continue;
+						}
+
+						var currentDirectoryBlock: TSOS.Block = this.getBlock(trackNumber, sectorNumber, blockNumber);
+
+						var dataString: string = Utils.hexToString(currentDirectoryBlock.data);
+						console.log("String: " + dataString);
+
+						if(dataString === fileName) {
+
+							directoryBlockFound = true;
+							break;
+						}
+					}
+
+					if(directoryBlockFound) {
+						break;
+					}
+				}
+
+				if(directoryBlockFound) {
+					break;
+				}
+			}
+
+			console.log("Found file " + fileName);
+
+			var outputString: string = "";
+			var stillReading: boolean = true;
+
+			var key: string = currentDirectoryBlock.nextTrack + currentDirectoryBlock.nextSector + currentDirectoryBlock.nextBlock;
+
+			// Read the file
+			while(stillReading) {
+
+				console.log("Reading the file");
+
+				// Get data block
+				var track: number = parseInt(key.charAt(0), 10);
+				var sector: number = parseInt(key.charAt(1), 10);
+				var block: number = parseInt(key.charAt(2), 10);
+
+				var dataBlock: TSOS.Block = this.getBlock(track, sector, block);
+
+				var dataString: string = Utils.hexToString(dataBlock.data);
+
+				outputString += dataString;
+				console.log(outputString);
+
+				// Check if at end of block chain
+				if(dataBlock.nextTrack === "-" || dataBlock.nextSector === "-" || dataBlock.nextBlock === "-") {
+
+					console.log("Stop reading.");
+					stillReading = false;
+				}
+
+				// More blocks in block-chain
+				else {
+					key = dataBlock.nextTrack + dataBlock.nextSector + dataBlock.nextBlock;
+				}
+			}
+
+			return outputString;
+
+		} // readFile()
 
 		// Resets the disk to default state
 		public formatDisk(): void {
@@ -299,6 +382,8 @@ module TSOS {
 			for(var i: number = inputBlock.data.length / 2; i < _FileConstants.DATA_SIZE; i++) {
 				blockData += "--";
 			}
+
+			console.log("Block data size: " + blockData.length);
 
 			var key: string = inputBlock.track.toString() + inputBlock.sector.toString() + inputBlock.block.toString();
 			sessionStorage.setItem(key, blockData);

@@ -115,6 +115,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellCreate, "create", " <filename> - Creates a new file with the name <filename>.");
             this.commandList[this.commandList.length] = sc;
 
+            // read <filename>
+            sc = new TSOS.ShellCommand(this.shellRead, "read", " <filename> - Read the contents of the file <filename>.");
+            this.commandList[this.commandList.length] = sc;
+
             // format
             sc = new TSOS.ShellCommand(this.shellFormat, "format", " - Formats the disk back to its default state.");
             this.commandList[this.commandList.length] = sc;
@@ -661,6 +665,38 @@ var TSOS;
                     _KrnFileSystemDriver.displayFileSystem();
                 } else {
                     _StdOut.putText("File could not be created. Secondary memory is full.");
+                }
+            }
+        };
+
+        Shell.prototype.shellRead = function (args) {
+            // Invalid arguments
+            if (args.length !== 1) {
+                _StdOut.putText("Usage: read <filename> - Please supply a filename.");
+            } else {
+                var fileName = args[0];
+                var directoryFiles = _KrnFileSystemDriver.getFileNames();
+
+                var fileFound = false;
+
+                for (var i = 0; i < directoryFiles.length; i++) {
+                    if (directoryFiles[i] === fileName) {
+                        fileFound = true;
+                        break;
+                    }
+                }
+
+                if (fileFound) {
+                    console.log("File found on disk. Read it.");
+                    var fileContents = _KrnFileSystemDriver.readFile(fileName);
+
+                    _StdOut.putText("Contents of file " + fileName + ": ");
+                    _StdOut.advanceLine();
+
+                    _StdOut.putText(fileContents);
+                    _StdOut.advanceLine();
+                } else {
+                    _StdOut.putText("Error! File not found on disk.");
                 }
             }
         };

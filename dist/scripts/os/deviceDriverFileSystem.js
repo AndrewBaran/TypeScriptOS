@@ -87,7 +87,8 @@ var TSOS;
                         nextBlock.innerHTML = block.nextBlock;
 
                         // Replace all the occurences of - with 0 to display
-                        // block.data.replace(/-/g, "0");
+                        block.data = block.data.replace(/-/g, "0");
+
                         // Data
                         var dataCell = newRow.insertCell();
                         dataCell.innerHTML = block.data;
@@ -217,6 +218,11 @@ var TSOS;
                 // Set dataBlock to in use
                 currentDataBlock.inUse = true;
 
+                // Set dataBlock next t,s,b to -
+                currentDataBlock.nextTrack = "-";
+                currentDataBlock.nextSector = "-";
+                currentDataBlock.nextBlock = "-";
+
                 // Update storage of these two blocks
                 this.updateBlock(currentDirectoryBlock);
                 this.updateBlock(currentDataBlock);
@@ -226,6 +232,73 @@ var TSOS;
                 // Let shell.ts handle error message
                 return false;
             }
+        };
+
+        // Reads the inputFile and returns its contents to the caller
+        DeviceDriverFileSystem.prototype.readFile = function (fileName) {
+            var directoryBlockFound = false;
+
+            for (var trackNumber = 0; trackNumber < 1; trackNumber++) {
+                for (var sectorNumber = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+                    for (var blockNumber = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+                        // Skip master boot record
+                        if (trackNumber === 0 && sectorNumber === 0 && blockNumber === 0) {
+                            continue;
+                        }
+
+                        var currentDirectoryBlock = this.getBlock(trackNumber, sectorNumber, blockNumber);
+
+                        var dataString = TSOS.Utils.hexToString(currentDirectoryBlock.data);
+                        console.log("String: " + dataString);
+
+                        if (dataString === fileName) {
+                            directoryBlockFound = true;
+                            break;
+                        }
+                    }
+
+                    if (directoryBlockFound) {
+                        break;
+                    }
+                }
+
+                if (directoryBlockFound) {
+                    break;
+                }
+            }
+
+            console.log("Found file " + fileName);
+
+            var outputString = "";
+            var stillReading = true;
+
+            var key = currentDirectoryBlock.nextTrack + currentDirectoryBlock.nextSector + currentDirectoryBlock.nextBlock;
+
+            while (stillReading) {
+                console.log("Reading the file");
+
+                // Get data block
+                var track = parseInt(key.charAt(0), 10);
+                var sector = parseInt(key.charAt(1), 10);
+                var block = parseInt(key.charAt(2), 10);
+
+                var dataBlock = this.getBlock(track, sector, block);
+
+                var dataString = TSOS.Utils.hexToString(dataBlock.data);
+
+                outputString += dataString;
+                console.log(outputString);
+
+                // Check if at end of block chain
+                if (dataBlock.nextTrack === "-" || dataBlock.nextSector === "-" || dataBlock.nextBlock === "-") {
+                    console.log("Stop reading.");
+                    stillReading = false;
+                } else {
+                    key = dataBlock.nextTrack + dataBlock.nextSector + dataBlock.nextBlock;
+                }
+            }
+
+            return outputString;
         };
 
         // Resets the disk to default state
@@ -262,6 +335,8 @@ var TSOS;
             for (var i = inputBlock.data.length / 2; i < _FileConstants.DATA_SIZE; i++) {
                 blockData += "--";
             }
+
+            console.log("Block data size: " + blockData.length);
 
             var key = inputBlock.track.toString() + inputBlock.sector.toString() + inputBlock.block.toString();
             sessionStorage.setItem(key, blockData);

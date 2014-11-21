@@ -91,8 +91,10 @@ module TSOS {
             }
 
             return newString;
-        }
 
+        } // toUpperHex()
+
+        // Converts a decimal value to a string of the hex representation
         public static decimalToHex(decimalValue: number): string {
 
             var returnString: string = "";
@@ -173,6 +175,32 @@ module TSOS {
 
         } // stringToHex()
 
+        public static isHex(inputString: string): boolean {
+
+            var regex = /[a-f|A-F|0-9]/;
+            var isValid: boolean = true;
+
+            if(inputString.length !== 0) {
+
+                for(var i: number = 0; i < inputString.length; i++) {
+
+                    if(!regex.test(inputString[i])) {
+                        isValid = false;
+                        break;
+                    }
+                }
+            }
+
+            else {
+                return false;
+            }
+
+            console.log("Is " + inputString + " valid: " + isValid);
+
+            return isValid;
+
+        } // isHex()
+
         // Takes in a string of hex symbols and returns a string with the corresponding character values
         public static hexToString(inputString: string): string {
 
@@ -183,20 +211,37 @@ module TSOS {
             var correctCharacter: string = "";
 
             var outputString: string = "";
+            var errorOccured: boolean = false;
 
-            while(index < inputString.length) {
+            while((index < inputString.length) && (!errorOccured)) {
+
 
                 currentSymbols = inputString.charAt(index) + inputString.charAt(index + 1);
                 index += 2;
 
-                characterValue = parseInt(currentSymbols, 16);
-                correctCharacter = String.fromCharCode(characterValue);
+                console.log("Hex: " + currentSymbols);
 
-                outputString += correctCharacter;
+                if(Utils.isHex(currentSymbols)) {
+
+                    characterValue = parseInt(currentSymbols, 16);
+                    correctCharacter = String.fromCharCode(characterValue);
+
+                    outputString += correctCharacter;
+                }
+
+                else {
+
+                    console.log("Hex was not valid. Break");
+                    errorOccured = true;
+                }
+
             }
+
+            console.log("Returning string: " + outputString);
 
             return outputString;
 
         } // hexToString()
+
     }
 }
