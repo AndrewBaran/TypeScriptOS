@@ -129,6 +129,10 @@ module TSOS {
             sc = new ShellCommand(this.shellGetSchedule, "getschedule", " - Displays the current scheduling algorithm.");
             this.commandList[this.commandList.length] = sc;
 
+            // ls
+            sc = new ShellCommand(this.shellLS, "ls", " Displays the files in the current directory.");
+            this.commandList[this.commandList.length] = sc;
+
             // create <filename>
             sc = new ShellCommand(this.shellCreate, "create", " <filename> - Creates a new file with the name <filename>.");
             this.commandList[this.commandList.length] = sc;
@@ -721,6 +725,26 @@ module TSOS {
             _StdOut.putText("Scheduling algorithm: " + schedulingType); 
         }
 
+        // Lists the fileNames in the current directory
+        public shellLS(): void {
+
+            _Mode_Bit = _Modes.KERNEL;
+
+            var fileNameList: string = _KrnFileSystemDriver.getFileNames();
+
+            _Mode_Bit = _Modes.USER;
+
+            _StdOut.putText("Files on disk: ");
+            _StdOut.advanceLine();
+
+            // Display files
+            for(var i: number = 0; i < fileNameList.length; i++) {
+
+                _StdOut.putText(fileNameList[i]);
+                _StdOut.advanceLine();
+            }
+        }
+
         // Creates a new file in the file system with the name <filename>
         public shellCreate(args: string[]): void {
 
@@ -757,6 +781,7 @@ module TSOS {
                     _StdOut.putText("File could not be created. Secondary memory is full.");
                 }
             }
+
         } // shellCreate()
 
     }

@@ -145,6 +145,29 @@ var TSOS;
 
             return outputString;
         };
+
+        // Takes in a string of hex symbols and returns a string with the corresponding character values
+        Utils.hexToString = function (inputString) {
+            // Parse two hex values at a time, turning them into characters
+            var index = 0;
+            var currentSymbols = "";
+            var characterValue = 0;
+            var correctCharacter = "";
+
+            var outputString = "";
+
+            while (index < inputString.length) {
+                currentSymbols = inputString.charAt(index) + inputString.charAt(index + 1);
+                index += 2;
+
+                characterValue = parseInt(currentSymbols, 16);
+                correctCharacter = String.fromCharCode(characterValue);
+
+                outputString += correctCharacter;
+            }
+
+            return outputString;
+        };
         return Utils;
     })();
     TSOS.Utils = Utils;

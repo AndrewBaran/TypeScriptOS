@@ -24,7 +24,7 @@ var TSOS;
                 if (i >= 0 && i <= 3) {
                     defaultValue += "0";
                 } else {
-                    defaultValue += "00";
+                    defaultValue += "--";
                 }
             }
 
@@ -86,6 +86,8 @@ var TSOS;
                         var nextBlock = newRow.insertCell();
                         nextBlock.innerHTML = block.nextBlock;
 
+                        // Replace all the occurences of - with 0 to display
+                        // block.data.replace(/-/g, "0");
                         // Data
                         var dataCell = newRow.insertCell();
                         dataCell.innerHTML = block.data;
@@ -94,6 +96,45 @@ var TSOS;
             }
         };
 
+        // Returns an array of strings holding each file name
+        DeviceDriverFileSystem.prototype.getFileNames = function () {
+            var outputFileNames = [];
+
+            for (var trackNumber = 0; trackNumber < 1; trackNumber++) {
+                for (var sectorNumber = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+                    for (var blockNumber = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+                        // Skip master boot record
+                        if (trackNumber === 0 && sectorNumber === 0 && blockNumber === 0) {
+                            continue;
+                        }
+
+                        // Check if block is in use
+                        var currentDirectoryBlock = this.getBlock(trackNumber, sectorNumber, blockNumber);
+
+                        if (currentDirectoryBlock.inUse) {
+                            // Get fileName
+                            var hexFileName = "";
+
+                            var index = 0;
+                            var currentChar = "";
+
+                            while ((currentChar = currentDirectoryBlock.data.charAt(index)) != "-") {
+                                hexFileName += currentChar;
+                                index++;
+                            }
+
+                            var fileName = TSOS.Utils.hexToString(hexFileName);
+
+                            outputFileNames.push(fileName);
+                        }
+                    }
+                }
+            }
+
+            return outputFileNames;
+        };
+
+        // TODO Make it so dupliciate file name writes over previous file name
         // Creates a file in the file system
         DeviceDriverFileSystem.prototype.createFile = function (fileName, hiddenFile) {
             // Add invalid character to file name to prevent Alan from deleting the file
@@ -214,7 +255,7 @@ var TSOS;
             blockData += inputBlock.data;
 
             for (var i = inputBlock.data.length / 2; i < _FileConstants.DATA_SIZE; i++) {
-                blockData += "00";
+                blockData += "--";
             }
 
             var key = inputBlock.track.toString() + inputBlock.sector.toString() + inputBlock.block.toString();

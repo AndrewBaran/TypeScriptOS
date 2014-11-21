@@ -107,6 +107,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellGetSchedule, "getschedule", " - Displays the current scheduling algorithm.");
             this.commandList[this.commandList.length] = sc;
 
+            // ls
+            sc = new TSOS.ShellCommand(this.shellLS, "ls", " Displays the files in the current directory.");
+            this.commandList[this.commandList.length] = sc;
+
             // create <filename>
             sc = new TSOS.ShellCommand(this.shellCreate, "create", " <filename> - Creates a new file with the name <filename>.");
             this.commandList[this.commandList.length] = sc;
@@ -605,6 +609,23 @@ var TSOS;
             var schedulingType = _Scheduler.getSchedulingType();
 
             _StdOut.putText("Scheduling algorithm: " + schedulingType);
+        };
+
+        // Lists the fileNames in the current directory
+        Shell.prototype.shellLS = function () {
+            _Mode_Bit = _Modes.KERNEL;
+
+            var fileNameList = _KrnFileSystemDriver.getFileNames();
+
+            _Mode_Bit = _Modes.USER;
+
+            _StdOut.putText("Files on disk: ");
+            _StdOut.advanceLine();
+
+            for (var i = 0; i < fileNameList.length; i++) {
+                _StdOut.putText(fileNameList[i]);
+                _StdOut.advanceLine();
+            }
         };
 
         // Creates a new file in the file system with the name <filename>

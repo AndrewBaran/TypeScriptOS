@@ -170,6 +170,33 @@ module TSOS {
             }
 
             return outputString;
-        }
+
+        } // stringToHex()
+
+        // Takes in a string of hex symbols and returns a string with the corresponding character values
+        public static hexToString(inputString: string): string {
+
+            // Parse two hex values at a time, turning them into characters
+            var index: number = 0;
+            var currentSymbols: string = "";
+            var characterValue: number = 0;
+            var correctCharacter: string = "";
+
+            var outputString: string = "";
+
+            while(index < inputString.length) {
+
+                currentSymbols = inputString.charAt(index) + inputString.charAt(index + 1);
+                index += 2;
+
+                characterValue = parseInt(currentSymbols, 16);
+                correctCharacter = String.fromCharCode(characterValue);
+
+                outputString += correctCharacter;
+            }
+
+            return outputString;
+
+        } // hexToString()
     }
 }

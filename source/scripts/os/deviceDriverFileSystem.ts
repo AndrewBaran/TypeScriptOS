@@ -25,7 +25,7 @@ module TSOS {
 
 				// Pad with twice the hex symbols, as 1 byte = 2 hex
 				else {
-					defaultValue += "00";
+					defaultValue += "--";
 				}
 			}
 
@@ -96,6 +96,9 @@ module TSOS {
 						var nextBlock = newRow.insertCell();
 						nextBlock.innerHTML = block.nextBlock;
 
+						// Replace all the occurences of - with 0 to display
+						// block.data.replace(/-/g, "0");
+						
 						// Data
 						var dataCell = newRow.insertCell();
 						dataCell.innerHTML = block.data;
@@ -105,6 +108,49 @@ module TSOS {
 
 		} // displayFileSystem()
 
+		// Returns an array of strings holding each file name
+		public getFileNames(): string[] {
+
+			var outputFileNames: string [] = [];
+
+			for(var trackNumber: number = 0; trackNumber < 1; trackNumber++) {
+				for(var sectorNumber: number = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+					for(var blockNumber: number = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+
+						// Skip master boot record
+						if(trackNumber === 0 && sectorNumber === 0 && blockNumber === 0) {
+							continue;
+						}
+
+						// Check if block is in use
+						var currentDirectoryBlock: TSOS.Block = this.getBlock(trackNumber, sectorNumber, blockNumber);
+
+						if(currentDirectoryBlock.inUse) {
+
+							// Get fileName
+							var hexFileName: string = "";
+
+							var index: number = 0;
+							var currentChar: string = "";
+
+							while((currentChar = currentDirectoryBlock.data.charAt(index)) != "-") {
+
+								hexFileName += currentChar;
+								index++;
+							}
+
+							var fileName: string = Utils.hexToString(hexFileName);
+
+							outputFileNames.push(fileName);
+						}
+					}
+				}
+			}
+
+			return outputFileNames;
+		}
+
+		// TODO Make it so dupliciate file name writes over previous file name
 		// Creates a file in the file system
 		public createFile(fileName: string, hiddenFile?: boolean): boolean {
 
@@ -245,13 +291,15 @@ module TSOS {
 
 			// Pad until data block is full
 			for(var i: number = inputBlock.data.length / 2; i < _FileConstants.DATA_SIZE; i++) {
-				blockData += "00";
+				blockData += "--";
 			}
 
 			var key: string = inputBlock.track.toString() + inputBlock.sector.toString() + inputBlock.block.toString();
 			sessionStorage.setItem(key, blockData);
 
 			return true;
-		}
+
+		} // updateBlock()
+
 	}
 }
