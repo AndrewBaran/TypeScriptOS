@@ -223,6 +223,15 @@ var TSOS;
                 currentDataBlock.nextSector = "-";
                 currentDataBlock.nextBlock = "-";
 
+                // Set dataBlock data to all -'s
+                var dataString = "";
+
+                for (var i = 0; i < _FileConstants.DATA_SIZE; i++) {
+                    dataString += "-";
+                }
+
+                currentDataBlock.data = dataString;
+
                 // Update storage of these two blocks
                 this.updateBlock(currentDirectoryBlock);
                 this.updateBlock(currentDataBlock);
@@ -350,6 +359,11 @@ var TSOS;
                     // Find a new block
                     var nextDataBlock = this.findNewBlock();
 
+                    // Can't find new block to write to
+                    if (nextDataBlock === null) {
+                        return false;
+                    }
+
                     // Set currentDataBlock to point to the nextDataBlock
                     dataBlock.nextTrack = nextDataBlock.track.toString();
                     dataBlock.nextSector = nextDataBlock.sector.toString();
@@ -371,11 +385,50 @@ var TSOS;
                     dataBlock = nextDataBlock;
                 }
             }
+
+            return true;
         };
 
         DeviceDriverFileSystem.prototype.deleteFile = function (fileName) {
-            // FInd corresponding directory block
+            // Find corresponding directory block
             var directoryBlockFound = false;
+
+            for (var trackNumber = 0; trackNumber < 1; trackNumber++) {
+                for (var sectorNumber = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+                    for (var blockNumber = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+                        var currentDirectoryBlock = this.getBlock(trackNumber, sectorNumber, blockNumber);
+                        var dataString = TSOS.Utils.hexToString(currentDirectoryBlock.data);
+
+                        if (dataString === fileName) {
+                            directoryBlockFound = true;
+                            break;
+                        }
+                    }
+
+                    if (directoryBlockFound) {
+                        break;
+                    }
+                }
+
+                if (directoryBlockFound) {
+                    break;
+                }
+            }
+
+            // Get first block of this file
+            var track = parseInt(currentDirectoryBlock.nextTrack, 10);
+            var sector = parseInt(currentDirectoryBlock.nextSector, 10);
+            var block = parseInt(currentDirectoryBlock.nextBlock, 10);
+
+            var dataBlock = this.getBlock(track, sector, block);
+
+            // Delete the block and its associated chain
+            this.eraseBlockChain(dataBlock, true);
+
+            // Set the directory block to not in use
+            currentDirectoryBlock.inUse = false;
+
+            this.updateBlock(currentDirectoryBlock);
 
             return true;
         };
@@ -440,7 +493,7 @@ var TSOS;
             return null;
         };
 
-        // Takes the starting block in a chain and set each block after it to not in use
+        // Sets each block in a block chain (including first block when deleting) to not in use
         DeviceDriverFileSystem.prototype.eraseBlockChain = function (startingBlock, deletingFile) {
             if (typeof deletingFile === "undefined") { deletingFile = false; }
             var currentBlock = null;
@@ -471,7 +524,6 @@ var TSOS;
                 this.updateBlock(currentBlock);
 
                 if (currentBlock.nextTrack === "-" || currentBlock.nextSector === "-" || currentBlock.nextBlock === "-") {
-                    console.log("Done erasing");
                     stillErasing = false;
                 } else {
                     var track = parseInt(currentBlock.nextTrack, 10);

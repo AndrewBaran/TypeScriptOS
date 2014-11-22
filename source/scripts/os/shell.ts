@@ -911,11 +911,17 @@ module TSOS {
         			// Write contents to the file
         			_Mode_Bit = _Modes.KERNEL;
 
-        			_KrnFileSystemDriver.writeFile(fileName, contentToWrite);
+        			var writeResult: boolean = _KrnFileSystemDriver.writeFile(fileName, contentToWrite);
 
         			_Mode_Bit = _Modes.USER;
 
-        			_StdOut.putText(contentToWrite + " written to file " + fileName + ".");
+                    if(writeResult) {
+                        _StdOut.putText(contentToWrite + " written to file " + fileName + ".");
+                    }
+
+                    else {
+                        _StdOut.putText("Error: disk full. Couldn't write to file.");
+                    }
 
         			// Update the file system display
         			_KrnFileSystemDriver.displayFileSystem();
@@ -964,6 +970,9 @@ module TSOS {
         			var deleteResult: boolean = _KrnFileSystemDriver.deleteFile(fileName);
 
         			_Mode_Bit = _Modes.USER;
+
+                    // Update display
+                    _KrnFileSystemDriver.displayFileSystem();
 
         			if(deleteResult) {
         				_StdOut.putText("File " + fileName + " was successfully deleted.");

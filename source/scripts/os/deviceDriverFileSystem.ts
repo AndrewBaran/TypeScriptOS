@@ -248,6 +248,16 @@ module TSOS {
 				currentDataBlock.nextSector = "-";
 				currentDataBlock.nextBlock = "-";
 
+
+				// Set dataBlock data to all -'s
+				var dataString: string = "";
+
+				for(var i: number = 0; i < _FileConstants.DATA_SIZE; i++) {
+					dataString += "-";
+				}
+
+				currentDataBlock.data = dataString;
+
 				// Update storage of these two blocks
 				this.updateBlock(currentDirectoryBlock);
 				this.updateBlock(currentDataBlock);
@@ -334,7 +344,7 @@ module TSOS {
 
 		} // readFile()
 
-		public writeFile(fileName: string, contentToWrite: string): void {
+		public writeFile(fileName: string, contentToWrite: string): boolean {
 
 			var directoryBlockFound: boolean = false;
 
@@ -393,12 +403,16 @@ module TSOS {
 					stillWriting = false;
 				}
 
-				// TODO Implement
-				// Find a new block to write to
+				// Find a new block to write to and add it to the block chain
 				else {
 
 					// Find a new block
 					var nextDataBlock: TSOS.Block = this.findNewBlock();
+
+					// Can't find new block to write to
+					if(nextDataBlock === null) {
+						return false;
+					}
 
 					// Set currentDataBlock to point to the nextDataBlock
 					dataBlock.nextTrack = nextDataBlock.track.toString();
@@ -423,13 +437,55 @@ module TSOS {
 
 			}
 
+			return true;
+
 		} // writeFile()
 
 		public deleteFile(fileName: string): boolean {
 
-			// FInd corresponding directory block
-
+			// Find corresponding directory block
 			var directoryBlockFound: boolean = false;
+
+			for(var trackNumber: number = 0; trackNumber < 1; trackNumber++) {
+				for(var sectorNumber: number = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+					for(var blockNumber: number = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+
+						var currentDirectoryBlock: TSOS.Block = this.getBlock(trackNumber, sectorNumber, blockNumber);
+						var dataString: string = Utils.hexToString(currentDirectoryBlock.data);
+
+						if(dataString === fileName) {
+
+							directoryBlockFound = true;
+							break;
+						}
+					}
+
+					if(directoryBlockFound) {
+						break;
+					}
+
+				}
+
+				if(directoryBlockFound) {
+					break;
+				}
+
+			}
+
+			// Get first block of this file
+			var track: number = parseInt(currentDirectoryBlock.nextTrack, 10);
+			var sector: number = parseInt(currentDirectoryBlock.nextSector, 10);
+			var block: number = parseInt(currentDirectoryBlock.nextBlock, 10);
+
+			var dataBlock: TSOS.Block = this.getBlock(track, sector, block); 
+
+			// Delete the block and its associated chain
+			this.eraseBlockChain(dataBlock, true);
+
+			// Set the directory block to not in use
+			currentDirectoryBlock.inUse = false;
+
+			this.updateBlock(currentDirectoryBlock);
 
 			return true;
 		}
@@ -504,7 +560,7 @@ module TSOS {
 
 		} // findNewBlock()
 
-		// Takes the starting block in a chain and set each block after it to not in use
+		// Sets each block in a block chain (including first block when deleting) to not in use
 		private eraseBlockChain(startingBlock: TSOS.Block, deletingFile: boolean = false): void {
 
 			var currentBlock: TSOS.Block = null;
@@ -541,7 +597,6 @@ module TSOS {
 
 				if(currentBlock.nextTrack === "-" || currentBlock.nextSector === "-" || currentBlock.nextBlock === "-") {
 
-					console.log("Done erasing");
 					stillErasing = false;
 				}
 
