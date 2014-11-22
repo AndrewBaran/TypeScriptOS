@@ -39,7 +39,12 @@ var TSOS;
         Scheduler.prototype.schedule = function () {
             switch (this.schedulingType) {
                 case "rr":
-                    _Kernel.krnTrace("Scheduling programs using round robin.");
+                case "fcfs":
+                    if (this.schedulingType === "rr") {
+                        _Kernel.krnTrace("Scheduling programs using round robin.");
+                    } else {
+                        _Kernel.krnTrace("Scheduling programs using first-come first-serve.");
+                    }
 
                     // Take items off resident queue and put into ready queue
                     var queueLength = _ResidentQueue.length;
@@ -54,7 +59,7 @@ var TSOS;
                     _ResidentQueue = [];
 
                     // Reset quantum (used if someone loads during runall)
-                    if (!_CPU.isExecuting) {
+                    if (!_CPU.isExecuting && this.schedulingType === "rr") {
                         this.resetQuantum();
                     }
 
@@ -62,7 +67,7 @@ var TSOS;
                         _ReadyQueue.q[j].status = _ProcessStates.READY;
                     }
 
-                    // Seek currentPCB to running
+                    // Set currentPCB to running
                     _CurrentPCB = _ReadyQueue.peek();
                     _CurrentPCB.status = _ProcessStates.RUNNING;
 
@@ -72,10 +77,6 @@ var TSOS;
                     // Log the scheduling event
                     _Kernel.krnTrace("Process state of PID " + _CurrentPCB.processID + " loaded.");
 
-                    break;
-
-                case "fcfs":
-                    console.log("First-come first-serve scheduling");
                     break;
 
                 case "priority":

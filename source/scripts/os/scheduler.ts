@@ -51,10 +51,16 @@ module TSOS {
 			// Select appropriate scheduling depending on type
 			switch(this.schedulingType) {
 
-				// Round robin
-				case "rr":
+				// Round robin and fcfs (very similar; only minor changes necessary for rr)
+				case "rr": case "fcfs":
 
-					_Kernel.krnTrace("Scheduling programs using round robin.");
+					if(this.schedulingType === "rr") {
+						_Kernel.krnTrace("Scheduling programs using round robin.");
+					}
+
+					else {
+						_Kernel.krnTrace("Scheduling programs using first-come first-serve.");
+					}
 
 					// Take items off resident queue and put into ready queue
 					var queueLength: number = _ResidentQueue.length;
@@ -70,7 +76,7 @@ module TSOS {
 					_ResidentQueue = [];
 
 					// Reset quantum (used if someone loads during runall)
-					if(!_CPU.isExecuting) {
+					if(!_CPU.isExecuting && this.schedulingType === "rr") {
 						this.resetQuantum();
 					}
 
@@ -79,7 +85,7 @@ module TSOS {
 						_ReadyQueue.q[j].status = _ProcessStates.READY;
 					}
 
-					// Seek currentPCB to running
+					// Set currentPCB to running
 					_CurrentPCB = _ReadyQueue.peek();
 					_CurrentPCB.status = _ProcessStates.RUNNING;
 
@@ -89,12 +95,6 @@ module TSOS {
 					// Log the scheduling event
                 	_Kernel.krnTrace("Process state of PID " + _CurrentPCB.processID + " loaded.");
 
-					break;
-
-				// First-come first-serve
-				case "fcfs":
-
-					console.log("First-come first-serve scheduling");
 					break;
 
 				// Priority
