@@ -119,6 +119,10 @@ var TSOS;
             sc = new TSOS.ShellCommand(this.shellRead, "read", " <filename> - Read the contents of the file <filename>.");
             this.commandList[this.commandList.length] = sc;
 
+            // write <filename>
+            sc = new TSOS.ShellCommand(this.shellWrite, "write", " <filename> \"Contents\" - Write the contents within the double quotes to the file <filename>.");
+            this.commandList[this.commandList.length] = sc;
+
             // format
             sc = new TSOS.ShellCommand(this.shellFormat, "format", " - Formats the disk back to its default state.");
             this.commandList[this.commandList.length] = sc;
@@ -687,7 +691,6 @@ var TSOS;
                 }
 
                 if (fileFound) {
-                    console.log("File found on disk. Read it.");
                     var fileContents = _KrnFileSystemDriver.readFile(fileName);
 
                     _StdOut.putText("Contents of file " + fileName + ": ");
@@ -695,6 +698,56 @@ var TSOS;
 
                     _StdOut.putText(fileContents);
                     _StdOut.advanceLine();
+                } else {
+                    _StdOut.putText("Error! File not found on disk.");
+                }
+            }
+        };
+
+        // Write the specified contents to the file specified
+        Shell.prototype.shellWrite = function (args) {
+            // Invalid arguments
+            if (args.length < 2) {
+                _StdOut.putText("Usage: write <filename> \"contents\"  Please supply a filename.");
+            } else {
+                console.log(args);
+                console.log(args.length);
+
+                var contentToWrite = "";
+
+                for (var i = 1; i < args.length; i++) {
+                    contentToWrite += args[i];
+
+                    // Add space for all but last iteration
+                    if (!((i + 1) === args.length)) {
+                        contentToWrite += " ";
+                    }
+                }
+
+                // Strip off the quotation marks
+                contentToWrite = contentToWrite.substring(1, contentToWrite.length);
+                contentToWrite = contentToWrite.substring(0, contentToWrite.length - 1);
+
+                console.log("Content: " + contentToWrite);
+
+                var fileName = args[0];
+                var fileFound = false;
+
+                var directoryFiles = _KrnFileSystemDriver.getFileNames();
+
+                for (var i = 0; i < directoryFiles.length; i++) {
+                    if (directoryFiles[i] === fileName) {
+                        fileFound = true;
+                        break;
+                    }
+                }
+
+                if (fileFound) {
+                    // Write contents to the file
+                    _KrnFileSystemDriver.writeFile(fileName, contentToWrite);
+
+                    // Update the file system display
+                    _KrnFileSystemDriver.displayFileSystem();
                 } else {
                     _StdOut.putText("Error! File not found on disk.");
                 }

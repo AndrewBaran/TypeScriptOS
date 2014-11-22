@@ -249,7 +249,6 @@ var TSOS;
                         var currentDirectoryBlock = this.getBlock(trackNumber, sectorNumber, blockNumber);
 
                         var dataString = TSOS.Utils.hexToString(currentDirectoryBlock.data);
-                        console.log("String: " + dataString);
 
                         if (dataString === fileName) {
                             directoryBlockFound = true;
@@ -267,16 +266,12 @@ var TSOS;
                 }
             }
 
-            console.log("Found file " + fileName);
-
             var outputString = "";
             var stillReading = true;
 
             var key = currentDirectoryBlock.nextTrack + currentDirectoryBlock.nextSector + currentDirectoryBlock.nextBlock;
 
             while (stillReading) {
-                console.log("Reading the file");
-
                 // Get data block
                 var track = parseInt(key.charAt(0), 10);
                 var sector = parseInt(key.charAt(1), 10);
@@ -287,11 +282,9 @@ var TSOS;
                 var dataString = TSOS.Utils.hexToString(dataBlock.data);
 
                 outputString += dataString;
-                console.log(outputString);
 
                 // Check if at end of block chain
                 if (dataBlock.nextTrack === "-" || dataBlock.nextSector === "-" || dataBlock.nextBlock === "-") {
-                    console.log("Stop reading.");
                     stillReading = false;
                 } else {
                     key = dataBlock.nextTrack + dataBlock.nextSector + dataBlock.nextBlock;
@@ -299,6 +292,60 @@ var TSOS;
             }
 
             return outputString;
+        };
+
+        DeviceDriverFileSystem.prototype.writeFile = function (fileName, contentToWrite) {
+            var directoryBlockFound = false;
+
+            for (var trackNumber = 0; trackNumber < 1; trackNumber++) {
+                for (var sectorNumber = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+                    for (var blockNumber = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+                        var currentDirectoryBlock = this.getBlock(trackNumber, sectorNumber, blockNumber);
+
+                        var dataString = TSOS.Utils.hexToString(currentDirectoryBlock.data);
+
+                        if (currentDirectoryBlock.inUse && (dataString === fileName)) {
+                            directoryBlockFound = true;
+                            break;
+                        }
+                    }
+
+                    if (directoryBlockFound) {
+                        break;
+                    }
+                }
+
+                if (directoryBlockFound) {
+                    break;
+                }
+            }
+
+            var track = parseInt(currentDirectoryBlock.nextTrack, 10);
+            var sector = parseInt(currentDirectoryBlock.nextSector, 10);
+            var block = parseInt(currentDirectoryBlock.nextBlock, 10);
+
+            var dataBlock = this.getBlock(track, sector, block);
+
+            var stillWriting = true;
+
+            while (contentToWrite.length > 0 && stillWriting) {
+                var currentContent = contentToWrite.substring(0, _FileConstants.DATA_SIZE);
+                contentToWrite = contentToWrite.substring(_FileConstants.DATA_SIZE);
+
+                // Convert currentContent to hex
+                var hexString = TSOS.Utils.stringToHex(currentContent);
+
+                dataBlock.data = hexString;
+
+                // Write data back to session storage
+                this.updateBlock(dataBlock);
+
+                // No more content to write
+                if (contentToWrite.length === 0) {
+                    stillWriting = false;
+                } else {
+                }
+            }
         };
 
         // Resets the disk to default state

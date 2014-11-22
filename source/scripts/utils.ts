@@ -195,8 +195,6 @@ module TSOS {
                 return false;
             }
 
-            console.log("Is " + inputString + " valid: " + isValid);
-
             return isValid;
 
         } // isHex()
@@ -219,8 +217,6 @@ module TSOS {
                 currentSymbols = inputString.charAt(index) + inputString.charAt(index + 1);
                 index += 2;
 
-                console.log("Hex: " + currentSymbols);
-
                 if(Utils.isHex(currentSymbols)) {
 
                     characterValue = parseInt(currentSymbols, 16);
@@ -230,18 +226,14 @@ module TSOS {
                 }
 
                 else {
-
-                    console.log("Hex was not valid. Break");
                     errorOccured = true;
                 }
 
             }
 
-            console.log("Returning string: " + outputString);
-
             return outputString;
 
         } // hexToString()
-
+ 
     }
 }

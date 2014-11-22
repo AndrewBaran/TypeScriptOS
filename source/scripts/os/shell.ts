@@ -141,6 +141,10 @@ module TSOS {
             sc = new ShellCommand(this.shellRead, "read", " <filename> - Read the contents of the file <filename>.");
             this.commandList[this.commandList.length] = sc;
 
+            // write <filename>
+            sc = new ShellCommand(this.shellWrite, "write", " <filename> \"Contents\" - Write the contents within the double quotes to the file <filename>.");
+            this.commandList[this.commandList.length] = sc;
+
             // format
             sc = new ShellCommand(this.shellFormat, "format", " - Formats the disk back to its default state.");
             this.commandList[this.commandList.length] = sc;
@@ -829,7 +833,6 @@ module TSOS {
 
         		if(fileFound) {
 
-        			console.log("File found on disk. Read it.");
         			var fileContents: string = _KrnFileSystemDriver.readFile(fileName);
 
 	        		_StdOut.putText("Contents of file " + fileName + ": ");
@@ -845,6 +848,71 @@ module TSOS {
         	}
 
         } // shellRead()
+
+        // Write the specified contents to the file specified
+        public shellWrite(args: string[]): void {
+
+        	// Invalid arguments
+        	if(args.length < 2) {
+        		_StdOut.putText("Usage: write <filename> \"contents\"  Please supply a filename.");
+        	}
+
+        	else {
+
+        		console.log(args);
+        		console.log(args.length);
+
+        		var contentToWrite: string = "";
+
+        		// TODO BAD WAY OF PARSING CONTENTS; FIX ME
+        		// Combine each of the additional arguments (the contents) into a single unified string
+        		for(var i: number = 1; i < args.length; i++) {
+
+        			contentToWrite += args[i];
+
+        			// Add space for all but last iteration
+        			if(!((i + 1) === args.length)) {
+        				contentToWrite += " ";
+        			}
+        		}
+
+        		// Strip off the quotation marks
+        		contentToWrite = contentToWrite.substring(1, contentToWrite.length);
+        		contentToWrite = contentToWrite.substring(0, contentToWrite.length - 1);
+
+        		console.log("Content: " + contentToWrite);
+
+        		var fileName: string = args[0];
+        		var fileFound: boolean = false;
+
+        		var directoryFiles: string[] = _KrnFileSystemDriver.getFileNames();
+
+        		// See if the file exists on the disk
+        		for(var i: number = 0; i < directoryFiles.length; i++) {
+
+        			if(directoryFiles[i] === fileName) {
+
+        				fileFound = true;
+        				break;
+        			}
+        		}
+
+        		if(fileFound) {
+
+        			// Write contents to the file
+        			_KrnFileSystemDriver.writeFile(fileName, contentToWrite);
+
+        			// Update the file system display
+        			_KrnFileSystemDriver.displayFileSystem();
+        		}
+
+        		else {
+					_StdOut.putText("Error! File not found on disk.");        			
+        		}
+
+        	}
+
+        } // shellWrite()
 
         // Formats the disk back to its default state
         public shellFormat(): void {

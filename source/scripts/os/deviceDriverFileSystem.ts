@@ -282,7 +282,6 @@ module TSOS {
 						var currentDirectoryBlock: TSOS.Block = this.getBlock(trackNumber, sectorNumber, blockNumber);
 
 						var dataString: string = Utils.hexToString(currentDirectoryBlock.data);
-						console.log("String: " + dataString);
 
 						if(dataString === fileName) {
 
@@ -301,8 +300,6 @@ module TSOS {
 				}
 			}
 
-			console.log("Found file " + fileName);
-
 			var outputString: string = "";
 			var stillReading: boolean = true;
 
@@ -310,8 +307,6 @@ module TSOS {
 
 			// Read the file
 			while(stillReading) {
-
-				console.log("Reading the file");
 
 				// Get data block
 				var track: number = parseInt(key.charAt(0), 10);
@@ -323,12 +318,9 @@ module TSOS {
 				var dataString: string = Utils.hexToString(dataBlock.data);
 
 				outputString += dataString;
-				console.log(outputString);
 
 				// Check if at end of block chain
 				if(dataBlock.nextTrack === "-" || dataBlock.nextSector === "-" || dataBlock.nextBlock === "-") {
-
-					console.log("Stop reading.");
 					stillReading = false;
 				}
 
@@ -341,6 +333,72 @@ module TSOS {
 			return outputString;
 
 		} // readFile()
+
+		public writeFile(fileName: string, contentToWrite: string): void {
+
+			var directoryBlockFound: boolean = false;
+
+			for(var trackNumber: number = 0; trackNumber < 1; trackNumber++) {
+				for(var sectorNumber: number = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+					for(var blockNumber: number = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+
+						var currentDirectoryBlock: TSOS.Block = this.getBlock(trackNumber, sectorNumber, blockNumber);
+
+						var dataString: string = Utils.hexToString(currentDirectoryBlock.data);
+
+						if(currentDirectoryBlock.inUse && (dataString === fileName)) {
+
+							directoryBlockFound = true;
+							break;
+						}
+					}
+
+					if(directoryBlockFound) {
+						break;
+					}
+				}
+
+				if(directoryBlockFound) {
+					break;
+				}
+			}
+
+			var track: number = parseInt(currentDirectoryBlock.nextTrack, 10);
+			var sector: number = parseInt(currentDirectoryBlock.nextSector, 10);
+			var block: number = parseInt(currentDirectoryBlock.nextBlock, 10);
+
+			var dataBlock: TSOS.Block = this.getBlock(track, sector, block);
+
+			var stillWriting: boolean = true;
+
+			// Write the content to the file
+			while(contentToWrite.length > 0 && stillWriting) {
+
+				var currentContent: string = contentToWrite.substring(0, _FileConstants.DATA_SIZE);
+				contentToWrite = contentToWrite.substring(_FileConstants.DATA_SIZE);
+
+				// Convert currentContent to hex
+				var hexString: string = Utils.stringToHex(currentContent);
+
+				dataBlock.data = hexString;
+
+				// Write data back to session storage
+				this.updateBlock(dataBlock);
+
+				// No more content to write
+				if(contentToWrite.length === 0) {
+					stillWriting = false;
+				}
+
+				// TODO Implement
+				// Find a new block to write to
+				else {
+
+				}
+
+			}
+
+		}
 
 		// Resets the disk to default state
 		public formatDisk(): void {
