@@ -85,6 +85,13 @@ interface Modes {
 var _Mode_Bit: number = 0;     // (currently unused)  0 = Kernel Mode, 1 = User Mode.  See page 21.
 var _Modes: Modes = {KERNEL: 1, USER: 0}; // States that the mode bit can be in (spoiler: there are 2)
 
+interface Locations {
+	MEMORY: string;
+	DISK: string;
+}
+
+var _Locations: Locations = {MEMORY: "Memory", DISK: "Disk"};
+
 // Main memory
 var _MemoryManager: TSOS.MemoryManager; // Abstraction layer above main memory
 

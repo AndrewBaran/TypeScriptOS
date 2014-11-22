@@ -245,6 +245,36 @@ module TSOS {
 
 		}
 
+		// Returns the contents of memory as a concatenated string
+		public getMemoryContents(processID: number): string {
+
+			var pcbFound: boolean = false;
+
+			// Check if process is in memory
+			for(var i: number = 0; i < _ReadyQueue.getSize(); i++) {
+
+				var currentPCB: TSOS.PCB = _ReadyQueue.q[i];
+
+				// PCB found and it was in memory
+				if(currentPCB.processID === processID && currentPCB.location === _Locations.MEMORY) {
+
+					pcbFound = true;
+				}
+			}
+
+			if(pcbFound) {
+
+				
+				
+				return "";
+			}
+
+			else {
+				return "";
+			}
+
+		}
+
 		// Determines if a given address is within a processID's memory limit
 		private validateAddress(address: number, processID: number): boolean {
 

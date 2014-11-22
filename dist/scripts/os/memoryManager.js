@@ -191,6 +191,26 @@ var TSOS;
             }
         };
 
+        // Returns the contents of memory as a concatenated string
+        MemoryManager.prototype.getMemoryContents = function (processID) {
+            var pcbFound = false;
+
+            for (var i = 0; i < _ReadyQueue.getSize(); i++) {
+                var currentPCB = _ReadyQueue.q[i];
+
+                // PCB found and it was in memory
+                if (currentPCB.processID === processID && currentPCB.location === _Locations.MEMORY) {
+                    pcbFound = true;
+                }
+            }
+
+            if (pcbFound) {
+                return "";
+            } else {
+                return "";
+            }
+        };
+
         // Determines if a given address is within a processID's memory limit
         MemoryManager.prototype.validateAddress = function (address, processID) {
             var pcbBase = _CurrentPCB.baseRegister;

@@ -33,6 +33,8 @@ var _OSclock = 0;
 var _Mode_Bit = 0;
 var _Modes = { KERNEL: 1, USER: 0 };
 
+var _Locations = { MEMORY: "Memory", DISK: "Disk" };
+
 // Main memory
 var _MemoryManager;
 
