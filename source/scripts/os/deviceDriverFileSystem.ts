@@ -369,6 +369,9 @@ module TSOS {
 
 			var dataBlock: TSOS.Block = this.getBlock(track, sector, block);
 
+			// Erase contents before writing
+			this.eraseBlockChain(dataBlock);
+
 			var stillWriting: boolean = true;
 
 			// Write the content to the file
@@ -394,6 +397,28 @@ module TSOS {
 				// Find a new block to write to
 				else {
 
+					// Find a new block
+					var nextDataBlock: TSOS.Block = this.findNewBlock();
+
+					// Set currentDataBlock to point to the nextDataBlock
+					dataBlock.nextTrack = nextDataBlock.track.toString();
+					dataBlock.nextSector = nextDataBlock.sector.toString();
+					dataBlock.nextBlock = nextDataBlock.block.toString();
+
+					// Set nextDataBlock to in use
+					nextDataBlock.inUse = true;
+
+					// Set nextDataBlock to point to no other block
+					nextDataBlock.nextTrack = "-";
+					nextDataBlock.nextSector = "-";
+					nextDataBlock.nextBlock = "-";
+
+					// Store these blocks back into storage
+					this.updateBlock(dataBlock);
+					this.updateBlock(nextDataBlock);
+
+					// Set dataBlock to this nextDataBlock
+					dataBlock = nextDataBlock;
 				}
 
 			}
@@ -402,7 +427,9 @@ module TSOS {
 
 		public deleteFile(fileName: string): boolean {
 
-			
+			// FInd corresponding directory block
+
+			var directoryBlockFound: boolean = false;
 
 			return true;
 		}
@@ -454,6 +481,81 @@ module TSOS {
 			return true;
 
 		} // updateBlock()
+
+		// Searches for an available block in the data section on the disk
+		private findNewBlock(): TSOS.Block {
+
+			for(var trackNumber: number = 1; trackNumber < _FileConstants.NUM_TRACKS; trackNumber++) {
+				for(var sectorNumber: number = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+					for(var blockNumber: number = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+
+						var currentDataBlock: TSOS.Block = this.getBlock(trackNumber, sectorNumber, blockNumber);
+
+						// Available block
+						if(!currentDataBlock.inUse) {
+							return currentDataBlock;
+						}
+					}
+				}
+			}
+
+			// No available blocks found
+			return null;
+
+		} // findNewBlock()
+
+		// Takes the starting block in a chain and set each block after it to not in use
+		private eraseBlockChain(startingBlock: TSOS.Block, deletingFile: boolean = false): void {
+
+			var currentBlock: TSOS.Block = null;
+			var stillErasing: boolean = false;
+
+			// Edge case for first block
+			if(deletingFile) {
+
+				startingBlock.inUse = false;
+				this.updateBlock(startingBlock);
+			}
+
+			// One block; don't do anything
+			if(startingBlock.nextTrack === "-" || startingBlock.nextSector === "-" || startingBlock.nextBlock === "-") {
+				return;
+			}
+
+			else {
+
+				var track: number = parseInt(startingBlock.nextTrack, 10);
+				var sector: number = parseInt(startingBlock.nextSector, 10);
+				var block: number = parseInt(startingBlock.nextBlock, 10);
+
+				currentBlock = this.getBlock(track, sector, block);
+
+				stillErasing = true;
+			}
+
+			while(stillErasing) {
+
+				currentBlock.inUse = false;
+
+				this.updateBlock(currentBlock);
+
+				if(currentBlock.nextTrack === "-" || currentBlock.nextSector === "-" || currentBlock.nextBlock === "-") {
+
+					console.log("Done erasing");
+					stillErasing = false;
+				}
+
+				else {
+
+					var track: number = parseInt(currentBlock.nextTrack, 10);
+					var sector: number = parseInt(currentBlock.nextSector, 10);
+					var block: number = parseInt(currentBlock.nextBlock, 10);
+
+					currentBlock = this.getBlock(track, sector, block);
+				}
+			}
+
+		} // eraseBlockChain()
 
 	}
 }

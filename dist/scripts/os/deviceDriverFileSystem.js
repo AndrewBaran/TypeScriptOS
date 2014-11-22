@@ -326,6 +326,9 @@ var TSOS;
 
             var dataBlock = this.getBlock(track, sector, block);
 
+            // Erase contents before writing
+            this.eraseBlockChain(dataBlock);
+
             var stillWriting = true;
 
             while (contentToWrite.length > 0 && stillWriting) {
@@ -344,11 +347,36 @@ var TSOS;
                 if (contentToWrite.length === 0) {
                     stillWriting = false;
                 } else {
+                    // Find a new block
+                    var nextDataBlock = this.findNewBlock();
+
+                    // Set currentDataBlock to point to the nextDataBlock
+                    dataBlock.nextTrack = nextDataBlock.track.toString();
+                    dataBlock.nextSector = nextDataBlock.sector.toString();
+                    dataBlock.nextBlock = nextDataBlock.block.toString();
+
+                    // Set nextDataBlock to in use
+                    nextDataBlock.inUse = true;
+
+                    // Set nextDataBlock to point to no other block
+                    nextDataBlock.nextTrack = "-";
+                    nextDataBlock.nextSector = "-";
+                    nextDataBlock.nextBlock = "-";
+
+                    // Store these blocks back into storage
+                    this.updateBlock(dataBlock);
+                    this.updateBlock(nextDataBlock);
+
+                    // Set dataBlock to this nextDataBlock
+                    dataBlock = nextDataBlock;
                 }
             }
         };
 
         DeviceDriverFileSystem.prototype.deleteFile = function (fileName) {
+            // FInd corresponding directory block
+            var directoryBlockFound = false;
+
             return true;
         };
 
@@ -391,6 +419,68 @@ var TSOS;
             sessionStorage.setItem(key, blockData);
 
             return true;
+        };
+
+        // Searches for an available block in the data section on the disk
+        DeviceDriverFileSystem.prototype.findNewBlock = function () {
+            for (var trackNumber = 1; trackNumber < _FileConstants.NUM_TRACKS; trackNumber++) {
+                for (var sectorNumber = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
+                    for (var blockNumber = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
+                        var currentDataBlock = this.getBlock(trackNumber, sectorNumber, blockNumber);
+
+                        // Available block
+                        if (!currentDataBlock.inUse) {
+                            return currentDataBlock;
+                        }
+                    }
+                }
+            }
+
+            // No available blocks found
+            return null;
+        };
+
+        // Takes the starting block in a chain and set each block after it to not in use
+        DeviceDriverFileSystem.prototype.eraseBlockChain = function (startingBlock, deletingFile) {
+            if (typeof deletingFile === "undefined") { deletingFile = false; }
+            var currentBlock = null;
+            var stillErasing = false;
+
+            // Edge case for first block
+            if (deletingFile) {
+                startingBlock.inUse = false;
+                this.updateBlock(startingBlock);
+            }
+
+            // One block; don't do anything
+            if (startingBlock.nextTrack === "-" || startingBlock.nextSector === "-" || startingBlock.nextBlock === "-") {
+                return;
+            } else {
+                var track = parseInt(startingBlock.nextTrack, 10);
+                var sector = parseInt(startingBlock.nextSector, 10);
+                var block = parseInt(startingBlock.nextBlock, 10);
+
+                currentBlock = this.getBlock(track, sector, block);
+
+                stillErasing = true;
+            }
+
+            while (stillErasing) {
+                currentBlock.inUse = false;
+
+                this.updateBlock(currentBlock);
+
+                if (currentBlock.nextTrack === "-" || currentBlock.nextSector === "-" || currentBlock.nextBlock === "-") {
+                    console.log("Done erasing");
+                    stillErasing = false;
+                } else {
+                    var track = parseInt(currentBlock.nextTrack, 10);
+                    var sector = parseInt(currentBlock.nextSector, 10);
+                    var block = parseInt(currentBlock.nextBlock, 10);
+
+                    currentBlock = this.getBlock(track, sector, block);
+                }
+            }
         };
         return DeviceDriverFileSystem;
     })(TSOS.DeviceDriver);
