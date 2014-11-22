@@ -398,6 +398,13 @@ module TSOS {
 
 			}
 
+		} // writeFile()
+
+		public deleteFile(fileName: string): boolean {
+
+			
+
+			return true;
 		}
 
 		// Resets the disk to default state
@@ -440,8 +447,6 @@ module TSOS {
 			for(var i: number = inputBlock.data.length / 2; i < _FileConstants.DATA_SIZE; i++) {
 				blockData += "--";
 			}
-
-			console.log("Block data size: " + blockData.length);
 
 			var key: string = inputBlock.track.toString() + inputBlock.sector.toString() + inputBlock.block.toString();
 			sessionStorage.setItem(key, blockData);

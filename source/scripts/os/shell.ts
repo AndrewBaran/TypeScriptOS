@@ -142,7 +142,11 @@ module TSOS {
             this.commandList[this.commandList.length] = sc;
 
             // write <filename>
-            sc = new ShellCommand(this.shellWrite, "write", " <filename> \"Contents\" - Write the contents within the double quotes to the file <filename>.");
+            sc = new ShellCommand(this.shellWrite, "write", " <filename> \"contents\" - Write the contents within the double quotes to the file <filename>.");
+            this.commandList[this.commandList.length] = sc;
+
+            // delete <filename>
+            sc = new ShellCommand(this.shellDelete, "delete", " <filename> - Delete the file <filename> from the disk.");
             this.commandList[this.commandList.length] = sc;
 
             // format
@@ -713,7 +717,6 @@ module TSOS {
             else {
 
                 var schedulingType: string = args[0];
-                console.log(schedulingType);
 
                 if(schedulingType === "rr" || schedulingType === "fcfs" || schedulingType === "priority") {
 
@@ -780,7 +783,7 @@ module TSOS {
 
             // Invalid file name
             else if(!Utils.isValidFileName(fileName)) {
-                _StdOut.putText("Error! Invalid filename. Only alphanumeric characters allowed.");
+                _StdOut.putText("Error! Invalid filename.");
             }
 
             // Valid filename; create the file
@@ -809,9 +812,15 @@ module TSOS {
 
         public shellRead(args: string[]): void {
 
+        	var fileName: string = args[0];
+
         	// Invalid arguments
         	if(args.length !== 1) {
         		_StdOut.putText("Usage: read <filename> - Please supply a filename.");
+        	}
+
+        	else if(!Utils.isValidFileName(fileName)) {
+        		_StdOut.putText("Error! Invalid filename.");
         	}
 
         	else {
@@ -852,15 +861,18 @@ module TSOS {
         // Write the specified contents to the file specified
         public shellWrite(args: string[]): void {
 
+        	var fileName: string = args[0];
+
         	// Invalid arguments
         	if(args.length < 2) {
         		_StdOut.putText("Usage: write <filename> \"contents\"  Please supply a filename.");
         	}
 
-        	else {
+        	else if(!Utils.isValidFileName(fileName)) {
+        		_StdOut.putText("Error! Invalid filename.");
+        	}
 
-        		console.log(args);
-        		console.log(args.length);
+        	else {
 
         		var contentToWrite: string = "";
 
@@ -880,9 +892,6 @@ module TSOS {
         		contentToWrite = contentToWrite.substring(1, contentToWrite.length);
         		contentToWrite = contentToWrite.substring(0, contentToWrite.length - 1);
 
-        		console.log("Content: " + contentToWrite);
-
-        		var fileName: string = args[0];
         		var fileFound: boolean = false;
 
         		var directoryFiles: string[] = _KrnFileSystemDriver.getFileNames();
@@ -900,7 +909,13 @@ module TSOS {
         		if(fileFound) {
 
         			// Write contents to the file
+        			_Mode_Bit = _Modes.KERNEL;
+
         			_KrnFileSystemDriver.writeFile(fileName, contentToWrite);
+
+        			_Mode_Bit = _Modes.USER;
+
+        			_StdOut.putText(contentToWrite + " written to file " + fileName + ".");
 
         			// Update the file system display
         			_KrnFileSystemDriver.displayFileSystem();
@@ -913,6 +928,61 @@ module TSOS {
         	}
 
         } // shellWrite()
+
+        public shellDelete(args: string[]): void {
+
+        	var fileName: string = args[0];
+
+        	// Invalid arguments
+        	if(args.length !== 1) {
+        		_StdOut.putText("Usage: delete <filename>  Please supply a filename.");
+        	}
+
+        	else if(!Utils.isValidFileName(fileName)) {
+        		_StdOut.putText("Error! Invalid filename.");
+        	}
+
+        	else {
+
+        		var directoryFiles: string[] = _KrnFileSystemDriver.getFileNames();
+
+        		var fileFound: boolean = false;
+
+        		for(var i: number = 0; i < directoryFiles.length; i++) {
+
+        			if(directoryFiles[i] === fileName) {
+
+        				fileFound = true;
+        				break;
+        			}
+        		} 
+
+        		if(fileFound) {
+
+        			_Mode_Bit = _Modes.KERNEL;
+
+        			var deleteResult: boolean = _KrnFileSystemDriver.deleteFile(fileName);
+
+        			_Mode_Bit = _Modes.USER;
+
+        			if(deleteResult) {
+        				_StdOut.putText("File " + fileName + " was successfully deleted.");
+        			}
+
+        			// This shouldn't happen
+        			else {
+        				_StdOut.putText("Error! File " + fileName + " couldn't be deleted.");	
+        			}
+
+        		}
+
+        		// File not found
+        		else {
+        			_StdOut.putText("Error! File not found on disk.");
+        		}
+        	}
+
+        } //shellDelete()
 
         // Formats the disk back to its default state
         public shellFormat(): void {

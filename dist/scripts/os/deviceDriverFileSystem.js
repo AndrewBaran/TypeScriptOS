@@ -348,6 +348,10 @@ var TSOS;
             }
         };
 
+        DeviceDriverFileSystem.prototype.deleteFile = function (fileName) {
+            return true;
+        };
+
         // Resets the disk to default state
         DeviceDriverFileSystem.prototype.formatDisk = function () {
             this.initializeStorage();
@@ -382,8 +386,6 @@ var TSOS;
             for (var i = inputBlock.data.length / 2; i < _FileConstants.DATA_SIZE; i++) {
                 blockData += "--";
             }
-
-            console.log("Block data size: " + blockData.length);
 
             var key = inputBlock.track.toString() + inputBlock.sector.toString() + inputBlock.block.toString();
             sessionStorage.setItem(key, blockData);

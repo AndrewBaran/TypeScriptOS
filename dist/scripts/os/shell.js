@@ -120,7 +120,11 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
 
             // write <filename>
-            sc = new TSOS.ShellCommand(this.shellWrite, "write", " <filename> \"Contents\" - Write the contents within the double quotes to the file <filename>.");
+            sc = new TSOS.ShellCommand(this.shellWrite, "write", " <filename> \"contents\" - Write the contents within the double quotes to the file <filename>.");
+            this.commandList[this.commandList.length] = sc;
+
+            // delete <filename>
+            sc = new TSOS.ShellCommand(this.shellDelete, "delete", " <filename> - Delete the file <filename> from the disk.");
             this.commandList[this.commandList.length] = sc;
 
             // format
@@ -604,7 +608,6 @@ var TSOS;
                 _StdOut.putText("Usage: setschedule <type>  Please supply a scheduling algorithm.");
             } else {
                 var schedulingType = args[0];
-                console.log(schedulingType);
 
                 if (schedulingType === "rr" || schedulingType === "fcfs" || schedulingType === "priority") {
                     _Scheduler.setSchedulingType(schedulingType);
@@ -654,7 +657,7 @@ var TSOS;
             if (args.length !== 1) {
                 _StdOut.putText("Usage: create <filename>  Please supply a filename.");
             } else if (!TSOS.Utils.isValidFileName(fileName)) {
-                _StdOut.putText("Error! Invalid filename. Only alphanumeric characters allowed.");
+                _StdOut.putText("Error! Invalid filename.");
             } else {
                 _Mode_Bit = _Modes.KERNEL;
 
@@ -674,9 +677,13 @@ var TSOS;
         };
 
         Shell.prototype.shellRead = function (args) {
+            var fileName = args[0];
+
             // Invalid arguments
             if (args.length !== 1) {
                 _StdOut.putText("Usage: read <filename> - Please supply a filename.");
+            } else if (!TSOS.Utils.isValidFileName(fileName)) {
+                _StdOut.putText("Error! Invalid filename.");
             } else {
                 var fileName = args[0];
                 var directoryFiles = _KrnFileSystemDriver.getFileNames();
@@ -706,13 +713,14 @@ var TSOS;
 
         // Write the specified contents to the file specified
         Shell.prototype.shellWrite = function (args) {
+            var fileName = args[0];
+
             // Invalid arguments
             if (args.length < 2) {
                 _StdOut.putText("Usage: write <filename> \"contents\"  Please supply a filename.");
+            } else if (!TSOS.Utils.isValidFileName(fileName)) {
+                _StdOut.putText("Error! Invalid filename.");
             } else {
-                console.log(args);
-                console.log(args.length);
-
                 var contentToWrite = "";
 
                 for (var i = 1; i < args.length; i++) {
@@ -728,9 +736,6 @@ var TSOS;
                 contentToWrite = contentToWrite.substring(1, contentToWrite.length);
                 contentToWrite = contentToWrite.substring(0, contentToWrite.length - 1);
 
-                console.log("Content: " + contentToWrite);
-
-                var fileName = args[0];
                 var fileFound = false;
 
                 var directoryFiles = _KrnFileSystemDriver.getFileNames();
@@ -744,10 +749,54 @@ var TSOS;
 
                 if (fileFound) {
                     // Write contents to the file
+                    _Mode_Bit = _Modes.KERNEL;
+
                     _KrnFileSystemDriver.writeFile(fileName, contentToWrite);
+
+                    _Mode_Bit = _Modes.USER;
+
+                    _StdOut.putText(contentToWrite + " written to file " + fileName + ".");
 
                     // Update the file system display
                     _KrnFileSystemDriver.displayFileSystem();
+                } else {
+                    _StdOut.putText("Error! File not found on disk.");
+                }
+            }
+        };
+
+        Shell.prototype.shellDelete = function (args) {
+            var fileName = args[0];
+
+            // Invalid arguments
+            if (args.length !== 1) {
+                _StdOut.putText("Usage: delete <filename>  Please supply a filename.");
+            } else if (!TSOS.Utils.isValidFileName(fileName)) {
+                _StdOut.putText("Error! Invalid filename.");
+            } else {
+                var directoryFiles = _KrnFileSystemDriver.getFileNames();
+
+                var fileFound = false;
+
+                for (var i = 0; i < directoryFiles.length; i++) {
+                    if (directoryFiles[i] === fileName) {
+                        fileFound = true;
+                        break;
+                    }
+                }
+
+                if (fileFound) {
+                    _Mode_Bit = _Modes.KERNEL;
+
+                    var deleteResult = _KrnFileSystemDriver.deleteFile(fileName);
+
+                    _Mode_Bit = _Modes.USER;
+
+                    if (deleteResult) {
+                        _StdOut.putText("File " + fileName + " was successfully deleted.");
+                    } else {
+                        _StdOut.putText("Error! File " + fileName + " couldn't be deleted.");
+                    }
                 } else {
                     _StdOut.putText("Error! File not found on disk.");
                 }
