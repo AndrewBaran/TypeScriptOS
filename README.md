@@ -77,11 +77,11 @@ Project 3 Checklist
 Final Project Checklist
 =======================
 
-- [ ] Add shell commands for the following disk operations
+- [x] Add shell commands for the following disk operations
 	- [x] create (filename) - create the file filename and display a message denoting success or failure
 	- [x] read (filename) - read and display the contents of filename or display an error if something went wrong
-	- [ ] write (filename) "data" - write the data inside the quotes to filename and display a message denoting success or failure
-	- [ ] delete (filename) - remove filename from storage and display a message denoting success or failure
+	- [x] write (filename) "data" - write the data inside the quotes to filename and display a message denoting success or failure
+	- [x] delete (filename) - remove filename from storage and display a message denoting success or failure
 	- [x] format - initialize all blocks in all sectors in all tracks and display a message denoting success or failure
 - [x] Add a shell command, ls, to list the files currently stored on the disk
 - [x] Add a shell command to allow the user to select a CPU scheduling algorithm - setschedule [rr, fcfs, priority]
