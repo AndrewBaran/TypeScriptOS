@@ -273,8 +273,8 @@ var TSOS;
 
                     var value = TSOS.Utils.decimalToHex(decimalValue);
 
-                    // Don't display PID or Z-flag in hex
-                    if (key === "processID" || key === "Zflag") {
+                    // Don't display PID, Z-flag, or Priority in hex
+                    if (key === "processID" || key === "Zflag" || key === "priority") {
                         value = decimalValue.toString(10);
                     }
 

@@ -94,7 +94,7 @@ Final Project Checklist
 	- [x] Develop your fsDD to insulate and encapsulate the implementation of the kernel-level I/O operations from the byte-level details of your individual blocks on the local storage
 - [ ] Add new scheduling algorithms to youe CPU scheduler (Default is RR)
 	- [ ] First-come, first-served (FCFS)
-	- [ ] Non-preemptive priority (You will need an optional load parameter here)
+	- [x] Non-preemptive priority (You will need an optional load parameter here)
 
 - [ ] Implement swapped virtual memory with enough physical memory for three concurrent user processes
 	- [ ] Allow OS to execute four concurrent prcess by writing roll-out and roll-in routines
