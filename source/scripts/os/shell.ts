@@ -153,6 +153,11 @@ module TSOS {
             sc = new ShellCommand(this.shellFormat, "format", " - Formats the disk back to its default state.");
             this.commandList[this.commandList.length] = sc;
 
+            // TODO Remove after testing is done
+            // test <pid>
+            sc = new ShellCommand(this.shellTest, "test", " <pid> - Tests rolling program out to the disk.");
+            this.commandList[this.commandList.length] = sc;
+
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -1018,6 +1023,16 @@ module TSOS {
         	}
 
         } // shellFormat()
+
+        // TODO Remove after testing is over
+        public shellTest(inputPID: string): void {
+
+            var pidValue: number = parseInt(inputPID, 10);
+
+            console.log("Rolling pid " + pidValue + " out to disk.");
+
+            _Kernel.programRollOut(pidValue);
+        }
 
     }
 }

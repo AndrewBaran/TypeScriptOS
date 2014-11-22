@@ -52,6 +52,7 @@ module TSOS {
 			switch(this.schedulingType) {
 
 				// Round robin and fcfs (very similar; only minor changes necessary for rr)
+				// TODO Make FCFS work like Priorirty by sorting by increasing arrival time
 				case "rr": case "fcfs":
 
 					if(this.schedulingType === "rr") {
@@ -166,7 +167,8 @@ module TSOS {
 					break;
 
 			} // switch
-		}
+
+		} // schedule()
 
 	}
 }

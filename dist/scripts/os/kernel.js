@@ -355,6 +355,45 @@ var TSOS;
             // Flip mode bit back
             _Mode_Bit = _Modes.USER;
         };
+
+        // TODO Implement
+        Kernel.prototype.programRollOut = function (processID) {
+            // Check if processID corresponds to a PCB in the Ready queue
+            var pcbFound = false;
+
+            for (var i = 0; i < _ReadyQueue.getSize(); i++) {
+                var currentPCB = _ReadyQueue.q[i];
+
+                if (currentPCB.processID === processID) {
+                    console.log("PCB found.");
+                    pcbFound = true;
+                    break;
+                }
+            }
+
+            if (pcbFound) {
+                // Create swap file as a hidden file
+                var fileName = "process" + processID + ".swp";
+
+                console.log("Swap file name: " + fileName);
+
+                _KrnFileSystemDriver.createFile(fileName, true);
+
+                // Write PCB memory contents to swap file
+                var memoryContents = "";
+
+                // Set this PCB to on disk
+                return true;
+            } else {
+                this.krnTrace("Error! Process ID " + processID + " not found.");
+                return false;
+            }
+        };
+
+        // TODO Implement
+        Kernel.prototype.programRollIn = function (processID) {
+            return true;
+        };
         return Kernel;
     })();
     TSOS.Kernel = Kernel;

@@ -425,5 +425,56 @@ module TSOS {
 
         } // contextSwitch()
 
+        // TODO Implement
+        public programRollOut(processID: number): boolean {
+
+            // Check if processID corresponds to a PCB in the Ready queue
+            var pcbFound: boolean = false;
+
+            for(var i: number = 0; i < _ReadyQueue.getSize(); i++) {
+
+                var currentPCB: TSOS.PCB = _ReadyQueue.q[i];
+
+                if(currentPCB.processID === processID) {
+                    
+                    console.log("PCB found.");
+                    pcbFound = true;
+                    break;
+                }
+            } 
+
+            if(pcbFound) {
+
+                // Create swap file as a hidden file
+                var fileName: string = "process" + processID + ".swp";
+
+                console.log("Swap file name: " + fileName);
+
+                _KrnFileSystemDriver.createFile(fileName, true);
+
+                // Write PCB memory contents to swap file
+                var memoryContents: string = "";
+
+                // Set this PCB to on disk
+
+                return true;
+            }
+
+            // PCB was not found
+            else {
+
+                this.krnTrace("Error! Process ID " + processID + " not found.");
+                return false;
+            }
+
+        } // programRollOut()
+
+        // TODO Implement
+        public programRollIn(processID: number): boolean {
+
+            return true;
+        
+        } // programRollIn()
+
     }
 }
