@@ -192,6 +192,18 @@ var TSOS;
 
             return outputString;
         };
+
+        // Comparing function that compares two PCB's according to priority
+        // Higher priority PCB placed before lower priority PCB
+        Utils.compareUsingPriority = function (firstPCB, secondPCB) {
+            if (firstPCB.priority > secondPCB.priority) {
+                return -1;
+            } else if (firstPCB.priority < secondPCB.priority) {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
         return Utils;
     })();
     TSOS.Utils = Utils;

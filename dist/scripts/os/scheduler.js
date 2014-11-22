@@ -80,7 +80,59 @@ var TSOS;
                     break;
 
                 case "priority":
-                    console.log("Priority scheduling");
+                    _Kernel.krnTrace("Scheduling programs using priority.");
+
+                    var listToSort = [];
+
+                    for (var i = 0; i < _ResidentQueue.length; i++) {
+                        var currentPCB = _ResidentQueue[i];
+                        listToSort.push(currentPCB);
+                    }
+
+                    // Clear resident queue
+                    _ResidentQueue = [];
+
+                    // Get all items, except the first item, off the ready queue
+                    var readyQueueLength = _ReadyQueue.getSize();
+
+                    for (var i = 1; i < readyQueueLength; i++) {
+                        var currentPCB = _ReadyQueue.q[i];
+                        listToSort.push(currentPCB);
+                    }
+
+                    // Clear ready queue if it has elements; save first element (one in use by CPU)
+                    if (_ReadyQueue.getSize() !== 0) {
+                        var pcbInUse = _ReadyQueue.dequeue();
+
+                        _ReadyQueue = new TSOS.Queue();
+                        _ReadyQueue.enqueue(pcbInUse);
+                    }
+
+                    // Sort the list into decreasing priority
+                    listToSort.sort(TSOS.Utils.compareUsingPriority);
+
+                    console.log("Sorted list: " + listToSort);
+
+                    // Push sorted list items back into the ready queue
+                    var listLength = listToSort.length;
+
+                    for (var i = 0; i < listLength; i++) {
+                        var currentPCB = listToSort[i];
+
+                        // Set status to ready
+                        currentPCB.status = _ProcessStates.READY;
+
+                        // Add PCB to the ready queue
+                        _ReadyQueue.enqueue(currentPCB);
+                    }
+
+                    // Set scheduler falg
+                    this.inUse = true;
+
+                    // Set global PCB to first item
+                    _CurrentPCB = _ReadyQueue.peek();
+                    _CurrentPCB.status = _ProcessStates.RUNNING;
+
                     break;
 
                 default:

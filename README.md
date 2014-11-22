@@ -89,9 +89,9 @@ Final Project Checklist
 - [x] Implement a file system in HTML5 web storage
 - [x] Include a file system viewer in your OS interface
 
-- [ ] Develop a FIle System Device Driver (fsDD) for all of the functional requirements noted above
+- [x] Develop a FIle System Device Driver (fsDD) for all of the functional requirements noted above
 	- [x] Load the fsDD in a similar manner as the keyboard device driver
-	- [ ] Develop your fsDD to insulate and encapsulate the implementation of the kernel-level I/O operations from the byte-level details of your individual blocks on the local storage
+	- [x] Develop your fsDD to insulate and encapsulate the implementation of the kernel-level I/O operations from the byte-level details of your individual blocks on the local storage
 - [ ] Add new scheduling algorithms to youe CPU scheduler (Default is RR)
 	- [ ] First-come, first-served (FCFS)
 	- [ ] Non-preemptive priority (You will need an optional load parameter here)

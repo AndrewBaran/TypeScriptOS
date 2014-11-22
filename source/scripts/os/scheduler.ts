@@ -100,7 +100,64 @@ module TSOS {
 				// Priority
 				case "priority":
 
-					console.log("Priority scheduling");
+					_Kernel.krnTrace("Scheduling programs using priority.");
+
+					var listToSort: TSOS.PCB [] = [];
+
+					// Get all items off the resident queue
+					for(var i: number = 0; i < _ResidentQueue.length; i++) {
+
+						var currentPCB: TSOS.PCB = _ResidentQueue[i];
+						listToSort.push(currentPCB);
+					}
+
+					// Clear resident queue
+					_ResidentQueue = [];
+
+					// Get all items, except the first item, off the ready queue
+					var readyQueueLength: number = _ReadyQueue.getSize();
+
+					for(var i: number = 1; i < readyQueueLength; i++) {
+
+						var currentPCB: TSOS.PCB = _ReadyQueue.q[i];
+						listToSort.push(currentPCB);
+					}
+
+					// Clear ready queue if it has elements; save first element (one in use by CPU)
+					if(_ReadyQueue.getSize() !== 0) {
+
+						var pcbInUse: TSOS.PCB = _ReadyQueue.dequeue();
+						
+						_ReadyQueue = new Queue();
+						_ReadyQueue.enqueue(pcbInUse);
+					}
+
+					// Sort the list into decreasing priority
+					listToSort.sort(Utils.compareUsingPriority);
+
+					console.log("Sorted list: " + listToSort);
+
+					// Push sorted list items back into the ready queue
+					var listLength: number = listToSort.length;
+
+					for(var i: number = 0; i < listLength; i++) {
+
+						var currentPCB: TSOS.PCB = listToSort[i];
+
+						// Set status to ready
+						currentPCB.status = _ProcessStates.READY;
+
+						// Add PCB to the ready queue
+						_ReadyQueue.enqueue(currentPCB);
+					}
+
+					// Set scheduler falg
+					this.inUse = true;
+
+					// Set global PCB to first item
+					_CurrentPCB = _ReadyQueue.peek();
+					_CurrentPCB.status = _ProcessStates.RUNNING;
+
 					break;
 
 				default:

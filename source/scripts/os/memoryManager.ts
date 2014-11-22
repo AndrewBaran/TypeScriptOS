@@ -105,6 +105,9 @@ module TSOS {
 			newPCB.timeArrived = _OSclock; // Used in FCFS scheduling
 			newPCB.status = _ProcessStates.NEW; // Used for scheduling
 
+			// Set priority based off of size of program
+			newPCB.priority = byteList.length;
+
 			_ResidentQueue.push(newPCB);
 
 			// Keep track of where program is loaded
