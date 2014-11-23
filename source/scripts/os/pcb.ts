@@ -16,6 +16,7 @@ module TSOS {
 		public location: string;
 		public priority: number;
 		
+		public memorySlot: number;
 		public isExecuting: boolean;
 
 		public timeArrived: number;
@@ -34,6 +35,7 @@ module TSOS {
 					status = "",
 					location = "",
 					priority = -1,
+					memorySlot = -1,
 					isExecuting = false,
 					timeArrived = 0,
 					cyclesComplete = 0) {

@@ -174,8 +174,6 @@ module TSOS {
 				// Denote swap file as hidden
 				fileName = "." + fileName;
 
-				console.log("Created file " + fileName);
-
 				// Write memory contents to swap file
 				_KrnFileSystemDriver.writeFile(fileName, memoryContents);
 
@@ -190,6 +188,8 @@ module TSOS {
 				newPCB.location = _Locations.DISK;
 
 				_ResidentQueue.push(newPCB);
+
+				_StdOut.putText("Program loaded | PID " + processID + " created");
 
 				_KrnFileSystemDriver.displayFileSystem();
 
@@ -387,6 +387,8 @@ module TSOS {
 			}
 
 			if(spaceFound) {
+
+				console.log("Space at " + processNumber + " is empty. Fill.");
 
 				return true;
 			}

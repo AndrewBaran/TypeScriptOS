@@ -357,53 +357,103 @@ var TSOS;
         };
 
         // Moves a process's memory contents to the disk
-        Kernel.prototype.programRollOut = function (processID) {
-            // Check if processID corresponds to a PCB in the Ready queue
-            var pcbFound = false;
+        Kernel.prototype.programRollOut = function (processID, runCalled) {
+            if (typeof runCalled === "undefined") { runCalled = false; }
+            // If run command used
+            if (runCalled) {
+                console.log("Run command used. Look at resident queue.");
 
-            for (var i = 0; i < _ReadyQueue.getSize(); i++) {
-                var currentPCB = _ReadyQueue.q[i];
+                // Check if processID corresponds to a PCB in the resident queue
+                var pcbFound = false;
 
-                if (currentPCB.processID === processID) {
-                    console.log("PCB found.");
-                    pcbFound = true;
-                    break;
+                for (var i = 0; i < _ResidentQueue.length; i++) {
+                    var currentPCB = _ResidentQueue[i];
+
+                    if (currentPCB.processID === processID) {
+                        console.log("PCB found.");
+                        pcbFound = true;
+                        break;
+                    }
                 }
-            }
 
-            if (pcbFound) {
-                var fileName = "process" + processID + ".swp";
+                if (pcbFound) {
+                    var fileName = "process" + processID + ".swp";
 
-                _KrnFileSystemDriver.createFile(fileName, true);
+                    _KrnFileSystemDriver.createFile(fileName, true);
 
-                // Denote swap file as a hidden file
-                fileName = "." + fileName;
+                    // Denote swap file as a hidden file
+                    fileName = "." + fileName;
 
-                // Write PCB memory contents to swap file
-                var memoryContents = _MemoryManager.getMemoryContents(processID);
-                _KrnFileSystemDriver.writeFile(fileName, memoryContents);
+                    // Write PCB memory contents to swap file
+                    var memoryContents = _MemoryManager.getMemoryContents(processID);
+                    _KrnFileSystemDriver.writeFile(fileName, memoryContents);
 
-                _Kernel.krnTrace("Wrote contents of PID " + processID + " to disk in file " + fileName + ".");
+                    _Kernel.krnTrace("Wrote contents of PID " + processID + " to disk in file " + fileName + ".");
 
-                // Set this PCB to on disk
-                currentPCB.location = _Locations.DISK;
+                    // Set this PCB to on disk
+                    currentPCB.location = _Locations.DISK;
 
-                // Store PCB back in ready queue
-                _ReadyQueue.q[i] = currentPCB;
+                    // Update PCB in the resident queue
+                    _ResidentQueue[i] = currentPCB;
 
-                // TODO Clear memory of the currnetPCB?
-                _KrnFileSystemDriver.displayFileSystem();
+                    _KrnFileSystemDriver.displayFileSystem();
 
-                return true;
+                    return true;
+                } else {
+                    this.krnTrace("Error! PID " + processID + " not found in memory.");
+
+                    return false;
+                }
             } else {
-                this.krnTrace("Error! Process ID " + processID + " not found in memory.");
-                return false;
+                console.log("Runall command used. Look at ready queue.");
+
+                // Check if processID corresponds to a PCB in the Ready queue
+                var pcbFound = false;
+
+                for (var i = 0; i < _ReadyQueue.getSize(); i++) {
+                    var currentPCB = _ReadyQueue.q[i];
+
+                    if (currentPCB.processID === processID) {
+                        console.log("PCB found.");
+                        pcbFound = true;
+                        break;
+                    }
+                }
+
+                if (pcbFound) {
+                    var fileName = "process" + processID + ".swp";
+
+                    _KrnFileSystemDriver.createFile(fileName, true);
+
+                    // Denote swap file as a hidden file
+                    fileName = "." + fileName;
+
+                    // Write PCB memory contents to swap file
+                    var memoryContents = _MemoryManager.getMemoryContents(processID);
+                    _KrnFileSystemDriver.writeFile(fileName, memoryContents);
+
+                    _Kernel.krnTrace("Wrote contents of PID " + processID + " to disk in file " + fileName + ".");
+
+                    // Set this PCB to on disk
+                    currentPCB.location = _Locations.DISK;
+
+                    // Store PCB back in ready queue
+                    _ReadyQueue.q[i] = currentPCB;
+
+                    _KrnFileSystemDriver.displayFileSystem();
+
+                    return true;
+                } else {
+                    this.krnTrace("Error! PID " + processID + " not found in memory.");
+                    return false;
+                }
             }
         };
 
         // Moves a process sotred on the disk into memory
         // TODO Implement
-        Kernel.prototype.programRollIn = function (processID) {
+        Kernel.prototype.programRollIn = function (processID, runCalled) {
+            if (typeof runCalled === "undefined") { runCalled = false; }
             var pcbFound = false;
 
             // Get list of files on the disk
@@ -433,10 +483,11 @@ var TSOS;
 
                 for (var i = 0; i < memoryContents.length; i = i + 2) {
                     var currentByte = memoryContents[i] + memoryContents[i + 1];
-                    console.log("currentByte = " + currentByte);
 
                     byteList.push(currentByte);
                 }
+
+                console.log("Placing PID " + processID + " into memory.");
 
                 // TODO IDK yet
                 _MemoryManager.putMemoryContents(byteList, processID);

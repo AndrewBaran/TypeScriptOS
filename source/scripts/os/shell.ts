@@ -530,6 +530,46 @@ module TSOS {
                     var selectedPCB: TSOS.PCB = _ResidentQueue[properIndex];
                     _ResidentQueue.splice(properIndex, 1);
 
+                    // If PCB is on disk
+                    if(selectedPCB.location === _Locations.DISK) {
+
+                        console.log("PCB is on disk");
+
+                        var memorySlot: number = 0;
+                        var memorySlotFound: boolean = false;
+
+                        // Find available location in disk
+                        for(var i: number = 0; i < _MemoryManager.programsInUse.length; i++) {
+
+                            if(_MemoryManager.programsInUse[i] === 0) {
+
+                                memorySlot = i;
+                                memorySlotFound = true;
+                            }
+                        }
+
+                        // Pick one at random if no location available
+                        if(!memorySlotFound) {
+
+                            memorySlot = Math.floor(Math.random() * (_MemoryManager.programsInUse.length));
+
+                        }
+
+                        console.log("Replacing slot " + memorySlot);
+                        // TODO Figure out which PCB is in which slot?
+
+                        // Roll PCB from disk to memory
+                        _Kernel.programRollOut(memorySlot, true);
+
+                        // Clear memory at the slot
+                        _MemoryManager.clearMemory(memorySlot);
+
+                        // Roll replace PCB into disk
+                        _Kernel.programRollIn(processID, true);
+
+                        Control.updateDisplays();
+                    }
+
                     // Add PCB to ready queue
                     _ReadyQueue.enqueue(selectedPCB);
                     _CurrentPCB = selectedPCB;

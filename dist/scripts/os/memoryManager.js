@@ -137,8 +137,6 @@ var TSOS;
                 // Denote swap file as hidden
                 fileName = "." + fileName;
 
-                console.log("Created file " + fileName);
-
                 // Write memory contents to swap file
                 _KrnFileSystemDriver.writeFile(fileName, memoryContents);
 
@@ -153,6 +151,8 @@ var TSOS;
                 newPCB.location = _Locations.DISK;
 
                 _ResidentQueue.push(newPCB);
+
+                _StdOut.putText("Program loaded | PID " + processID + " created");
 
                 _KrnFileSystemDriver.displayFileSystem();
             }
@@ -304,6 +304,8 @@ var TSOS;
             }
 
             if (spaceFound) {
+                console.log("Space at " + processNumber + " is empty. Fill.");
+
                 return true;
             } else {
                 return false;

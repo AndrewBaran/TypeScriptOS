@@ -426,63 +426,123 @@ module TSOS {
         } // contextSwitch()
 
         // Moves a process's memory contents to the disk
-        public programRollOut(processID: number): boolean {
+        public programRollOut(processID: number, runCalled: boolean = false): boolean {
 
-            // Check if processID corresponds to a PCB in the Ready queue
-            var pcbFound: boolean = false;
+            // If run command used
+            if(runCalled) {
 
-            for(var i: number = 0; i < _ReadyQueue.getSize(); i++) {
+                console.log("Run command used. Look at resident queue.");
 
-                var currentPCB: TSOS.PCB = _ReadyQueue.q[i];
+                // Check if processID corresponds to a PCB in the resident queue
+                var pcbFound: boolean = false;
 
-                if(currentPCB.processID === processID) {
-                    
-                    console.log("PCB found.");
-                    pcbFound = true;
-                    break;
+                for(var i: number = 0; i < _ResidentQueue.length; i++) {
+
+                    var currentPCB: TSOS.PCB = _ResidentQueue[i];
+
+                    if(currentPCB.processID === processID) {
+
+                    	console.log("PCB found.");
+                    	pcbFound = true;
+                    	break;
+                    }
                 }
-            } 
 
-            if(pcbFound) {
+                if(pcbFound) {
 
-                var fileName: string = "process" + processID + ".swp";
+					var fileName: string = "process" + processID + ".swp";
 
-                _KrnFileSystemDriver.createFile(fileName, true);
+                    _KrnFileSystemDriver.createFile(fileName, true);
 
-                // Denote swap file as a hidden file
-                fileName = "." + fileName;
+                    // Denote swap file as a hidden file
+                    fileName = "." + fileName;
 
-                // Write PCB memory contents to swap file
-                var memoryContents: string = _MemoryManager.getMemoryContents(processID);
-                _KrnFileSystemDriver.writeFile(fileName, memoryContents);
+                    // Write PCB memory contents to swap file
+                    var memoryContents: string = _MemoryManager.getMemoryContents(processID);
+                    _KrnFileSystemDriver.writeFile(fileName, memoryContents);
 
-                _Kernel.krnTrace("Wrote contents of PID " + processID + " to disk in file " + fileName + ".");
+                    _Kernel.krnTrace("Wrote contents of PID " + processID + " to disk in file " + fileName + ".");
 
-                // Set this PCB to on disk
-                currentPCB.location = _Locations.DISK;
+                    // Set this PCB to on disk
+                    currentPCB.location = _Locations.DISK;
 
-                // Store PCB back in ready queue
-                _ReadyQueue.q[i] = currentPCB;
+                    // Update PCB in the resident queue
+                    _ResidentQueue[i] = currentPCB;
 
-                // TODO Clear memory of the currnetPCB?
+                    _KrnFileSystemDriver.displayFileSystem();
 
-                _KrnFileSystemDriver.displayFileSystem();
+                    return true;
+                }
 
-                return true;
-            }
+                else {
 
-            // PCB was not found
+                	this.krnTrace("Error! PID " + processID + " not found in memory.");
+
+                	return false;
+                }
+
+            } // run command
+
+            // If runall command used
             else {
 
-                this.krnTrace("Error! Process ID " + processID + " not found in memory.");
-                return false;
-            }
+                console.log("Runall command used. Look at ready queue.");
+
+                // Check if processID corresponds to a PCB in the Ready queue
+                var pcbFound: boolean = false;
+
+                for(var i: number = 0; i < _ReadyQueue.getSize(); i++) {
+
+                    var currentPCB: TSOS.PCB = _ReadyQueue.q[i];
+
+                    if(currentPCB.processID === processID) {
+                        
+                        console.log("PCB found.");
+                        pcbFound = true;
+                        break;
+                    }
+                } 
+
+                if(pcbFound) {
+
+                    var fileName: string = "process" + processID + ".swp";
+
+                    _KrnFileSystemDriver.createFile(fileName, true);
+
+                    // Denote swap file as a hidden file
+                    fileName = "." + fileName;
+
+                    // Write PCB memory contents to swap file
+                    var memoryContents: string = _MemoryManager.getMemoryContents(processID);
+                    _KrnFileSystemDriver.writeFile(fileName, memoryContents);
+
+                    _Kernel.krnTrace("Wrote contents of PID " + processID + " to disk in file " + fileName + ".");
+
+                    // Set this PCB to on disk
+                    currentPCB.location = _Locations.DISK;
+
+                    // Store PCB back in ready queue
+                    _ReadyQueue.q[i] = currentPCB;
+
+                    _KrnFileSystemDriver.displayFileSystem();
+
+                    return true;
+                }
+
+                // PCB was not found
+                else {
+
+                    this.krnTrace("Error! PID " + processID + " not found in memory.");
+                    return false;
+                }
+
+            } // runall command
 
         } // programRollOut()
 
         // Moves a process sotred on the disk into memory
         // TODO Implement
-        public programRollIn(processID: number): boolean {
+        public programRollIn(processID: number, runCalled: boolean = false): boolean {
 
             var pcbFound: boolean = false;
 
@@ -517,10 +577,11 @@ module TSOS {
                 for(var i: number = 0; i < memoryContents.length; i = i + 2) {
 
                     var currentByte: string = memoryContents[i] + memoryContents[i + 1];
-                    console.log("currentByte = " + currentByte);
 
                     byteList.push(currentByte);
                 }
+
+                console.log("Placing PID " + processID + " into memory.");
 
                 // TODO IDK yet
                 _MemoryManager.putMemoryContents(byteList, processID);
