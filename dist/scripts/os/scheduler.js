@@ -39,12 +39,7 @@ var TSOS;
         Scheduler.prototype.schedule = function () {
             switch (this.schedulingType) {
                 case "rr":
-                case "fcfs":
-                    if (this.schedulingType === "rr") {
-                        _Kernel.krnTrace("Scheduling programs using round robin.");
-                    } else {
-                        _Kernel.krnTrace("Scheduling programs using first-come first-serve.");
-                    }
+                    _Kernel.krnTrace("Scheduling programs using round robin.");
 
                     // Take items off resident queue and put into ready queue
                     var queueLength = _ResidentQueue.length;
@@ -59,7 +54,7 @@ var TSOS;
                     _ResidentQueue = [];
 
                     // Reset quantum (used if someone loads during runall)
-                    if (!_CPU.isExecuting && this.schedulingType === "rr") {
+                    if (!_CPU.isExecuting) {
                         this.resetQuantum();
                     }
 
@@ -79,8 +74,13 @@ var TSOS;
 
                     break;
 
+                case "fcfs":
                 case "priority":
-                    _Kernel.krnTrace("Scheduling programs using priority.");
+                    if (this.schedulingType === "fcfs") {
+                        _Kernel.krnTrace("Scheduling programs using first-come first-serve.");
+                    } else {
+                        _Kernel.krnTrace("Scheduling programs using priority.");
+                    }
 
                     var listToSort = [];
 
@@ -108,10 +108,14 @@ var TSOS;
                         _ReadyQueue.enqueue(pcbInUse);
                     }
 
-                    // Sort the list into decreasing priority
-                    listToSort.sort(TSOS.Utils.compareUsingPriority);
-
-                    console.log("Sorted list: " + listToSort);
+                    // FCFS scheduling
+                    if (this.schedulingType === "fcfs") {
+                        // Sort the list into increasing arrival time in system
+                        listToSort.sort(TSOS.Utils.compareUsingTimeArrived);
+                    } else {
+                        // Sort the list into decreasing priority
+                        listToSort.sort(TSOS.Utils.compareUsingPriority);
+                    }
 
                     // Push sorted list items back into the ready queue
                     var listLength = listToSort.length;
@@ -132,6 +136,8 @@ var TSOS;
                     // Set global PCB to first item
                     _CurrentPCB = _ReadyQueue.peek();
                     _CurrentPCB.status = _ProcessStates.RUNNING;
+
+                    _Kernel.krnTrace("Process state of PID " + _CurrentPCB.processID + " loaded.");
 
                     break;
 

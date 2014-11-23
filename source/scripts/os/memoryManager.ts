@@ -117,7 +117,6 @@ module TSOS {
 				// Set priority based off of size of program
 				newPCB.priority = byteList.length;
 
-				// TODO Fix this for disk
 				// Set location to memory
 				newPCB.location = _Locations.MEMORY;
 
@@ -133,20 +132,13 @@ module TSOS {
 			// Load onto disk
 			else {
 
-				console.log("Loading program onto disk.");
-
 				// Convert byteList into concatenated string
 				var memoryContents: string = byteList.join("");
-
-				console.log("Pad with " + ((_MemoryConstants.PROCESS_SIZE) - (memoryContents.length / 2)) + " byte.");
 
 				// Pad string with 00's
 				for(var i: number = memoryContents.length / 2; i < _MemoryConstants.PROCESS_SIZE; i++) {
 					memoryContents += "00";
 				}
-
-				console.log("Writing to disk: " + memoryContents);
-				console.log("Length of memory: " + memoryContents.length);
 
 				// Find available PID
 				var processID: number = 0;
@@ -199,7 +191,6 @@ module TSOS {
 
 				_ResidentQueue.push(newPCB);
 
-				// Remove?
 				_KrnFileSystemDriver.displayFileSystem();
 
 			} // else

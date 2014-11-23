@@ -768,6 +768,7 @@ var TSOS;
             }
         };
 
+        // Deletes the specified file from disk
         Shell.prototype.shellDelete = function (args) {
             var fileName = args[0];
 

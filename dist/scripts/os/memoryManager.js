@@ -91,7 +91,6 @@ var TSOS;
                 // Set priority based off of size of program
                 newPCB.priority = byteList.length;
 
-                // TODO Fix this for disk
                 // Set location to memory
                 newPCB.location = _Locations.MEMORY;
 
@@ -102,19 +101,12 @@ var TSOS;
 
                 _StdOut.putText("Program loaded | PID " + processNumber + " created");
             } else {
-                console.log("Loading program onto disk.");
-
                 // Convert byteList into concatenated string
                 var memoryContents = byteList.join("");
-
-                console.log("Pad with " + ((_MemoryConstants.PROCESS_SIZE) - (memoryContents.length / 2)) + " byte.");
 
                 for (var i = memoryContents.length / 2; i < _MemoryConstants.PROCESS_SIZE; i++) {
                     memoryContents += "00";
                 }
-
-                console.log("Writing to disk: " + memoryContents);
-                console.log("Length of memory: " + memoryContents.length);
 
                 // Find available PID
                 var processID = 0;
@@ -162,7 +154,6 @@ var TSOS;
 
                 _ResidentQueue.push(newPCB);
 
-                // Remove?
                 _KrnFileSystemDriver.displayFileSystem();
             }
         };

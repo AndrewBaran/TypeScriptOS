@@ -235,6 +235,24 @@ module TSOS {
 
         } // hexToString()
 
+        // Comparing function that compares two PCB's according to their time arrived in the system
+        // PCB with earlier time arrived placed before the PCB with the later time arrived 
+        public static compareUsingTimeArrived(firstPCB: TSOS.PCB, secondPCB: TSOS.PCB): number {
+
+            if(firstPCB.timeArrived < secondPCB.timeArrived) {
+                return -1;
+            }
+
+            else if(firstPCB.timeArrived > secondPCB.timeArrived) {
+                return 1;
+            }
+
+            else {
+                return 0;
+            }
+
+        }
+
         // Comparing function that compares two PCB's according to priority
         // Higher priority PCB placed before lower priority PCB
         public static compareUsingPriority(firstPCB: TSOS.PCB, secondPCB: TSOS.PCB): number {

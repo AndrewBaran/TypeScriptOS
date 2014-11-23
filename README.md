@@ -92,8 +92,8 @@ Final Project Checklist
 - [x] Develop a FIle System Device Driver (fsDD) for all of the functional requirements noted above
 	- [x] Load the fsDD in a similar manner as the keyboard device driver
 	- [x] Develop your fsDD to insulate and encapsulate the implementation of the kernel-level I/O operations from the byte-level details of your individual blocks on the local storage
-- [ ] Add new scheduling algorithms to youe CPU scheduler (Default is RR)
-	- [ ] First-come, first-served (FCFS)
+- [x] Add new scheduling algorithms to youe CPU scheduler (Default is RR)
+	- [x] First-come, first-served (FCFS)
 	- [x] Non-preemptive priority (You will need an optional load parameter here)
 
 - [ ] Implement swapped virtual memory with enough physical memory for three concurrent user processes

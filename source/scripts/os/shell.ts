@@ -931,6 +931,7 @@ module TSOS {
 
         } // shellWrite()
 
+        // Deletes the specified file from disk
         public shellDelete(args: string[]): void {
 
         	var fileName: string = args[0];

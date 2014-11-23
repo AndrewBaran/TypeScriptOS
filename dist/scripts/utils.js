@@ -193,6 +193,18 @@ var TSOS;
             return outputString;
         };
 
+        // Comparing function that compares two PCB's according to their time arrived in the system
+        // PCB with earlier time arrived placed before the PCB with the later time arrived
+        Utils.compareUsingTimeArrived = function (firstPCB, secondPCB) {
+            if (firstPCB.timeArrived < secondPCB.timeArrived) {
+                return -1;
+            } else if (firstPCB.timeArrived > secondPCB.timeArrived) {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
+
         // Comparing function that compares two PCB's according to priority
         // Higher priority PCB placed before lower priority PCB
         Utils.compareUsingPriority = function (firstPCB, secondPCB) {
