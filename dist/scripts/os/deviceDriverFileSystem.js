@@ -306,6 +306,8 @@ var TSOS;
         DeviceDriverFileSystem.prototype.writeFile = function (fileName, contentToWrite) {
             var directoryBlockFound = false;
 
+            console.log("Writing: " + contentToWrite);
+
             for (var trackNumber = 0; trackNumber < 1; trackNumber++) {
                 for (var sectorNumber = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
                     for (var blockNumber = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {

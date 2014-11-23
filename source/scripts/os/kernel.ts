@@ -425,7 +425,7 @@ module TSOS {
 
         } // contextSwitch()
 
-        // TODO Implement
+        // Moves a process's memory contents to the disk
         public programRollOut(processID: number): boolean {
 
             // Check if processID corresponds to a PCB in the Ready queue
@@ -445,17 +445,28 @@ module TSOS {
 
             if(pcbFound) {
 
-                // Create swap file as a hidden file
                 var fileName: string = "process" + processID + ".swp";
-
-                console.log("Swap file name: " + fileName);
 
                 _KrnFileSystemDriver.createFile(fileName, true);
 
+                // Denote swap file as a hidden file
+                fileName = "." + fileName;
+
                 // Write PCB memory contents to swap file
-                var memoryContents: string = "";
+                var memoryContents: string = _MemoryManager.getMemoryContents(processID);
+                _KrnFileSystemDriver.writeFile(fileName, memoryContents);
+
+                _Kernel.krnTrace("Wrote contents of PID " + processID + " to disk in file " + fileName + ".");
 
                 // Set this PCB to on disk
+                currentPCB.location = _Locations.DISK;
+
+                // Store PCB back in ready queue
+                _ReadyQueue.q[i] = currentPCB;
+
+                // TODO Clear memory of the currnetPCB?
+
+                _KrnFileSystemDriver.displayFileSystem();
 
                 return true;
             }
@@ -463,17 +474,70 @@ module TSOS {
             // PCB was not found
             else {
 
-                this.krnTrace("Error! Process ID " + processID + " not found.");
+                this.krnTrace("Error! Process ID " + processID + " not found in memory.");
                 return false;
             }
 
         } // programRollOut()
 
+        // Moves a process sotred on the disk into memory
         // TODO Implement
         public programRollIn(processID: number): boolean {
 
-            return true;
-        
+            var pcbFound: boolean = false;
+
+            // Get list of files on the disk
+            var desiredFileName: string = ".process" + processID.toString(10) + ".swp";
+            var fileNames: string[] = _KrnFileSystemDriver.getFileNames();
+
+            console.log("Desired file name: " + desiredFileName);
+            console.log("File names on disk: " + fileNames);
+
+            for(var i: number = 0; i < fileNames.length; i++) {
+
+                if(fileNames[i] === desiredFileName) {
+
+                    pcbFound = true;
+                    break;
+                }
+            }
+
+            if(pcbFound) {
+
+                console.log("Found the PCB");
+
+                // Read the contents of disk into string
+                var memoryContents: string = _KrnFileSystemDriver.readFile(desiredFileName);
+
+                console.log("Length of memory: " + memoryContents.length);
+
+                // Parse contents back into memory
+                var byteList: string [] = [];
+
+                for(var i: number = 0; i < memoryContents.length; i = i + 2) {
+
+                    var currentByte: string = memoryContents[i] + memoryContents[i + 1];
+                    console.log("currentByte = " + currentByte);
+
+                    byteList.push(currentByte);
+                }
+
+                // TODO IDK yet
+                _MemoryManager.putMemoryContents(byteList, processID);
+
+                // Delete the swap file
+                // Set location of PCB to memory
+
+                this.krnTrace("PID " + processID + " moved from disk to memory.");
+                return true;
+            }
+
+            else {
+
+                this.krnTrace("Error! PID " + processID + " not found on disk.");
+                return false;
+            }
+
         } // programRollIn()
 
     }

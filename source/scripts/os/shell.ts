@@ -454,16 +454,7 @@ module TSOS {
 
                     if(byteList.length <= _MemoryConstants.PROCESS_SIZE) {
 
-                        // Load the program into memory at the opening found by the for loop above
-                        if(_ResidentQueue.length !== 3 && _ReadyQueue.getSize() != 3) {
-
-                            // Allow 3 programs to be loaded
-                            _MemoryManager.loadProgram(byteList);
-                        }
-
-                        else {
-                            _StdOut.putText("Cannot load program - memory is full.");
-                        }
+                        _MemoryManager.loadProgram(byteList);
                         
                     }
 
@@ -1032,6 +1023,8 @@ module TSOS {
             console.log("Rolling pid " + pidValue + " out to disk.");
 
             _Kernel.programRollOut(pidValue);
+
+            _Kernel.programRollIn(pidValue);
         }
 
     }

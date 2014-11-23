@@ -5,6 +5,7 @@ var TSOS;
         function MemoryManager() {
             this.memoryObject = null;
             this.programsInUse = [0, 0, 0];
+            this.pidsOnDisk = [];
         }
         // Methods
         // Create new memory object and clear it out
@@ -44,52 +45,126 @@ var TSOS;
             }
         };
 
-        // Loads the program into physical memory
+        // Loads the program into physical memory or disks
         MemoryManager.prototype.loadProgram = function (byteList) {
+            var memorySlotFound = false;
+
             for (var i = 0; i < this.programsInUse.length; i++) {
                 if (this.programsInUse[i] === 0) {
                     var processNumber = i;
+                    memorySlotFound = true;
+
                     break;
                 }
             }
 
-            // Clear memory
-            this.clearMemory(processNumber);
+            // Load into memory
+            if (memorySlotFound) {
+                // Clear memory
+                this.clearMemory(processNumber);
 
-            // Start at the beginning of the specified program section
-            var baseAddress = processNumber * _MemoryConstants.PROCESS_SIZE;
-            var limitAddress = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
+                // Start at the beginning of the specified program section
+                var baseAddress = processNumber * _MemoryConstants.PROCESS_SIZE;
+                var limitAddress = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
 
-            var startingRow = baseAddress / _MemoryConstants.BYTES_PER_ROW;
-            var endingRow = startingRow + Math.floor(byteList.length / _MemoryConstants.BYTES_PER_ROW);
+                var startingRow = baseAddress / _MemoryConstants.BYTES_PER_ROW;
+                var endingRow = startingRow + Math.floor(byteList.length / _MemoryConstants.BYTES_PER_ROW);
 
-            var index = 0;
+                var index = 0;
 
-            for (; startingRow <= endingRow; startingRow++) {
-                for (var colNumber = 0; colNumber < _MemoryConstants.NUM_COLUMNS; colNumber++) {
-                    if (index < byteList.length) {
-                        this.memoryObject.memoryList[startingRow][colNumber] = byteList[index];
-                        index++;
+                for (; startingRow <= endingRow; startingRow++) {
+                    for (var colNumber = 0; colNumber < _MemoryConstants.NUM_COLUMNS; colNumber++) {
+                        if (index < byteList.length) {
+                            this.memoryObject.memoryList[startingRow][colNumber] = byteList[index];
+                            index++;
+                        }
                     }
                 }
+
+                // Reload memory display
+                this.displayMemory();
+
+                var newPCB = new TSOS.PCB(processNumber, baseAddress, limitAddress);
+                newPCB.timeArrived = _OSclock; // Used in FCFS scheduling
+                newPCB.status = _ProcessStates.NEW; // Used for scheduling
+
+                // Set priority based off of size of program
+                newPCB.priority = byteList.length;
+
+                // TODO Fix this for disk
+                // Set location to memory
+                newPCB.location = _Locations.MEMORY;
+
+                _ResidentQueue.push(newPCB);
+
+                // Keep track of where program is loaded
+                this.programsInUse[processNumber] = 1;
+
+                _StdOut.putText("Program loaded | PID " + processNumber + " created");
+            } else {
+                console.log("Loading program onto disk.");
+
+                // Convert byteList into concatenated string
+                var memoryContents = byteList.join("");
+
+                console.log("Pad with " + ((_MemoryConstants.PROCESS_SIZE) - (memoryContents.length / 2)) + " byte.");
+
+                for (var i = memoryContents.length / 2; i < _MemoryConstants.PROCESS_SIZE; i++) {
+                    memoryContents += "00";
+                }
+
+                console.log("Writing to disk: " + memoryContents);
+                console.log("Length of memory: " + memoryContents.length);
+
+                // Find available PID
+                var processID = 0;
+                var currentPID = 3;
+
+                var pidFound = false;
+
+                while (!pidFound) {
+                    // PID not in use
+                    if (this.pidsOnDisk.indexOf(currentPID) === -1) {
+                        processID = currentPID;
+                        pidFound = true;
+
+                        // Add this processID to pidsOnDisk
+                        this.pidsOnDisk.push(processID);
+                    } else {
+                        currentPID++;
+                    }
+                }
+
+                console.log("PID to use: " + processID);
+
+                // Create swap file
+                var fileName = "process" + processID + ".swp";
+
+                _KrnFileSystemDriver.createFile(fileName, true);
+
+                // Denote swap file as hidden
+                fileName = "." + fileName;
+
+                console.log("Created file " + fileName);
+
+                // Write memory contents to swap file
+                _KrnFileSystemDriver.writeFile(fileName, memoryContents);
+
+                var newPCB = new TSOS.PCB(processID);
+                newPCB.timeArrived = _OSclock; // Used in FCFS scheduling
+                newPCB.status = _ProcessStates.NEW; // Used for scheduling
+
+                // Set priority based off of size of program
+                newPCB.priority = byteList.length;
+
+                // Set location to disk
+                newPCB.location = _Locations.DISK;
+
+                _ResidentQueue.push(newPCB);
+
+                // Remove?
+                _KrnFileSystemDriver.displayFileSystem();
             }
-
-            // Reload memory display
-            this.displayMemory();
-
-            var newPCB = new TSOS.PCB(processNumber, baseAddress, limitAddress);
-            newPCB.timeArrived = _OSclock; // Used in FCFS scheduling
-            newPCB.status = _ProcessStates.NEW; // Used for scheduling
-
-            // Set priority based off of size of program
-            newPCB.priority = byteList.length;
-
-            _ResidentQueue.push(newPCB);
-
-            // Keep track of where program is loaded
-            this.programsInUse[processNumber] = 1;
-
-            _StdOut.putText("Program loaded | PID " + processNumber + " created");
         };
 
         // Display the (potentially updated) memory in the browser
@@ -205,9 +280,42 @@ var TSOS;
             }
 
             if (pcbFound) {
-                return "";
+                var outputString = "";
+
+                var startingRow = currentPCB.baseRegister / _MemoryConstants.BYTES_PER_ROW;
+                var endingRow = Math.floor(currentPCB.limitRegister / _MemoryConstants.BYTES_PER_ROW);
+
+                console.log("Starting: " + startingRow);
+                console.log("Ending: " + endingRow);
+
+                for (var currentRow = startingRow; currentRow <= endingRow; currentRow++) {
+                    for (var currentColumn = 0; currentColumn < _MemoryConstants.NUM_COLUMNS; currentColumn++) {
+                        // Concatenate memory contents to outputString
+                        outputString += this.memoryObject.memoryList[currentRow][currentColumn];
+                    }
+                }
+
+                return outputString;
             } else {
                 return "";
+            }
+        };
+
+        // Put the contents of memory from a PCB on disk back into memory
+        MemoryManager.prototype.putMemoryContents = function (byteList, processID) {
+            var spaceFound = false;
+
+            for (var i = 0; i < this.programsInUse.length; i++) {
+                if (this.programsInUse[i] === 0) {
+                    var processNumber = i;
+                    spaceFound = true;
+                }
+            }
+
+            if (spaceFound) {
+                return true;
+            } else {
+                return false;
             }
         };
 

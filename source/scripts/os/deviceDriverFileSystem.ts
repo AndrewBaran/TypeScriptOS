@@ -348,6 +348,8 @@ module TSOS {
 
 			var directoryBlockFound: boolean = false;
 
+			console.log("Writing: " + contentToWrite);
+
 			for(var trackNumber: number = 0; trackNumber < 1; trackNumber++) {
 				for(var sectorNumber: number = 0; sectorNumber < _FileConstants.NUM_SECTORS; sectorNumber++) {
 					for(var blockNumber: number = 0; blockNumber < _FileConstants.NUM_BLOCKS; blockNumber++) {
