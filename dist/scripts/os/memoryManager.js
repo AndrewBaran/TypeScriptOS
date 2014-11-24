@@ -46,12 +46,38 @@ var TSOS;
         };
 
         // Loads the program into physical memory or disks
+        // Broken?
         MemoryManager.prototype.loadProgram = function (byteList) {
             var memorySlotFound = false;
 
             for (var i = 0; i < this.programsInUse.length; i++) {
                 if (this.programsInUse[i] === 0) {
-                    var processNumber = i;
+                    var memorySlot = i;
+
+                    // Check if disk does not hold same process name
+                    var fileNamesOnDisk = _KrnFileSystemDriver.getFileNames();
+
+                    var pidFound = false;
+                    var currentPID = i;
+
+                    while (!pidFound && fileNamesOnDisk.length !== 0) {
+                        console.log("Disk has files to look through.");
+
+                        var correspondingFileName = ".process" + currentPID + ".swp";
+
+                        for (var j = 0; j < fileNamesOnDisk.length; j++) {
+                            if (fileNamesOnDisk[j] === correspondingFileName) {
+                                // Check next PID
+                                currentPID++;
+                                break;
+                            } else if ((j + 1) === fileNamesOnDisk.length) {
+                                pidFound = true;
+                            }
+                        }
+                    }
+
+                    var processNumber = currentPID;
+
                     memorySlotFound = true;
 
                     break;
@@ -61,10 +87,10 @@ var TSOS;
             // Load into memory
             if (memorySlotFound) {
                 // Clear memory
-                this.clearMemory(processNumber);
+                this.clearMemory(memorySlot);
 
                 // Start at the beginning of the specified program section
-                var baseAddress = processNumber * _MemoryConstants.PROCESS_SIZE;
+                var baseAddress = memorySlot * _MemoryConstants.PROCESS_SIZE;
                 var limitAddress = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
 
                 var startingRow = baseAddress / _MemoryConstants.BYTES_PER_ROW;

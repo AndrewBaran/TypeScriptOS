@@ -64,6 +64,7 @@ module TSOS {
 		} // clearMemory()
 
 		// Loads the program into physical memory or disks
+		// Broken?
 		public loadProgram(byteList: string[]) : void {
 
 			var memorySlotFound: boolean = false;
@@ -73,21 +74,56 @@ module TSOS {
 
 				if(this.programsInUse[i] === 0) {
 
-					var processNumber: number = i;
+					var memorySlot: number = i;
+
+					// Check if disk does not hold same process name
+					var fileNamesOnDisk: string[] = _KrnFileSystemDriver.getFileNames();
+
+					var pidFound: boolean = false;
+					var currentPID: number = i;
+
+					// Look for valid PID
+					while(!pidFound && fileNamesOnDisk.length !== 0) {
+
+						console.log("Disk has files to look through.");
+						
+						var correspondingFileName: string = ".process" + currentPID + ".swp";
+
+						// Check each file on disk and see if one has the same PID
+						for(var j: number = 0; j < fileNamesOnDisk.length; j++) {
+
+							if(fileNamesOnDisk[j] === correspondingFileName) {
+
+								// Check next PID
+								currentPID++;
+								break;
+							}
+
+							else if((j + 1) === fileNamesOnDisk.length) {
+
+								pidFound = true;
+							}
+						}
+
+					} // while
+
+
+					var processNumber: number = currentPID;
+
 					memorySlotFound = true;
 
 					break;
-				}
+				} // if
 			}
 
 			// Load into memory
 			if(memorySlotFound) {
 				
 				// Clear memory
-				this.clearMemory(processNumber);
+				this.clearMemory(memorySlot);
 
 				// Start at the beginning of the specified program section
-				var baseAddress: number = processNumber * _MemoryConstants.PROCESS_SIZE;
+				var baseAddress: number = memorySlot * _MemoryConstants.PROCESS_SIZE;
 				var limitAddress: number = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
 
 				var startingRow: number = baseAddress / _MemoryConstants.BYTES_PER_ROW;

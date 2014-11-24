@@ -1100,9 +1100,7 @@ module TSOS {
         // TODO Remove after testing is over
         public shellTest(inputPID: string): void {
 
-            var pidValue: number = parseInt(inputPID, 10);
-
-            console.log("Rolling pid " + pidValue + " out to disk.");
+            _StdOut.putText("Pids on disk: " + _MemoryManager.pidsOnDisk);
         }
 
     }

@@ -471,6 +471,9 @@ module TSOS {
 
                     _KrnFileSystemDriver.displayFileSystem();
 
+                    // Keep track of the pids
+                    _MemoryManager.pidsOnDisk.push(processID);
+
                     return true;
                 }
 
@@ -589,6 +592,16 @@ module TSOS {
 
                 // Delete the swap file
                 _KrnFileSystemDriver.deleteFile(desiredFileName);
+
+                // Remove tracking of pid
+                for(var i: number = 0; i < _MemoryManager.pidsOnDisk.length; i++) {
+
+                    if(_MemoryManager.pidsOnDisk[i] === processID) {
+
+                        // Remove pid from the tracker
+                        _MemoryManager.pidsOnDisk.splice(i, 1);
+                    }
+                }
 
                 this.krnTrace("PID " + processID + " moved from disk to memory at slot #" + memorySlot + ".");
                 return true;

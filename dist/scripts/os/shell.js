@@ -905,9 +905,7 @@ var TSOS;
 
         // TODO Remove after testing is over
         Shell.prototype.shellTest = function (inputPID) {
-            var pidValue = parseInt(inputPID, 10);
-
-            console.log("Rolling pid " + pidValue + " out to disk.");
+            _StdOut.putText("Pids on disk: " + _MemoryManager.pidsOnDisk);
         };
         return Shell;
     })();
