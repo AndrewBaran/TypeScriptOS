@@ -48,7 +48,7 @@ var TSOS;
             // Check if the PC is valid
             if (this.PC >= 0 && this.PC < _MemoryConstants.PROCESS_SIZE) {
                 // Get real instruction from memory
-                var nextInstruction = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
+                var nextInstruction = _MemoryManager.getByte(this.PC, _CurrentPCB.memorySlot);
             } else {
                 // TODO Probably better to remove program instead
                 _Kernel.krnTrapError("Error! PC must be in range: 0 <= PC <= " + _MemoryConstants.PROCESS_SIZE);
@@ -71,7 +71,7 @@ var TSOS;
                     console.log("LDA");
 
                     // Read 1 data byte
-                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.memorySlot));
 
                     var hexString = instructionData.pop();
                     var hexValue = parseInt(hexString, 16);
@@ -88,7 +88,7 @@ var TSOS;
                     console.log("LDA");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
                     }
 
                     var memoryAddress = "";
@@ -97,7 +97,7 @@ var TSOS;
                         memoryAddress += instructionData.pop();
                     }
 
-                    var stringValue = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var stringValue = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue = parseInt(stringValue, 16);
 
                     this.Acc = hexValue;
@@ -110,7 +110,7 @@ var TSOS;
                     console.log("STA");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
                     }
 
                     var memoryAddress = "";
@@ -119,7 +119,7 @@ var TSOS;
                         memoryAddress += instructionData.pop();
                     }
 
-                    _MemoryManager.writeData(memoryAddress, _CPU.Acc, _CurrentPCB.processID);
+                    _MemoryManager.writeData(memoryAddress, _CPU.Acc, _CurrentPCB.memorySlot);
 
                     this.PC += 2;
 
@@ -129,7 +129,7 @@ var TSOS;
                     console.log("ADC");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
                     }
 
                     var memoryAddress = "";
@@ -138,7 +138,7 @@ var TSOS;
                         memoryAddress += instructionData.pop();
                     }
 
-                    var stringValue = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var stringValue = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue = parseInt(stringValue, 16);
 
                     // Add to accumulator
@@ -152,7 +152,7 @@ var TSOS;
                     console.log("LDX");
 
                     // Read 1 data byte
-                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.memorySlot));
 
                     var hexString = instructionData.pop();
                     var hexValue = parseInt(hexString, 16);
@@ -167,7 +167,7 @@ var TSOS;
                     console.log("LDX");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
                     }
 
                     var memoryAddress = "";
@@ -176,7 +176,7 @@ var TSOS;
                         memoryAddress += instructionData.pop();
                     }
 
-                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue = parseInt(hexString, 16);
 
                     // Load Yreg
@@ -190,7 +190,7 @@ var TSOS;
                     console.log("LDY");
 
                     // Read 1 data byte
-                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                    instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.memorySlot));
 
                     var hexString = instructionData.pop();
                     var hexValue = parseInt(hexString, 16);
@@ -205,7 +205,7 @@ var TSOS;
                     console.log("LDY");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
                     }
 
                     var memoryAddress = "";
@@ -214,7 +214,7 @@ var TSOS;
                         memoryAddress += instructionData.pop();
                     }
 
-                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue = parseInt(hexString, 16);
 
                     // Load Yreg
@@ -240,7 +240,7 @@ var TSOS;
                     console.log("CPX");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
                     }
 
                     var memoryAddress = "";
@@ -249,7 +249,7 @@ var TSOS;
                         memoryAddress += instructionData.pop();
                     }
 
-                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue = parseInt(hexString, 16);
 
                     // Set Zflag if equal
@@ -269,7 +269,7 @@ var TSOS;
                     // Branch if they were not equal (set to 1 if equal)
                     if (this.Zflag !== 1) {
                         // Read 1 byte
-                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.memorySlot));
 
                         var hexString = instructionData.pop();
                         var hexValue = parseInt(hexString, 16);
@@ -287,7 +287,7 @@ var TSOS;
                     console.log("INC");
 
                     for (var i = 0; i < 2; i++) {
-                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+                        instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
                     }
 
                     var memoryAddress = "";
@@ -297,14 +297,14 @@ var TSOS;
                     }
 
                     // Get the byte from memory
-                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexString = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue = parseInt(hexString, 16);
 
                     // Increment the byte
                     hexValue++;
 
                     // Store incremented byte back in memory
-                    _MemoryManager.writeData(memoryAddress, hexValue, _CurrentPCB.processID);
+                    _MemoryManager.writeData(memoryAddress, hexValue, _CurrentPCB.memorySlot);
 
                     this.PC += 2;
 
@@ -396,7 +396,7 @@ var TSOS;
             _CurrentPCB.status = _ProcessStates.FINISHED;
 
             // Stop tracking program in memory
-            _MemoryManager.programsInUse[_CurrentPCB.processID] = 0;
+            _MemoryManager.programsInUse[_CurrentPCB.memorySlot] = 0;
 
             // Add an interrupt to context switch which will remove process and may stop CPU
             _KernelInterruptQueue.enqueue(new TSOS.Interrupt(_InterruptConstants.CONTEXT_SWITCH_IRQ, ""));

@@ -52,7 +52,7 @@ module TSOS {
             if(this.PC >= 0 && this.PC < _MemoryConstants.PROCESS_SIZE) {
 
                 // Get real instruction from memory
-                var nextInstruction: string = _MemoryManager.getByte(this.PC, _CurrentPCB.processID);
+                var nextInstruction: string = _MemoryManager.getByte(this.PC, _CurrentPCB.memorySlot);
             }
 
             // Error
@@ -84,7 +84,7 @@ module TSOS {
             		console.log("LDA");
 
             		// Read 1 data byte
-            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.memorySlot));
 
             		var hexString: string = instructionData.pop();
             		var hexValue: number = parseInt(hexString, 16);
@@ -104,7 +104,7 @@ module TSOS {
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
             		}
 
                     var memoryAddress: string = "";
@@ -113,7 +113,7 @@ module TSOS {
                         memoryAddress += instructionData.pop();
                     }
 
-                    var stringValue: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var stringValue: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue: number = parseInt(stringValue, 16);
 
                     this.Acc = hexValue;
@@ -129,7 +129,7 @@ module TSOS {
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
             		}
 
                     var memoryAddress: string = "";
@@ -138,7 +138,7 @@ module TSOS {
                         memoryAddress += instructionData.pop();
             		}
 
-                    _MemoryManager.writeData(memoryAddress, _CPU.Acc, _CurrentPCB.processID);
+                    _MemoryManager.writeData(memoryAddress, _CPU.Acc, _CurrentPCB.memorySlot);
 
             		this.PC += 2;
 
@@ -151,7 +151,7 @@ module TSOS {
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
             		}
 
                     var memoryAddress: string = "";
@@ -160,7 +160,7 @@ module TSOS {
                         memoryAddress += instructionData.pop();
                     }
 
-                    var stringValue: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var stringValue: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue: number = parseInt(stringValue, 16);
 
                     // Add to accumulator
@@ -176,7 +176,7 @@ module TSOS {
             		console.log("LDX");
 
             		// Read 1 data byte
-            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.memorySlot));
 
                     var hexString: string = instructionData.pop();
                     var hexValue: number = parseInt(hexString, 16);
@@ -194,7 +194,7 @@ module TSOS {
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
             		}
 
                     var memoryAddress: string = "";
@@ -203,7 +203,7 @@ module TSOS {
                         memoryAddress += instructionData.pop();
                     }
 
-                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue: number = parseInt(hexString, 16);
 
                     // Load Yreg
@@ -219,7 +219,7 @@ module TSOS {
             		console.log("LDY");
 
             		// Read 1 data byte
-            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+            		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.memorySlot));
 
                     var hexString: string = instructionData.pop();
                     var hexValue: number = parseInt(hexString, 16);
@@ -237,7 +237,7 @@ module TSOS {
 
             		// Read 2 data bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
             		}
 
                     var memoryAddress: string = "";
@@ -246,7 +246,7 @@ module TSOS {
                         memoryAddress += instructionData.pop();
                     }
 
-                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue: number = parseInt(hexString, 16);
 
                     // Load Yreg
@@ -280,7 +280,7 @@ module TSOS {
 
             		// Read 2 bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
             		}
 
                     var memoryAddress: string = "";
@@ -289,7 +289,7 @@ module TSOS {
                         memoryAddress += instructionData.pop();
                     }
 
-                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue: number = parseInt(hexString, 16);
 
                     // Set Zflag if equal
@@ -314,7 +314,7 @@ module TSOS {
                     if(this.Zflag !== 1) {
 
                 		// Read 1 byte
-                		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.processID));
+                		instructionData.push(_MemoryManager.getByte(this.PC, _CurrentPCB.memorySlot));
 
                         var hexString: string = instructionData.pop();
                         var hexValue: number = parseInt(hexString, 16);
@@ -335,7 +335,7 @@ module TSOS {
 
             		// Read 2 bytes
             		for(var i: number = 0; i < 2; i++) {
-            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.processID));
+            			instructionData.push(_MemoryManager.getByte(this.PC + i, _CurrentPCB.memorySlot));
             		}
 
                     var memoryAddress: string = "";
@@ -345,14 +345,14 @@ module TSOS {
                     }
 
                     // Get the byte from memory
-                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.processID);
+                    var hexString: string = _MemoryManager.getData(memoryAddress, _CurrentPCB.memorySlot);
                     var hexValue: number = parseInt(hexString, 16);
 
                     // Increment the byte
                     hexValue++;
 
                     // Store incremented byte back in memory
-                    _MemoryManager.writeData(memoryAddress, hexValue, _CurrentPCB.processID);
+                    _MemoryManager.writeData(memoryAddress, hexValue, _CurrentPCB.memorySlot);
 
             		this.PC += 2;
 
@@ -459,7 +459,7 @@ module TSOS {
             _CurrentPCB.status = _ProcessStates.FINISHED;
 
             // Stop tracking program in memory
-            _MemoryManager.programsInUse[_CurrentPCB.processID] = 0;
+            _MemoryManager.programsInUse[_CurrentPCB.memorySlot] = 0;
 
             // Add an interrupt to context switch which will remove process and may stop CPU
             _KernelInterruptQueue.enqueue(new Interrupt(_InterruptConstants.CONTEXT_SWITCH_IRQ, ""));

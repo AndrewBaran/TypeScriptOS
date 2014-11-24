@@ -235,7 +235,7 @@ var TSOS;
 
                 var printString = "";
 
-                while ((data = _MemoryManager.getByte(currentPC, _CurrentPCB.processID)) !== "00") {
+                while ((data = _MemoryManager.getByte(currentPC, _CurrentPCB.memorySlot)) !== "00") {
                     var dataValue = parseInt(data, 16);
 
                     printString += String.fromCharCode(dataValue);
@@ -496,7 +496,7 @@ var TSOS;
                 // Delete the swap file
                 _KrnFileSystemDriver.deleteFile(desiredFileName);
 
-                this.krnTrace("PID " + processID + " moved from disk to memory.");
+                this.krnTrace("PID " + processID + " moved from disk to memory at slot #" + memorySlot + ".");
                 return true;
             } else {
                 this.krnTrace("Error! PID " + processID + " not found on disk.");

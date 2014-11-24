@@ -539,7 +539,7 @@ module TSOS {
                         var memorySlot: number = -1;
                         var memorySlotFound: boolean = false;
 
-                        // Find available location in disk
+                        // Find available location in memory
                         for(var i: number = 0; i < _MemoryManager.programsInUse.length; i++) {
 
                             if(_MemoryManager.programsInUse[i] === 0) {
@@ -559,6 +559,9 @@ module TSOS {
 
                         console.log("Replacing slot " + memorySlot);
                         console.log(_ResidentQueue);
+
+                        var pcbFound: boolean = false;
+
                         for(var index: number = 0; index < _ResidentQueue.length; index++) {
 
                             var pcbBeingReplaced: TSOS.PCB = _ResidentQueue[index];
@@ -568,22 +571,30 @@ module TSOS {
                                 console.log(pcbBeingReplaced);
                                 console.log("is in memorySlot " + memorySlot);
 
+                                pcbFound = true;
+
                                 break;
                             }
                         }
 
-                        // Roll PCB from disk to memory
-                        _Kernel.programRollOut(pcbBeingReplaced.processID, true);
+                        // Swapping out a process
+                        if(pcbFound) {
 
-                        // Clear memory at the slot
-                        _MemoryManager.clearMemory(pcbBeingReplaced.memorySlot);
+                            console.log("pcbBeingReplaced was not null.");
 
-                        // Clear items on the replaced PCB
-                        pcbBeingReplaced.location = _Locations.DISK;
-                        pcbBeingReplaced.memorySlot = -1;
+                            // Roll PCB from disk to memory
+                            _Kernel.programRollOut(pcbBeingReplaced.processID, true);
 
-                        // Place PCB back in the resident queue
-                        _ResidentQueue[index] = pcbBeingReplaced;
+                            // Clear memory at the slot
+                            _MemoryManager.clearMemory(pcbBeingReplaced.memorySlot);
+                    
+                            // Clear items on the replaced PCB
+                            pcbBeingReplaced.location = _Locations.DISK;
+                            pcbBeingReplaced.memorySlot = -1;
+
+                            // Place PCB back in the resident queue
+                            _ResidentQueue[index] = pcbBeingReplaced;
+                        }
 
                         // Roll requested PCB into disk
                         _Kernel.programRollIn(processID, memorySlot, true);
@@ -595,10 +606,7 @@ module TSOS {
                         selectedPCB.limitRegister = selectedPCB.baseRegister + _MemoryConstants.PROCESS_SIZE - 1;
 
                         console.log(selectedPCB);
-
                         console.log(_ResidentQueue);
-
-                        Control.updateDisplays();
                     }
 
                     // Add PCB to ready queue
@@ -613,6 +621,8 @@ module TSOS {
 
                     // Display the ready queue
                     Control.updateDisplays();
+
+                    _KrnFileSystemDriver.displayFileSystem();
                 }
 
                 else {

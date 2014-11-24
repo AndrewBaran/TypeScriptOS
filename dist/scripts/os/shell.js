@@ -492,6 +492,9 @@ var TSOS;
 
                         console.log("Replacing slot " + memorySlot);
                         console.log(_ResidentQueue);
+
+                        var pcbFound = false;
+
                         for (var index = 0; index < _ResidentQueue.length; index++) {
                             var pcbBeingReplaced = _ResidentQueue[index];
 
@@ -500,22 +503,29 @@ var TSOS;
                                 console.log(pcbBeingReplaced);
                                 console.log("is in memorySlot " + memorySlot);
 
+                                pcbFound = true;
+
                                 break;
                             }
                         }
 
-                        // Roll PCB from disk to memory
-                        _Kernel.programRollOut(pcbBeingReplaced.processID, true);
+                        // Swapping out a process
+                        if (pcbFound) {
+                            console.log("pcbBeingReplaced was not null.");
 
-                        // Clear memory at the slot
-                        _MemoryManager.clearMemory(pcbBeingReplaced.memorySlot);
+                            // Roll PCB from disk to memory
+                            _Kernel.programRollOut(pcbBeingReplaced.processID, true);
 
-                        // Clear items on the replaced PCB
-                        pcbBeingReplaced.location = _Locations.DISK;
-                        pcbBeingReplaced.memorySlot = -1;
+                            // Clear memory at the slot
+                            _MemoryManager.clearMemory(pcbBeingReplaced.memorySlot);
 
-                        // Place PCB back in the resident queue
-                        _ResidentQueue[index] = pcbBeingReplaced;
+                            // Clear items on the replaced PCB
+                            pcbBeingReplaced.location = _Locations.DISK;
+                            pcbBeingReplaced.memorySlot = -1;
+
+                            // Place PCB back in the resident queue
+                            _ResidentQueue[index] = pcbBeingReplaced;
+                        }
 
                         // Roll requested PCB into disk
                         _Kernel.programRollIn(processID, memorySlot, true);
@@ -527,10 +537,7 @@ var TSOS;
                         selectedPCB.limitRegister = selectedPCB.baseRegister + _MemoryConstants.PROCESS_SIZE - 1;
 
                         console.log(selectedPCB);
-
                         console.log(_ResidentQueue);
-
-                        TSOS.Control.updateDisplays();
                     }
 
                     // Add PCB to ready queue
@@ -545,6 +552,8 @@ var TSOS;
 
                     // Display the ready queue
                     TSOS.Control.updateDisplays();
+
+                    _KrnFileSystemDriver.displayFileSystem();
                 } else {
                     _StdOut.putText("Error: Invalid process ID");
                 }
