@@ -27,13 +27,13 @@ module TSOS {
 		public clearMemory(processID: number = -1): void {
 
 			// Clear specific processID of memory
-			if(processID >= 0 && processID < 3) {
+			if(processID >= 0 && processID <= 2) {
 
 				var baseAddress: number = processID * _MemoryConstants.PROCESS_SIZE;
 				var limitAddress: number = baseAddress + _MemoryConstants.PROCESS_SIZE - 1;
 
 				var startingRow: number = baseAddress / _MemoryConstants.BYTES_PER_ROW;
-				var endingRow: number = Math.floor(limitAddress / 8);
+				var endingRow: number = Math.floor(limitAddress / _MemoryConstants.BYTES_PER_ROW);
 
 				for(var i = startingRow; i <= endingRow; i++) {
 					for(var j = 0; j < _MemoryConstants.NUM_COLUMNS; j++) {
@@ -375,37 +375,38 @@ module TSOS {
 
 		} // getMemoryContents()
 
-		// TODO Implement!!!
-		// Put the contents of memory from a PCB on disk back into memory
-		public putMemoryContents(byteList: string[], processID: number): boolean {
+		// Put the contents of memory from a PCB on disk back into memory.
+		// Return memorySlot where program was placed
+		public putMemoryContents(byteList: string[], memorySlot: number): boolean {
 
-			var spaceFound: boolean = false;
+			// Update PCB with slot it is stored in
+			console.log("Space at " + memorySlot + " is empty. Fill.");
 
-			// Look for available spot in memory
-			for(var i: number = 0; i < this.programsInUse.length; i++) {
+			var base: number = memorySlot * _MemoryConstants.PROCESS_SIZE;
+			var limit: number = base + _MemoryConstants.PROCESS_SIZE - 1;
 
-				if(this.programsInUse[i] === 0) {
+			var startingRow: number = base / _MemoryConstants.BYTES_PER_ROW;
+			var endingRow: number = Math.floor(limit / _MemoryConstants.BYTES_PER_ROW);
 
-					var processNumber: number = i;
+			console.log("Starting: " + startingRow);
+			console.log("Ending: " + endingRow);
 
-					spaceFound = true;
-					break;
+			var index: number = 0;
+
+			// Load memory with the swapped in processes memory
+			for(var currentRow: number = startingRow; currentRow <= endingRow; currentRow++) {
+				for(var currentColumn: number = 0; currentColumn < _MemoryConstants.NUM_COLUMNS; currentColumn++) {
+
+					this.memoryObject.memoryList[currentRow][currentColumn] = byteList[index];
+					index++;
 				}
 			}
 
-			if(spaceFound) {
+			this.programsInUse[memorySlot] = 1;
 
-				// Update PCB with slot it is stored in
-				console.log("Space at " + processNumber + " is empty. Fill.");
+			return true;
 
-				return true;
-			}
-
-			else {
-
-				return false;
-			}
-		}
+		} // putMemoryContents
 
 		// Determines if a given address is within a processID's memory limit
 		private validateAddress(address: number, processID: number): boolean {

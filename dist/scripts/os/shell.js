@@ -518,7 +518,15 @@ var TSOS;
                         _ResidentQueue[index] = pcbBeingReplaced;
 
                         // Roll requested PCB into disk
-                        _Kernel.programRollIn(processID, true);
+                        _Kernel.programRollIn(processID, memorySlot, true);
+
+                        // Set approrpiate flags and stuff
+                        selectedPCB.location = _Locations.MEMORY;
+                        selectedPCB.memorySlot = memorySlot;
+                        selectedPCB.baseRegister = memorySlot * _MemoryConstants.PROCESS_SIZE;
+                        selectedPCB.limitRegister = selectedPCB.baseRegister + _MemoryConstants.PROCESS_SIZE - 1;
+
+                        console.log(selectedPCB);
 
                         console.log(_ResidentQueue);
 
@@ -891,10 +899,6 @@ var TSOS;
             var pidValue = parseInt(inputPID, 10);
 
             console.log("Rolling pid " + pidValue + " out to disk.");
-
-            _Kernel.programRollOut(pidValue);
-
-            _Kernel.programRollIn(pidValue);
         };
         return Shell;
     })();

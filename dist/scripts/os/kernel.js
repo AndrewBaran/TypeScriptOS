@@ -452,7 +452,7 @@ var TSOS;
 
         // Moves a process stored on the disk into memory
         // TODO Implement
-        Kernel.prototype.programRollIn = function (processID, runCalled) {
+        Kernel.prototype.programRollIn = function (processID, memorySlot, runCalled) {
             if (typeof runCalled === "undefined") { runCalled = false; }
             var pcbFound = false;
 
@@ -488,14 +488,14 @@ var TSOS;
                 }
 
                 console.log("Placing PID " + processID + " into memory.");
-
                 console.log(byteList);
 
-                // TODO IDK yet
-                _MemoryManager.putMemoryContents(byteList, processID);
+                // Put process memory into main memory
+                _MemoryManager.putMemoryContents(byteList, memorySlot);
 
                 // Delete the swap file
-                // Set location of PCB to memory
+                _KrnFileSystemDriver.deleteFile(desiredFileName);
+
                 this.krnTrace("PID " + processID + " moved from disk to memory.");
                 return true;
             } else {

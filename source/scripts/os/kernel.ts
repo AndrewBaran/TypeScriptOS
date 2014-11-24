@@ -542,7 +542,7 @@ module TSOS {
 
         // Moves a process stored on the disk into memory
         // TODO Implement
-        public programRollIn(processID: number, runCalled: boolean = false): boolean {
+        public programRollIn(processID: number, memorySlot: number, runCalled: boolean = false): boolean {
 
             var pcbFound: boolean = false;
 
@@ -582,14 +582,13 @@ module TSOS {
                 }
 
                 console.log("Placing PID " + processID + " into memory.");
-
                 console.log(byteList);
 
-                // TODO IDK yet
-                _MemoryManager.putMemoryContents(byteList, processID);
+                // Put process memory into main memory
+                _MemoryManager.putMemoryContents(byteList, memorySlot);
 
                 // Delete the swap file
-                // Set location of PCB to memory
+                _KrnFileSystemDriver.deleteFile(desiredFileName);
 
                 this.krnTrace("PID " + processID + " moved from disk to memory.");
                 return true;
