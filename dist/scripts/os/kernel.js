@@ -450,7 +450,7 @@ var TSOS;
             }
         };
 
-        // Moves a process sotred on the disk into memory
+        // Moves a process stored on the disk into memory
         // TODO Implement
         Kernel.prototype.programRollIn = function (processID, runCalled) {
             if (typeof runCalled === "undefined") { runCalled = false; }
@@ -488,6 +488,8 @@ var TSOS;
                 }
 
                 console.log("Placing PID " + processID + " into memory.");
+
+                console.log(byteList);
 
                 // TODO IDK yet
                 _MemoryManager.putMemoryContents(byteList, processID);

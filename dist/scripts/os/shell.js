@@ -464,6 +464,7 @@ var TSOS;
                     }
                 }
 
+                // Found PCB in the residentQueue
                 if (properIndex !== -1) {
                     // Remove PCB from resident queue
                     var selectedPCB = _ResidentQueue[properIndex];
@@ -473,7 +474,7 @@ var TSOS;
                     if (selectedPCB.location === _Locations.DISK) {
                         console.log("PCB is on disk");
 
-                        var memorySlot = 0;
+                        var memorySlot = -1;
                         var memorySlotFound = false;
 
                         for (var i = 0; i < _MemoryManager.programsInUse.length; i++) {
@@ -485,20 +486,41 @@ var TSOS;
 
                         // Pick one at random if no location available
                         if (!memorySlotFound) {
+                            console.log("Picking slot at random.");
                             memorySlot = Math.floor(Math.random() * (_MemoryManager.programsInUse.length));
                         }
 
                         console.log("Replacing slot " + memorySlot);
+                        console.log(_ResidentQueue);
+                        for (var index = 0; index < _ResidentQueue.length; index++) {
+                            var pcbBeingReplaced = _ResidentQueue[index];
 
-                        // TODO Figure out which PCB is in which slot?
+                            if (pcbBeingReplaced.memorySlot === memorySlot) {
+                                console.log("This PCB");
+                                console.log(pcbBeingReplaced);
+                                console.log("is in memorySlot " + memorySlot);
+
+                                break;
+                            }
+                        }
+
                         // Roll PCB from disk to memory
-                        _Kernel.programRollOut(memorySlot, true);
+                        _Kernel.programRollOut(pcbBeingReplaced.processID, true);
 
                         // Clear memory at the slot
-                        _MemoryManager.clearMemory(memorySlot);
+                        _MemoryManager.clearMemory(pcbBeingReplaced.memorySlot);
 
-                        // Roll replace PCB into disk
+                        // Clear items on the replaced PCB
+                        pcbBeingReplaced.location = _Locations.DISK;
+                        pcbBeingReplaced.memorySlot = -1;
+
+                        // Place PCB back in the resident queue
+                        _ResidentQueue[index] = pcbBeingReplaced;
+
+                        // Roll requested PCB into disk
                         _Kernel.programRollIn(processID, true);
+
+                        console.log(_ResidentQueue);
 
                         TSOS.Control.updateDisplays();
                     }

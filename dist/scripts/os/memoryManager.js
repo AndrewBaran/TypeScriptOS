@@ -94,6 +94,8 @@ var TSOS;
                 // Set location to memory
                 newPCB.location = _Locations.MEMORY;
 
+                newPCB.memorySlot = processNumber;
+
                 _ResidentQueue.push(newPCB);
 
                 // Keep track of where program is loaded
@@ -156,6 +158,8 @@ var TSOS;
 
                 _KrnFileSystemDriver.displayFileSystem();
             }
+
+            console.log(_ResidentQueue);
         };
 
         // Display the (potentially updated) memory in the browser
@@ -292,6 +296,7 @@ var TSOS;
             }
         };
 
+        // TODO Implement!!!
         // Put the contents of memory from a PCB on disk back into memory
         MemoryManager.prototype.putMemoryContents = function (byteList, processID) {
             var spaceFound = false;
@@ -299,11 +304,14 @@ var TSOS;
             for (var i = 0; i < this.programsInUse.length; i++) {
                 if (this.programsInUse[i] === 0) {
                     var processNumber = i;
+
                     spaceFound = true;
+                    break;
                 }
             }
 
             if (spaceFound) {
+                // Update PCB with slot it is stored in
                 console.log("Space at " + processNumber + " is empty. Fill.");
 
                 return true;

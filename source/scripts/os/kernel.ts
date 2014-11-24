@@ -540,7 +540,7 @@ module TSOS {
 
         } // programRollOut()
 
-        // Moves a process sotred on the disk into memory
+        // Moves a process stored on the disk into memory
         // TODO Implement
         public programRollIn(processID: number, runCalled: boolean = false): boolean {
 
@@ -582,6 +582,8 @@ module TSOS {
                 }
 
                 console.log("Placing PID " + processID + " into memory.");
+
+                console.log(byteList);
 
                 // TODO IDK yet
                 _MemoryManager.putMemoryContents(byteList, processID);

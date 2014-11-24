@@ -120,6 +120,8 @@ module TSOS {
 				// Set location to memory
 				newPCB.location = _Locations.MEMORY;
 
+				newPCB.memorySlot = processNumber;
+
 				_ResidentQueue.push(newPCB);
 
 				// Keep track of where program is loaded
@@ -194,6 +196,8 @@ module TSOS {
 				_KrnFileSystemDriver.displayFileSystem();
 
 			} // else
+
+			console.log(_ResidentQueue);
 
 		} // loadProgram()
 
@@ -371,6 +375,7 @@ module TSOS {
 
 		} // getMemoryContents()
 
+		// TODO Implement!!!
 		// Put the contents of memory from a PCB on disk back into memory
 		public putMemoryContents(byteList: string[], processID: number): boolean {
 
@@ -382,12 +387,15 @@ module TSOS {
 				if(this.programsInUse[i] === 0) {
 
 					var processNumber: number = i;
+
 					spaceFound = true;
+					break;
 				}
 			}
 
 			if(spaceFound) {
 
+				// Update PCB with slot it is stored in
 				console.log("Space at " + processNumber + " is empty. Fill.");
 
 				return true;
