@@ -371,6 +371,8 @@ module TSOS {
 
 			var pcbFound: boolean = false;
 
+			console.log("Getting memory at PID " + processID);
+
 			// Check if process is in memory
 			for(var i: number = 0; i < _ReadyQueue.getSize(); i++) {
 

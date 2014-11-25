@@ -329,10 +329,102 @@ var TSOS;
                 _ReadyQueue.enqueue(_CurrentPCB);
             }
 
-            // Load new PCB
+            // Load new PCB if more than one PCB in queue
             if (_ReadyQueue.getSize() > 0) {
                 // Get item at front of queue, don't remove
                 _CurrentPCB = _ReadyQueue.peek();
+
+                if (_CurrentPCB.location === _Locations.DISK) {
+                    console.log("_CurrentPCB is on disk.");
+
+                    // Place item at end of queue onto disk
+                    var lastPCB = _ReadyQueue.q[_ReadyQueue.getSize() - 1];
+                    var memorySlot = lastPCB.memorySlot;
+
+                    // Swap out, as lastPCB is in memory
+                    if (_ReadyQueue.getSize() > 1 && lastPCB.location === _Locations.MEMORY) {
+                        console.log("Can swap with lastPCB, which is in memory.");
+
+                        // Roll lastPCB in the queue to the disk
+                        this.programRollOut(lastPCB.processID, false);
+
+                        // Update its flags
+                        lastPCB.location = _Locations.DISK;
+                        lastPCB.memorySlot = -1;
+                        lastPCB.baseRegister = 0;
+                        lastPCB.limitRegister = 0;
+
+                        // Place it back in the queue
+                        _ReadyQueue.q[_ReadyQueue.getSize() - 1] = lastPCB;
+                    } else if (_ReadyQueue.getSize() > 1 && lastPCB.location === _Locations.DISK) {
+                        console.log("LastPCB is on disk, so look for an opening.");
+
+                        var pcbToReplaceFound = false;
+
+                        for (var i = 1; i < (_ReadyQueue.getSize() - 1); i++) {
+                            var pcbToReplace = _ReadyQueue.q[i];
+
+                            if (pcbToReplace.location === _Locations.MEMORY) {
+                                pcbToReplaceFound = true;
+                                break;
+                            }
+                        }
+
+                        // Found PCB in memory to replace
+                        if (pcbToReplaceFound) {
+                            console.log("Found PCB to replace in memory");
+
+                            memorySlot = pcbToReplace.memorySlot;
+                            console.log("Replacing slot " + memorySlot);
+
+                            this.programRollOut(pcbToReplace.processID, false);
+
+                            // Update its flags
+                            pcbToReplace.location = _Locations.DISK;
+                            pcbToReplace.memorySlot = -1;
+                            pcbToReplace.baseRegister = 0;
+                            pcbToReplace.limitRegister = 0;
+
+                            // Put back in queue
+                            _ReadyQueue.q[i] = pcbToReplace;
+                        } else {
+                            console.log("All PCBs on disk.");
+
+                            var randomSlot = Math.floor(Math.random() * _MemoryManager.programsInUse.length);
+
+                            memorySlot = randomSlot;
+                            _MemoryManager.programsInUse[memorySlot] = 1;
+                        }
+                    } else {
+                        console.log("Only one in queue and this PCB is on disk.");
+
+                        // Since only one left in queue, pick a random slot in memory to load into
+                        var randomSlot = Math.floor(Math.random() * _MemoryManager.programsInUse.length);
+
+                        memorySlot = randomSlot;
+                        _MemoryManager.programsInUse[memorySlot] = 1;
+
+                        console.log("Loading program on disk into memory slot " + memorySlot);
+                    }
+
+                    // Update its flags
+                    _CurrentPCB.location = _Locations.MEMORY;
+                    _CurrentPCB.memorySlot = memorySlot;
+                    _CurrentPCB.baseRegister = memorySlot * _MemoryConstants.PROCESS_SIZE;
+                    _CurrentPCB.limitRegister = _CurrentPCB.baseRegister + _MemoryConstants.PROCESS_SIZE - 1;
+
+                    console.log("Base reg: " + _CurrentPCB.baseRegister);
+                    console.log("Limit reg: " + _CurrentPCB.limitRegister);
+                    console.log("Memory slot: " + memorySlot);
+
+                    // Place it (_CurrentPCB) back on the ready queue
+                    _ReadyQueue.q[0] = _CurrentPCB;
+
+                    console.log("Rolling " + _CurrentPCB.processID + " into memory.");
+
+                    // Roll the program on disk (_CurrentPCB) to memory
+                    this.programRollIn(_CurrentPCB.processID, memorySlot, false);
+                }
 
                 // Load new CPU state
                 _CPU.loadState(_CurrentPCB);
@@ -351,6 +443,7 @@ var TSOS;
 
             // Load displays
             TSOS.Control.updateDisplays();
+            _KrnFileSystemDriver.displayFileSystem();
 
             // Flip mode bit back
             _Mode_Bit = _Modes.USER;
@@ -437,6 +530,9 @@ var TSOS;
 
                     _Kernel.krnTrace("Wrote contents of PID " + processID + " to disk in file " + fileName + ".");
 
+                    console.log("Writen to file " + fileName);
+                    console.log("Contents of file: " + memoryContents);
+
                     // Set this PCB to on disk
                     currentPCB.location = _Locations.DISK;
 
@@ -454,7 +550,6 @@ var TSOS;
         };
 
         // Moves a process stored on the disk into memory
-        // TODO Implement
         Kernel.prototype.programRollIn = function (processID, memorySlot, runCalled) {
             if (typeof runCalled === "undefined") { runCalled = false; }
             var pcbFound = false;
@@ -478,6 +573,8 @@ var TSOS;
 
                 // Read the contents of disk into string
                 var memoryContents = _KrnFileSystemDriver.readFile(desiredFileName);
+                console.log("Reading from file " + desiredFileName);
+                console.log("Contents of file: " + memoryContents);
 
                 console.log("Length of memory: " + memoryContents.length);
 

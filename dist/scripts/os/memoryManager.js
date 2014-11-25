@@ -291,6 +291,8 @@ var TSOS;
         MemoryManager.prototype.getMemoryContents = function (processID) {
             var pcbFound = false;
 
+            console.log("Getting memory at PID " + processID);
+
             for (var i = 0; i < _ReadyQueue.getSize(); i++) {
                 var currentPCB = _ReadyQueue.q[i];
 

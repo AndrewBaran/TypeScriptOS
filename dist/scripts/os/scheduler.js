@@ -145,6 +145,43 @@ var TSOS;
                     console.log("This shouldn't happen");
                     break;
             }
+
+            // Check if current PCB is on disk
+            if (_CurrentPCB.location === _Locations.DISK) {
+                console.log("_CurrentPCB is on disk");
+
+                var memorySlotFound = false;
+
+                for (var i = 0; i < _MemoryManager.programsInUse.length; i++) {
+                    if (_MemoryManager.programsInUse[i] === 0) {
+                        var memorySlot = i;
+                        memorySlotFound = true;
+
+                        break;
+                    }
+                }
+
+                // Pick one at random; no available slots in memory
+                // TODO Fix
+                if (!memorySlotFound) {
+                    var randomSlot = Math.floor(Math.random() * _MemoryManager.programsInUse.length);
+                    console.log("Replacing slot " + randomSlot);
+
+                    memorySlot = randomSlot;
+                    // _Kernel.programRollOut(_CurrentPCB.processID, false);
+                }
+
+                // Place program into memory
+                _Kernel.programRollIn(_CurrentPCB.processID, memorySlot, false);
+
+                _CurrentPCB.location = _Locations.MEMORY;
+                _CurrentPCB.memorySlot = memorySlot;
+                _CurrentPCB.baseRegister = memorySlot * _MemoryConstants.PROCESS_SIZE;
+                _CurrentPCB.limitRegister = _CurrentPCB.baseRegister + _MemoryConstants.PROCESS_SIZE - 1;
+
+                // Put back into ready queue
+                _ReadyQueue.q[0] = _CurrentPCB;
+            }
         };
         return Scheduler;
     })();
