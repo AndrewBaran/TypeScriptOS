@@ -198,7 +198,6 @@ module TSOS {
 				}
 
 				// Pick one at random; no available slots in memory
-				// TODO Fix
 				if(!memorySlotFound) {
 
 					var randomSlot: number = Math.floor(Math.random() * _MemoryManager.programsInUse.length);
@@ -206,7 +205,26 @@ module TSOS {
 
 					memorySlot = randomSlot;
 
-					// _Kernel.programRollOut(_CurrentPCB.processID, false);
+					// Find correspond PCB to this memorySlot
+					for(var i: number = 0; i < _ReadyQueue.getSize(); i++) {
+
+						var pcbToReplace: TSOS.PCB = _ReadyQueue.q[i];
+
+						if(pcbToReplace.memorySlot === memorySlot) {
+
+							break;
+						}
+					}
+
+					_Kernel.programRollOut(pcbToReplace.processID, false);
+
+					pcbToReplace.location = _Locations.DISK;
+					pcbToReplace.memorySlot = -1;
+					pcbToReplace.baseRegister = 0;
+					pcbToReplace.limitRegister = 0;
+
+					// Put back in ready queue
+					_ReadyQueue.q[i] = pcbToReplace;
 				}
 
 				// Place program into memory
