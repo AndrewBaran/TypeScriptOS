@@ -96,11 +96,11 @@ Final Project Checklist
 	- [x] First-come, first-served (FCFS)
 	- [x] Non-preemptive priority (You will need an optional load parameter here)
 
-- [ ] Implement swapped virtual memory with enough physical memory for three concurrent user processes
-	- [ ] Allow OS to execute four concurrent prcess by writing roll-out and roll-in routines
-		- [ ] Take a ready process and store it to the disk via your fsDD
-		- [ ] Load a swapped-out process and place it in the ready queue
-		- [ ] Your ready queue should denote which process are where
+- [x] Implement swapped virtual memory with enough physical memory for three concurrent user processes
+	- [x] Allow OS to execute four concurrent prcess by writing roll-out and roll-in routines
+		- [x] Take a ready process and store it to the disk via your fsDD
+		- [x] Load a swapped-out process and place it in the ready queue
+		- [x] Your ready queue should denote which process are where
 
 Setup TypeScript/Gulp
 =====================

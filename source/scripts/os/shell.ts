@@ -412,6 +412,7 @@ module TSOS {
             clearInterval(_hardwareClockID);
         }
 
+        // Loads a program into memory
         public shellLoad(): void {
 
             // Get text from the User Program Input textbox

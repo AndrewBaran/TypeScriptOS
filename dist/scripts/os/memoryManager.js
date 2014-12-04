@@ -46,7 +46,6 @@ var TSOS;
         };
 
         // Loads the program into physical memory or disks
-        // TODO Broken?
         MemoryManager.prototype.loadProgram = function (byteList) {
             var memorySlotFound = false;
 

@@ -64,7 +64,6 @@ module TSOS {
 		} // clearMemory()
 
 		// Loads the program into physical memory or disks
-		// TODO Broken?
 		public loadProgram(byteList: string[]) : void {
 
 			var memorySlotFound: boolean = false;

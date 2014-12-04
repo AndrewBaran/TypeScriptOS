@@ -385,6 +385,7 @@ var TSOS;
             clearInterval(_hardwareClockID);
         };
 
+        // Loads a program into memory
         Shell.prototype.shellLoad = function () {
             // Get text from the User Program Input textbox
             var textInput = document.getElementById("taProgramInput").value;
