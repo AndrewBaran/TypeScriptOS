@@ -150,7 +150,6 @@ module TSOS {
 			return outputFileNames;
 		}
 
-		// TODO Make it so dupliciate file name writes over previous file name
 		// Creates a file in the file system
 		public createFile(fileName: string, hiddenFile?: boolean): boolean {
 
@@ -223,8 +222,28 @@ module TSOS {
 				}
 			}
 
+			// Check if file already on disk
+			var fileNamesOnDisk: string[] = this.getFileNames();
+			var fileNameFound: boolean = false;
+
+			for(var i: number = 0; i < fileNamesOnDisk.length; i++) {
+
+				if(fileNamesOnDisk[i] === fileName) {
+
+					fileNameFound = true;
+					break;
+				}
+			}
+
+			// Duplicate file found; don't create it
+			if(fileNameFound) {
+
+				_Kernel.krnTrace("Error! Duplicate file found.");
+				return false;
+			}
+
 			// Add file to system
-			if(directoryBlockFound && dataBlockFound) {
+			else if(directoryBlockFound && dataBlockFound) {
 
 				// Convert the fileName to hex
 				var hexString: string = Utils.stringToHex(fileName);
@@ -344,6 +363,7 @@ module TSOS {
 
 		} // readFile()
 
+		// Write the contents to the specified file
 		public writeFile(fileName: string, contentToWrite: string): boolean {
 
 			var directoryBlockFound: boolean = false;
@@ -441,6 +461,7 @@ module TSOS {
 
 		} // writeFile()
 
+		// Deletes a file from the disk
 		public deleteFile(fileName: string): boolean {
 
 			// Find corresponding directory block

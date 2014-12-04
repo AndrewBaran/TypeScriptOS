@@ -153,11 +153,6 @@ module TSOS {
             sc = new ShellCommand(this.shellFormat, "format", " - Formats the disk back to its default state.");
             this.commandList[this.commandList.length] = sc;
 
-            // TODO Remove after testing is done
-            // test <pid>
-            sc = new ShellCommand(this.shellTest, "test", " <pid> - Tests rolling program out to the disk.");
-            this.commandList[this.commandList.length] = sc;
-
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -881,7 +876,7 @@ module TSOS {
                 }
 
                 else {
-                    _StdOut.putText("File could not be created. Secondary memory is full.");
+                    _StdOut.putText("File could not be created.");
                 }
             }
 
@@ -1096,12 +1091,6 @@ module TSOS {
         	}
 
         } // shellFormat()
-
-        // TODO Remove after testing is over
-        public shellTest(inputPID: string): void {
-
-            _StdOut.putText("Pids on disk: " + _MemoryManager.pidsOnDisk);
-        }
 
     }
 }

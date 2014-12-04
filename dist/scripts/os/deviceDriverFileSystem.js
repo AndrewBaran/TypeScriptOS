@@ -135,7 +135,6 @@ var TSOS;
             return outputFileNames;
         };
 
-        // TODO Make it so dupliciate file name writes over previous file name
         // Creates a file in the file system
         DeviceDriverFileSystem.prototype.createFile = function (fileName, hiddenFile) {
             // Add invalid character to file name to prevent Alan from deleting the file
@@ -199,8 +198,22 @@ var TSOS;
                 }
             }
 
-            // Add file to system
-            if (directoryBlockFound && dataBlockFound) {
+            // Check if file already on disk
+            var fileNamesOnDisk = this.getFileNames();
+            var fileNameFound = false;
+
+            for (var i = 0; i < fileNamesOnDisk.length; i++) {
+                if (fileNamesOnDisk[i] === fileName) {
+                    fileNameFound = true;
+                    break;
+                }
+            }
+
+            // Duplicate file found; don't create it
+            if (fileNameFound) {
+                _Kernel.krnTrace("Error! Duplicate file found.");
+                return false;
+            } else if (directoryBlockFound && dataBlockFound) {
                 // Convert the fileName to hex
                 var hexString = TSOS.Utils.stringToHex(fileName);
 
@@ -303,6 +316,7 @@ var TSOS;
             return outputString;
         };
 
+        // Write the contents to the specified file
         DeviceDriverFileSystem.prototype.writeFile = function (fileName, contentToWrite) {
             var directoryBlockFound = false;
 
@@ -389,6 +403,7 @@ var TSOS;
             return true;
         };
 
+        // Deletes a file from the disk
         DeviceDriverFileSystem.prototype.deleteFile = function (fileName) {
             // Find corresponding directory block
             var directoryBlockFound = false;

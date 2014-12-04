@@ -64,7 +64,7 @@ module TSOS {
 		} // clearMemory()
 
 		// Loads the program into physical memory or disks
-		// Broken?
+		// TODO Broken?
 		public loadProgram(byteList: string[]) : void {
 
 			var memorySlotFound: boolean = false;
@@ -184,7 +184,7 @@ module TSOS {
 
 				var pidFound: boolean = false;
 
-				// Look for next  available PID
+				// Look for next available PID
 				while(!pidFound) {
 
 					// PID not in use
@@ -207,33 +207,45 @@ module TSOS {
 				// Create swap file
 				var fileName: string = "process" + processID + ".swp";
 
-				_KrnFileSystemDriver.createFile(fileName, true);
+				var createFileResult: boolean = _KrnFileSystemDriver.createFile(fileName, true);
+				var writeFileResult: boolean = false;
 
-				// Denote swap file as hidden
-				fileName = "." + fileName;
+				// File successfully created
+				if(createFileResult) {
 
-				// Write memory contents to swap file
-				_KrnFileSystemDriver.writeFile(fileName, memoryContents);
+					// Denote swap file as hidden
+					fileName = "." + fileName;
 
-				var newPCB: TSOS.PCB = new PCB(processID);
-				newPCB.timeArrived = _OSclock; // Used in FCFS scheduling
-				newPCB.status = _ProcessStates.NEW; // Used for scheduling
+					// Write memory contents to swap file
+					writeFileResult = _KrnFileSystemDriver.writeFile(fileName, memoryContents);
 
-				// Set priority based off of size of program
-				newPCB.priority = byteList.length;
+					// Successful write to file
+					if(writeFileResult) {
+						
+						var newPCB: TSOS.PCB = new PCB(processID);
+						newPCB.timeArrived = _OSclock; // Used in FCFS scheduling
+						newPCB.status = _ProcessStates.NEW; // Used for scheduling
 
-				// Set location to disk
-				newPCB.location = _Locations.DISK;
+						// Set priority based off of size of program
+						newPCB.priority = byteList.length;
 
-				_ResidentQueue.push(newPCB);
+						// Set location to disk
+						newPCB.location = _Locations.DISK;
 
-				_StdOut.putText("Program loaded | PID " + processID + " created");
+						_ResidentQueue.push(newPCB);
 
-				_KrnFileSystemDriver.displayFileSystem();
+						_StdOut.putText("Program loaded | PID " + processID + " created");
+
+						_KrnFileSystemDriver.displayFileSystem();
+					}
+				}
+
+				// Check if file was not created and / or written to
+				if(!createFileResult && !writeFileResult) {
+					_StdOut.putText("Error! Couldn't load file: memory full.");
+				}
 
 			} // else
-
-			console.log(_ResidentQueue);
 
 		} // loadProgram()
 

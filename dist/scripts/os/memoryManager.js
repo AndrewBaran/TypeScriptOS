@@ -46,7 +46,7 @@ var TSOS;
         };
 
         // Loads the program into physical memory or disks
-        // Broken?
+        // TODO Broken?
         MemoryManager.prototype.loadProgram = function (byteList) {
             var memorySlotFound = false;
 
@@ -160,32 +160,42 @@ var TSOS;
                 // Create swap file
                 var fileName = "process" + processID + ".swp";
 
-                _KrnFileSystemDriver.createFile(fileName, true);
+                var createFileResult = _KrnFileSystemDriver.createFile(fileName, true);
+                var writeFileResult = false;
 
-                // Denote swap file as hidden
-                fileName = "." + fileName;
+                // File successfully created
+                if (createFileResult) {
+                    // Denote swap file as hidden
+                    fileName = "." + fileName;
 
-                // Write memory contents to swap file
-                _KrnFileSystemDriver.writeFile(fileName, memoryContents);
+                    // Write memory contents to swap file
+                    writeFileResult = _KrnFileSystemDriver.writeFile(fileName, memoryContents);
 
-                var newPCB = new TSOS.PCB(processID);
-                newPCB.timeArrived = _OSclock; // Used in FCFS scheduling
-                newPCB.status = _ProcessStates.NEW; // Used for scheduling
+                    // Successful write to file
+                    if (writeFileResult) {
+                        var newPCB = new TSOS.PCB(processID);
+                        newPCB.timeArrived = _OSclock; // Used in FCFS scheduling
+                        newPCB.status = _ProcessStates.NEW; // Used for scheduling
 
-                // Set priority based off of size of program
-                newPCB.priority = byteList.length;
+                        // Set priority based off of size of program
+                        newPCB.priority = byteList.length;
 
-                // Set location to disk
-                newPCB.location = _Locations.DISK;
+                        // Set location to disk
+                        newPCB.location = _Locations.DISK;
 
-                _ResidentQueue.push(newPCB);
+                        _ResidentQueue.push(newPCB);
 
-                _StdOut.putText("Program loaded | PID " + processID + " created");
+                        _StdOut.putText("Program loaded | PID " + processID + " created");
 
-                _KrnFileSystemDriver.displayFileSystem();
+                        _KrnFileSystemDriver.displayFileSystem();
+                    }
+                }
+
+                // Check if file was not created and / or written to
+                if (!createFileResult && !writeFileResult) {
+                    _StdOut.putText("Error! Couldn't load file: memory full.");
+                }
             }
-
-            console.log(_ResidentQueue);
         };
 
         // Display the (potentially updated) memory in the browser
