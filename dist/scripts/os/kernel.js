@@ -113,7 +113,6 @@ var TSOS;
             // Check for an interrupt
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
-                // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } else if (_CPU.isExecuting) {
@@ -134,13 +133,10 @@ var TSOS;
             }
         };
 
-        //
         // Interrupt Handling
-        //
         Kernel.prototype.krnEnableInterrupts = function () {
             // Keyboard
             TSOS.Devices.hostEnableKeyboardInterrupt();
-            // TODO File System
         };
 
         Kernel.prototype.krnDisableInterrupts = function () {
@@ -335,16 +331,12 @@ var TSOS;
                 _CurrentPCB = _ReadyQueue.peek();
 
                 if (_CurrentPCB.location === _Locations.DISK) {
-                    console.log("_CurrentPCB is on disk.");
-
                     // Place item at end of queue onto disk
                     var lastPCB = _ReadyQueue.q[_ReadyQueue.getSize() - 1];
                     var memorySlot = lastPCB.memorySlot;
 
                     // Swap out, as lastPCB is in memory
                     if (_ReadyQueue.getSize() > 1 && lastPCB.location === _Locations.MEMORY) {
-                        console.log("Can swap with lastPCB, which is in memory.");
-
                         // Roll lastPCB in the queue to the disk
                         this.programRollOut(lastPCB.processID, false);
 
@@ -357,8 +349,6 @@ var TSOS;
                         // Place it back in the queue
                         _ReadyQueue.q[_ReadyQueue.getSize() - 1] = lastPCB;
                     } else if (_ReadyQueue.getSize() > 1 && lastPCB.location === _Locations.DISK) {
-                        console.log("LastPCB is on disk, so look for an opening.");
-
                         var pcbToReplaceFound = false;
 
                         for (var i = 1; i < (_ReadyQueue.getSize() - 1); i++) {
@@ -372,10 +362,7 @@ var TSOS;
 
                         // Found PCB in memory to replace
                         if (pcbToReplaceFound) {
-                            console.log("Found PCB to replace in memory");
-
                             memorySlot = pcbToReplace.memorySlot;
-                            console.log("Replacing slot " + memorySlot);
 
                             this.programRollOut(pcbToReplace.processID, false);
 
@@ -388,23 +375,17 @@ var TSOS;
                             // Put back in queue
                             _ReadyQueue.q[i] = pcbToReplace;
                         } else {
-                            console.log("All PCBs on disk.");
-
                             var randomSlot = Math.floor(Math.random() * _MemoryManager.programsInUse.length);
 
                             memorySlot = randomSlot;
                             _MemoryManager.programsInUse[memorySlot] = 1;
                         }
                     } else {
-                        console.log("Only one in queue and this PCB is on disk.");
-
                         // Since only one left in queue, pick a random slot in memory to load into
                         var randomSlot = Math.floor(Math.random() * _MemoryManager.programsInUse.length);
 
                         memorySlot = randomSlot;
                         _MemoryManager.programsInUse[memorySlot] = 1;
-
-                        console.log("Loading program on disk into memory slot " + memorySlot);
                     }
 
                     // Update its flags
@@ -413,14 +394,8 @@ var TSOS;
                     _CurrentPCB.baseRegister = memorySlot * _MemoryConstants.PROCESS_SIZE;
                     _CurrentPCB.limitRegister = _CurrentPCB.baseRegister + _MemoryConstants.PROCESS_SIZE - 1;
 
-                    console.log("Base reg: " + _CurrentPCB.baseRegister);
-                    console.log("Limit reg: " + _CurrentPCB.limitRegister);
-                    console.log("Memory slot: " + memorySlot);
-
                     // Place it (_CurrentPCB) back on the ready queue
                     _ReadyQueue.q[0] = _CurrentPCB;
-
-                    console.log("Rolling " + _CurrentPCB.processID + " into memory.");
 
                     // Roll the program on disk (_CurrentPCB) to memory
                     this.programRollIn(_CurrentPCB.processID, memorySlot, false);
@@ -454,8 +429,6 @@ var TSOS;
             if (typeof runCalled === "undefined") { runCalled = false; }
             // If run command used
             if (runCalled) {
-                console.log("Run command used. Look at resident queue.");
-
                 // Check if processID corresponds to a PCB in the resident queue
                 var pcbFound = false;
 
@@ -463,7 +436,6 @@ var TSOS;
                     var currentPCB = _ResidentQueue[i];
 
                     if (currentPCB.processID === processID) {
-                        console.log("PCB found.");
                         pcbFound = true;
                         break;
                     }
@@ -501,8 +473,6 @@ var TSOS;
                     return false;
                 }
             } else {
-                console.log("Runall command used. Look at ready queue.");
-
                 // Check if processID corresponds to a PCB in the Ready queue
                 var pcbFound = false;
 
@@ -510,7 +480,6 @@ var TSOS;
                     var currentPCB = _ReadyQueue.q[i];
 
                     if (currentPCB.processID === processID) {
-                        console.log("PCB found.");
                         pcbFound = true;
                         break;
                     }
@@ -529,9 +498,6 @@ var TSOS;
                     _KrnFileSystemDriver.writeFile(fileName, memoryContents);
 
                     _Kernel.krnTrace("Wrote contents of PID " + processID + " to disk in file " + fileName + ".");
-
-                    console.log("Writen to file " + fileName);
-                    console.log("Contents of file: " + memoryContents);
 
                     // Set this PCB to on disk
                     currentPCB.location = _Locations.DISK;
@@ -558,9 +524,6 @@ var TSOS;
             var desiredFileName = ".process" + processID.toString(10) + ".swp";
             var fileNames = _KrnFileSystemDriver.getFileNames();
 
-            console.log("Desired file name: " + desiredFileName);
-            console.log("File names on disk: " + fileNames);
-
             for (var i = 0; i < fileNames.length; i++) {
                 if (fileNames[i] === desiredFileName) {
                     pcbFound = true;
@@ -569,14 +532,8 @@ var TSOS;
             }
 
             if (pcbFound) {
-                console.log("Found the PCB");
-
                 // Read the contents of disk into string
                 var memoryContents = _KrnFileSystemDriver.readFile(desiredFileName);
-                console.log("Reading from file " + desiredFileName);
-                console.log("Contents of file: " + memoryContents);
-
-                console.log("Length of memory: " + memoryContents.length);
 
                 // Parse contents back into memory
                 var byteList = [];
@@ -586,9 +543,6 @@ var TSOS;
 
                     byteList.push(currentByte);
                 }
-
-                console.log("Placing PID " + processID + " into memory.");
-                console.log(byteList);
 
                 // Put process memory into main memory
                 _MemoryManager.putMemoryContents(byteList, memorySlot);

@@ -151,9 +151,7 @@ var TSOS;
                         var currentDataBlock = this.getBlock(trackNumber, sectorNumber, blockNumber);
 
                         if (!currentDataBlock.inUse) {
-                            console.log("Data block at (" + trackNumber + ", " + sectorNumber + ", " + blockNumber + ") is free.");
                             dataBlockFound = true;
-
                             break;
                         }
                     }
@@ -181,9 +179,7 @@ var TSOS;
                         var currentDirectoryBlock = this.getBlock(trackNumber, sectorNumber, blockNumber);
 
                         if (!currentDirectoryBlock.inUse) {
-                            console.log("Directory block at (" + trackNumber + ", " + sectorNumber + ", " + blockNumber + ") is free.");
                             directoryBlockFound = true;
-
                             break;
                         }
                     }
@@ -343,64 +339,68 @@ var TSOS;
                 }
             }
 
-            var track = parseInt(currentDirectoryBlock.nextTrack, 10);
-            var sector = parseInt(currentDirectoryBlock.nextSector, 10);
-            var block = parseInt(currentDirectoryBlock.nextBlock, 10);
+            if (directoryBlockFound) {
+                var track = parseInt(currentDirectoryBlock.nextTrack, 10);
+                var sector = parseInt(currentDirectoryBlock.nextSector, 10);
+                var block = parseInt(currentDirectoryBlock.nextBlock, 10);
 
-            var dataBlock = this.getBlock(track, sector, block);
+                var dataBlock = this.getBlock(track, sector, block);
 
-            // Erase contents before writing
-            this.eraseBlockChain(dataBlock);
+                // Erase contents before writing
+                this.eraseBlockChain(dataBlock);
 
-            var stillWriting = true;
+                var stillWriting = true;
 
-            while (contentToWrite.length > 0 && stillWriting) {
-                var currentContent = contentToWrite.substring(0, _FileConstants.DATA_SIZE);
-                contentToWrite = contentToWrite.substring(_FileConstants.DATA_SIZE);
+                while (contentToWrite.length > 0 && stillWriting) {
+                    var currentContent = contentToWrite.substring(0, _FileConstants.DATA_SIZE);
+                    contentToWrite = contentToWrite.substring(_FileConstants.DATA_SIZE);
 
-                // Convert currentContent to hex
-                var hexString = TSOS.Utils.stringToHex(currentContent);
+                    // Convert currentContent to hex
+                    var hexString = TSOS.Utils.stringToHex(currentContent);
 
-                dataBlock.data = hexString;
+                    dataBlock.data = hexString;
 
-                // Write data back to session storage
-                this.updateBlock(dataBlock);
-
-                // No more content to write
-                if (contentToWrite.length === 0) {
-                    stillWriting = false;
-                } else {
-                    // Find a new block
-                    var nextDataBlock = this.findNewBlock();
-
-                    // Can't find new block to write to
-                    if (nextDataBlock === null) {
-                        return false;
-                    }
-
-                    // Set currentDataBlock to point to the nextDataBlock
-                    dataBlock.nextTrack = nextDataBlock.track.toString();
-                    dataBlock.nextSector = nextDataBlock.sector.toString();
-                    dataBlock.nextBlock = nextDataBlock.block.toString();
-
-                    // Set nextDataBlock to in use
-                    nextDataBlock.inUse = true;
-
-                    // Set nextDataBlock to point to no other block
-                    nextDataBlock.nextTrack = "-";
-                    nextDataBlock.nextSector = "-";
-                    nextDataBlock.nextBlock = "-";
-
-                    // Store these blocks back into storage
+                    // Write data back to session storage
                     this.updateBlock(dataBlock);
-                    this.updateBlock(nextDataBlock);
 
-                    // Set dataBlock to this nextDataBlock
-                    dataBlock = nextDataBlock;
+                    // No more content to write
+                    if (contentToWrite.length === 0) {
+                        stillWriting = false;
+                    } else {
+                        // Find a new block
+                        var nextDataBlock = this.findNewBlock();
+
+                        // Can't find new block to write to
+                        if (nextDataBlock === null) {
+                            return false;
+                        }
+
+                        // Set currentDataBlock to point to the nextDataBlock
+                        dataBlock.nextTrack = nextDataBlock.track.toString();
+                        dataBlock.nextSector = nextDataBlock.sector.toString();
+                        dataBlock.nextBlock = nextDataBlock.block.toString();
+
+                        // Set nextDataBlock to in use
+                        nextDataBlock.inUse = true;
+
+                        // Set nextDataBlock to point to no other block
+                        nextDataBlock.nextTrack = "-";
+                        nextDataBlock.nextSector = "-";
+                        nextDataBlock.nextBlock = "-";
+
+                        // Store these blocks back into storage
+                        this.updateBlock(dataBlock);
+                        this.updateBlock(nextDataBlock);
+
+                        // Set dataBlock to this nextDataBlock
+                        dataBlock = nextDataBlock;
+                    }
                 }
-            }
 
-            return true;
+                return true;
+            } else {
+                _Kernel.krnTrace("Error! File " + fileName + " could not be found to write to.");
+            }
         };
 
         // Deletes a file from the disk

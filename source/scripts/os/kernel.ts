@@ -121,7 +121,6 @@ module TSOS {
             if (_KernelInterruptQueue.getSize() > 0) {
 
                 // Process the first interrupt on the interrupt queue.
-                // TODO: Implement a priority queue based on the IRQ number/id to enforce interrupt priority.
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             } 
@@ -158,15 +157,11 @@ module TSOS {
 
         }
 
-        //
         // Interrupt Handling
-        //
         public krnEnableInterrupts(): void {
+
             // Keyboard
             Devices.hostEnableKeyboardInterrupt();
-
-            // TODO File System
-
         }
 
         public krnDisableInterrupts(): void {
@@ -401,8 +396,6 @@ module TSOS {
 
                 if(_CurrentPCB.location === _Locations.DISK) {
 
-                    console.log("_CurrentPCB is on disk.");
-
                     // Place item at end of queue onto disk
                     var lastPCB: TSOS.PCB = _ReadyQueue.q[_ReadyQueue.getSize() - 1];
                     var memorySlot: number = lastPCB.memorySlot;
@@ -410,8 +403,6 @@ module TSOS {
                     // Swap out, as lastPCB is in memory
                     if(_ReadyQueue.getSize() > 1 && lastPCB.location === _Locations.MEMORY) {
 
-                        console.log("Can swap with lastPCB, which is in memory.");
-                        
                         // Roll lastPCB in the queue to the disk
                         this.programRollOut(lastPCB.processID, false);
 
@@ -427,8 +418,6 @@ module TSOS {
 
                     // Both are on disk
                     else if(_ReadyQueue.getSize() > 1 && lastPCB.location === _Locations.DISK) {
-
-                        console.log("LastPCB is on disk, so look for an opening.");
 
                         var pcbToReplaceFound: boolean = false;
 
@@ -446,10 +435,7 @@ module TSOS {
                         // Found PCB in memory to replace
                         if(pcbToReplaceFound) {
 
-                            console.log("Found PCB to replace in memory");
-
                             memorySlot = pcbToReplace.memorySlot;
-                            console.log("Replacing slot " + memorySlot);
 
                             this.programRollOut(pcbToReplace.processID, false);
 
@@ -467,8 +453,6 @@ module TSOS {
                         // All processes on disk
                         else {
 
-                            console.log("All PCBs on disk.");
-
                             var randomSlot: number = Math.floor(Math.random() * _MemoryManager.programsInUse.length);
 
                             memorySlot = randomSlot;
@@ -480,15 +464,11 @@ module TSOS {
 
                     else {
 
-                        console.log("Only one in queue and this PCB is on disk.");
-
                         // Since only one left in queue, pick a random slot in memory to load into
                         var randomSlot: number = Math.floor(Math.random() * _MemoryManager.programsInUse.length);
 
                         memorySlot = randomSlot;
                         _MemoryManager.programsInUse[memorySlot] = 1;
-
-                        console.log("Loading program on disk into memory slot " + memorySlot);
                     }
 
 
@@ -498,15 +478,9 @@ module TSOS {
                     _CurrentPCB.baseRegister = memorySlot * _MemoryConstants.PROCESS_SIZE;
                     _CurrentPCB.limitRegister = _CurrentPCB.baseRegister + _MemoryConstants.PROCESS_SIZE - 1;
                     
-                    console.log("Base reg: " + _CurrentPCB.baseRegister);
-                    console.log("Limit reg: " + _CurrentPCB.limitRegister);
-                    console.log("Memory slot: " + memorySlot);
-
                     // Place it (_CurrentPCB) back on the ready queue
                     _ReadyQueue.q[0] = _CurrentPCB;
 
-                    console.log("Rolling " + _CurrentPCB.processID + " into memory.");
-                    
                     // Roll the program on disk (_CurrentPCB) to memory
                     this.programRollIn(_CurrentPCB.processID, memorySlot, false);
                 }
@@ -544,8 +518,6 @@ module TSOS {
             // If run command used
             if(runCalled) {
 
-                console.log("Run command used. Look at resident queue.");
-
                 // Check if processID corresponds to a PCB in the resident queue
                 var pcbFound: boolean = false;
 
@@ -555,7 +527,6 @@ module TSOS {
 
                     if(currentPCB.processID === processID) {
 
-                    	console.log("PCB found.");
                     	pcbFound = true;
                     	break;
                     }
@@ -602,8 +573,6 @@ module TSOS {
             // If runall command used
             else {
 
-                console.log("Runall command used. Look at ready queue.");
-
                 // Check if processID corresponds to a PCB in the Ready queue
                 var pcbFound: boolean = false;
 
@@ -613,7 +582,6 @@ module TSOS {
 
                     if(currentPCB.processID === processID) {
                         
-                        console.log("PCB found.");
                         pcbFound = true;
                         break;
                     }
@@ -633,9 +601,6 @@ module TSOS {
                     _KrnFileSystemDriver.writeFile(fileName, memoryContents);
 
                     _Kernel.krnTrace("Wrote contents of PID " + processID + " to disk in file " + fileName + ".");
-
-                    console.log("Writen to file " + fileName);
-                    console.log("Contents of file: " + memoryContents);
 
                     // Set this PCB to on disk
                     currentPCB.location = _Locations.DISK;
@@ -668,9 +633,6 @@ module TSOS {
             var desiredFileName: string = ".process" + processID.toString(10) + ".swp";
             var fileNames: string[] = _KrnFileSystemDriver.getFileNames();
 
-            console.log("Desired file name: " + desiredFileName);
-            console.log("File names on disk: " + fileNames);
-
             for(var i: number = 0; i < fileNames.length; i++) {
 
                 if(fileNames[i] === desiredFileName) {
@@ -682,14 +644,8 @@ module TSOS {
 
             if(pcbFound) {
 
-                console.log("Found the PCB");
-
                 // Read the contents of disk into string
                 var memoryContents: string = _KrnFileSystemDriver.readFile(desiredFileName);
-                console.log("Reading from file " + desiredFileName);
-                console.log("Contents of file: " + memoryContents);
-
-                console.log("Length of memory: " + memoryContents.length);
 
                 // Parse contents back into memory
                 var byteList: string [] = [];
@@ -700,9 +656,6 @@ module TSOS {
 
                     byteList.push(currentByte);
                 }
-
-                console.log("Placing PID " + processID + " into memory.");
-                console.log(byteList);
 
                 // Put process memory into main memory
                 _MemoryManager.putMemoryContents(byteList, memorySlot);

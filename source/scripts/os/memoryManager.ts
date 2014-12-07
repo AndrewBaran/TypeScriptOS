@@ -84,8 +84,6 @@ module TSOS {
 					// Look for valid PID
 					while(!pidFound && fileNamesOnDisk.length !== 0) {
 
-						console.log("Disk has files to look through.");
-						
 						var correspondingFileName: string = ".process" + currentPID + ".swp";
 
 						// Check each file on disk and see if one has the same PID
@@ -200,8 +198,6 @@ module TSOS {
 						currentPID++;
 					}
 				}
-
-				console.log("PID to use: " + processID);
 
 				// Create swap file
 				var fileName: string = "process" + processID + ".swp";
@@ -382,8 +378,6 @@ module TSOS {
 
 			var pcbFound: boolean = false;
 
-			console.log("Getting memory at PID " + processID);
-
 			// Check if process is in memory
 			for(var i: number = 0; i < _ReadyQueue.getSize(); i++) {
 
@@ -402,9 +396,6 @@ module TSOS {
 
 				var startingRow: number = currentPCB.baseRegister / _MemoryConstants.BYTES_PER_ROW;
 				var endingRow: number = Math.floor(currentPCB.limitRegister / _MemoryConstants.BYTES_PER_ROW);
-
-				console.log("Starting: " + startingRow);
-				console.log("Ending: " + endingRow);
 
 				for(var currentRow: number = startingRow; currentRow <= endingRow; currentRow++) {
 					for(var currentColumn: number = 0; currentColumn < _MemoryConstants.NUM_COLUMNS; currentColumn++) {
@@ -429,16 +420,11 @@ module TSOS {
 		public putMemoryContents(byteList: string[], memorySlot: number): boolean {
 
 			// Update PCB with slot it is stored in
-			console.log("Space at " + memorySlot + " is empty. Fill.");
-
 			var base: number = memorySlot * _MemoryConstants.PROCESS_SIZE;
 			var limit: number = base + _MemoryConstants.PROCESS_SIZE - 1;
 
 			var startingRow: number = base / _MemoryConstants.BYTES_PER_ROW;
 			var endingRow: number = Math.floor(limit / _MemoryConstants.BYTES_PER_ROW);
-
-			console.log("Starting: " + startingRow);
-			console.log("Ending: " + endingRow);
 
 			var index: number = 0;
 

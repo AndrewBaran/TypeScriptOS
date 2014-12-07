@@ -530,8 +530,6 @@ module TSOS {
                     // If PCB is on disk
                     if(selectedPCB.location === _Locations.DISK) {
 
-                        console.log("PCB is on disk");
-
                         var memorySlot: number = -1;
                         var memorySlotFound: boolean = false;
 
@@ -545,16 +543,10 @@ module TSOS {
                             }
                         }
 
-                        // Pick one at random if no location available
+                        // Pick one slot at random if no location available
                         if(!memorySlotFound) {
-
-                            console.log("Picking slot at random.");
                             memorySlot = Math.floor(Math.random() * (_MemoryManager.programsInUse.length));
-
                         }
-
-                        console.log("Replacing slot " + memorySlot);
-                        console.log(_ResidentQueue);
 
                         var pcbFound: boolean = false;
 
@@ -563,20 +555,14 @@ module TSOS {
                             var pcbBeingReplaced: TSOS.PCB = _ResidentQueue[index];
 
                             if(pcbBeingReplaced.memorySlot === memorySlot) {
-                                console.log("This PCB");
-                                console.log(pcbBeingReplaced);
-                                console.log("is in memorySlot " + memorySlot);
 
                                 pcbFound = true;
-
                                 break;
                             }
                         }
 
                         // Swapping out a process
                         if(pcbFound) {
-
-                            console.log("pcbBeingReplaced was not null.");
 
                             // Roll PCB from disk to memory
                             _Kernel.programRollOut(pcbBeingReplaced.processID, true);
@@ -600,9 +586,6 @@ module TSOS {
                         selectedPCB.memorySlot = memorySlot;
                         selectedPCB.baseRegister = memorySlot * _MemoryConstants.PROCESS_SIZE;
                         selectedPCB.limitRegister = selectedPCB.baseRegister + _MemoryConstants.PROCESS_SIZE - 1;
-
-                        console.log(selectedPCB);
-                        console.log(_ResidentQueue);
                     }
 
                     // Add PCB to ready queue
@@ -652,16 +635,28 @@ module TSOS {
         // Clears out the entire memory array and resident queue
         public shellClearMem(): void {
 
-            // Call this method without parameters to clear all partitions
-            _MemoryManager.clearMemory();
+            // Prevent calling this if the CPU is executing
+            if(!_CPU.isExecuting) {
+                
+                // Call this method without parameters to clear all partitions
+                _MemoryManager.clearMemory();
 
-            // Reload memory display
-            Control.updateDisplays();
+                // Reload memory display
+                Control.updateDisplays();
 
-            // Clear resident queue
-            _ResidentQueue = [];
+                // Clear resident queue
+                _ResidentQueue = [];
 
-            _StdOut.putText("Memory has been cleared.");
+                // Clear ready queue
+                _ReadyQueue.q = [];
+
+                _StdOut.putText("Memory has been successfully cleared.");
+            }
+
+            else {
+                _StdOut.putText("Error! Can't clear memory when programs are executing.");
+            }
+
         }
 
         // Sets the quantum time length for round robin scheduling
@@ -941,6 +936,7 @@ module TSOS {
         		_StdOut.putText("Usage: write <filename> \"contents\"  Please supply a filename.");
         	}
 
+            // Invalid filename
         	else if(!Utils.isValidFileName(fileName)) {
         		_StdOut.putText("Error! Invalid filename.");
         	}
@@ -949,7 +945,7 @@ module TSOS {
 
         		var contentToWrite: string = "";
 
-        		// TODO BAD WAY OF PARSING CONTENTS; FIX ME
+        		// Note: Bad way of parsing contents
         		// Combine each of the additional arguments (the contents) into a single unified string
         		for(var i: number = 1; i < args.length; i++) {
 

@@ -60,8 +60,6 @@ var TSOS;
                     var currentPID = i;
 
                     while (!pidFound && fileNamesOnDisk.length !== 0) {
-                        console.log("Disk has files to look through.");
-
                         var correspondingFileName = ".process" + currentPID + ".swp";
 
                         for (var j = 0; j < fileNamesOnDisk.length; j++) {
@@ -153,8 +151,6 @@ var TSOS;
                         currentPID++;
                     }
                 }
-
-                console.log("PID to use: " + processID);
 
                 // Create swap file
                 var fileName = "process" + processID + ".swp";
@@ -300,8 +296,6 @@ var TSOS;
         MemoryManager.prototype.getMemoryContents = function (processID) {
             var pcbFound = false;
 
-            console.log("Getting memory at PID " + processID);
-
             for (var i = 0; i < _ReadyQueue.getSize(); i++) {
                 var currentPCB = _ReadyQueue.q[i];
 
@@ -316,9 +310,6 @@ var TSOS;
 
                 var startingRow = currentPCB.baseRegister / _MemoryConstants.BYTES_PER_ROW;
                 var endingRow = Math.floor(currentPCB.limitRegister / _MemoryConstants.BYTES_PER_ROW);
-
-                console.log("Starting: " + startingRow);
-                console.log("Ending: " + endingRow);
 
                 for (var currentRow = startingRow; currentRow <= endingRow; currentRow++) {
                     for (var currentColumn = 0; currentColumn < _MemoryConstants.NUM_COLUMNS; currentColumn++) {
@@ -337,16 +328,11 @@ var TSOS;
         // Return memorySlot where program was placed
         MemoryManager.prototype.putMemoryContents = function (byteList, memorySlot) {
             // Update PCB with slot it is stored in
-            console.log("Space at " + memorySlot + " is empty. Fill.");
-
             var base = memorySlot * _MemoryConstants.PROCESS_SIZE;
             var limit = base + _MemoryConstants.PROCESS_SIZE - 1;
 
             var startingRow = base / _MemoryConstants.BYTES_PER_ROW;
             var endingRow = Math.floor(limit / _MemoryConstants.BYTES_PER_ROW);
-
-            console.log("Starting: " + startingRow);
-            console.log("Ending: " + endingRow);
 
             var index = 0;
 

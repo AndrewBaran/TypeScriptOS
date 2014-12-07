@@ -211,8 +211,8 @@ module TSOS {
             var outputString: string = "";
             var errorOccured: boolean = false;
 
+            // Convert each 2 hex symbol pair into 1 8 bit character; stop if non-hex digit found
             while((index < inputString.length) && (!errorOccured)) {
-
 
                 currentSymbols = inputString.charAt(index) + inputString.charAt(index + 1);
                 index += 2;

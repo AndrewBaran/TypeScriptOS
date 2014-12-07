@@ -142,14 +142,12 @@ var TSOS;
                     break;
 
                 default:
-                    console.log("This shouldn't happen");
+                    console.log("Shouldn't happen");
                     break;
             }
 
             // Check if current PCB is on disk
             if (_CurrentPCB.location === _Locations.DISK) {
-                console.log("_CurrentPCB is on disk");
-
                 var memorySlotFound = false;
 
                 for (var i = 0; i < _MemoryManager.programsInUse.length; i++) {
@@ -164,8 +162,6 @@ var TSOS;
                 // Pick one at random; no available slots in memory
                 if (!memorySlotFound) {
                     var randomSlot = Math.floor(Math.random() * _MemoryManager.programsInUse.length);
-                    console.log("Replacing slot " + randomSlot);
-
                     memorySlot = randomSlot;
 
                     for (var i = 0; i < _ReadyQueue.getSize(); i++) {

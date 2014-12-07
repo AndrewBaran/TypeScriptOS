@@ -173,15 +173,13 @@ module TSOS {
 
 				default:
 
-					console.log("This shouldn't happen");
+					console.log("Shouldn't happen");
 					break;
 
 			} // switch
 
 			// Check if current PCB is on disk
 			if(_CurrentPCB.location === _Locations.DISK) {
-
-				console.log("_CurrentPCB is on disk");
 
 				var memorySlotFound: boolean = false;
 
@@ -201,8 +199,6 @@ module TSOS {
 				if(!memorySlotFound) {
 
 					var randomSlot: number = Math.floor(Math.random() * _MemoryManager.programsInUse.length);
-					console.log("Replacing slot " + randomSlot);
-
 					memorySlot = randomSlot;
 
 					// Find correspond PCB to this memorySlot
