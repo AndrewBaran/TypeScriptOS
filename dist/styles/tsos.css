@@ -8,13 +8,21 @@
 	margin-bottom: 10px;
 }
 
+#display
+{
+	border: 1px solid black;
+}
+
 #divCPUStatus
 {
+	border: 1px solid black;
 	margin-bottom: 10px;
 }
 
 #divMainMemory
 {
+	border: 1px solid black;
+
 	height: 200px;
 	overflow: auto;
 
@@ -23,9 +31,21 @@
 
 #divReadyQueue
 {
+	border: 1px solid black;
+	margin-bottom: 10px;
 }
 
 textarea.noResize
 {
 	resize: none;
+}
+
+#divFileSystem
+{
+	border: 1px solid black;
+	margin-top: 10px;
+
+	height: 300px;
+
+	overflow: auto;
 }

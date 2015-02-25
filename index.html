@@ -62,7 +62,7 @@
 
 	<div class="row" id="divButtonBar">
 
-		<div class="col-sm-12"> 
+		<div class="col-sm-6"> 
 
 			<input type="button"
 				id="btnStartOS"
@@ -82,7 +82,7 @@
 		  	<input type="button"
 				id="btnReset"
 				name="brnReset"
-				class="btn btn-info"
+				class="btn btn-danger"
 				disabled="disabled"
 				value="Reset"
 				onclick="TSOS.Control.hostBtnReset_click(this);">
@@ -90,7 +90,7 @@
 			<input type="button"
 				id="btnEnableStep"
 				name="brnEnableStep"
-				class="btn btn-warning"
+				class="btn btn-primary"
 				disabled="disabled"
 				value="Start Step"
 				onclick="TSOS.Control.hostBtnEnableStep_click(this);">
@@ -106,31 +106,47 @@
 			<input type="button"
 				id="btnStop"
 				name"brnStop"
-				class="btn btn-warning"
+				class="btn btn-danger"
 				disabled="disabled"
 				value="Stop"
 				onclick="TSOS.Control.hostBtnStop_click(this);">
 
 		</div>
-	</div> <!-- Row -->
+
+		<div class="col-sm-6">
+
+			<span id="statusTimer">
+			</span>
+
+			<br />
+
+			Status: 
+			<span id="statusDisplay">
+				N/A
+			</span>
+
+		</div>
+
+	</div>
 
 	<div class="row">
 
 		<div class="col-sm-6" id="divConsole">
 
-			<canvas style="border: 1px solid black;" id="display"
+			<canvas id="display"
 					width="500px"
-					height="350px">
+					height="350px"
+					tabindex="-1">
 		  	</canvas>
 
 		</div>
 
 		<div class="col-sm-6" id="divMemCPU">
 
-			<div style="border: 1px solid black;" id="divCPUStatus">
+			<div id="divCPUStatus">
 
 				<div class="text-center">
-					CPU Status Information
+					CPU Status
 				</div>
 
 				<table class="table table-condensed text-center" id="cpuStatus">
@@ -147,22 +163,21 @@
 				</table>
 			</div>
 
-			<div style="border: 1px solid black;" id="divMainMemory">
+			<div id="divMainMemory">
 
 				<div class="text-center">
 					Main Memory
 				</div>
 
-				<hr />
-
-				<table id="mainMemory">
+				<table class="table table-condensed table-striped" id="mainMemory">
 				</table>
 
 			</div>
 
+			<div class="text-center" id="divReadyQueue">
 
-			<div style="border: 1px solid black;" id="divReadyQueue">
 				Ready Queue
+
 				<table class="table table-condensed" id="tableReadyQueue">
 					<tr>
 						<td>PID</td>
@@ -176,9 +191,6 @@
 						<td>Status</td>
 						<td>Location</td>
 						<td>Priority</td>
-					</tr>
-					<tr>
-						<td colspan="11" style="text-align: center;">No processes running</td>
 					</tr>
 				</table>
 			</div>
@@ -194,73 +206,81 @@
 
 			<div id="divLog">
 
-			  	<label>
-				Host Log:
+				<div class="text-center">
 
-				<span id="statusTimer">
-					<!-- Display date and time here via JavaScript-->
-				</span>
+					Host Log:
 
-				<br />
+					<br />
 
-				Status: 
-				<span id="statusDisplay">
-					N/A <!-- Status command arguments go here -->
-				</span>
-				<br />
+				</div>
 
 				<textarea name="taHostLog"
-							id  ="taHostLog"
+							id="taHostLog"
 							class="form-control noResize"
-						   	rows="7"
-						   	cols="48">
-				</textarea>
-			  	</label>
+						   	rows="8"
+						   	cols="100"></textarea>
 
 			</div>
 
 		</div>
 
+		<div class="col-sm-6">
 
-	</div> <!-- Row -->
+			<div class="text-center">
 
-	<div id="divUserProgramInput">
-		<label>
-			User Program Input
-			<br>
+			Program Code:
+
+			<br />
+
+			<input 	type="button"
+					class="btn btn-primary btn-sm"
+					value="Click For a Sample Program"
+					onclick="TSOS.Control.hostBtnLoadProgram_click(this);">
+			<span id="programTitle">N/A</span>
+
+			<br />
+
 			<textarea 	name="taProgramInput"
-				   		id  ="taProgramInput"
+				   		id="taProgramInput"
+				   		class="form-control noResize"
 				   		rows="8"
-				   		cols="34"></textarea>
-		</label>
+				   		cols="100"></textarea>
+			</div>
+
+		</div>
+
 	</div>
 
-	<!-- For testing purposes, places random program in User Program Input Box -->
-	<input 	type="button"
-			value="Random Program"
-			onclick="TSOS.Control.hostBtnLoadProgram_click(this);">
-	<label id="programTitle">N/A</label>
 
-	<div id="divFileSystem">
-		File System
-		<table id="tableFileSystem">
-			<tr>
-				<td>T</td>
-				<td>S</td>
-				<td>B</td>
-				<td>In Use</td>
-				<td>T<sub>n</sub></td>
-				<td>S<sub>n</sub></td>
-				<td>B<sub>n</sub></td>
-				<td>Data</td>
-			</tr>
-		</table>
+	<div class="row">
+
+		<div class="col-sm-12 text-center" id="divFileSystem">
+
+			<label>
+				File System
+			</label>
+
+			<table class="table table-condensed" id="tableFileSystem">
+				<tr>
+					<td>T</td>
+					<td>S</td>
+					<td>B</td>
+					<td>In Use</td>
+					<td>T<sub>n</sub></td>
+					<td>S<sub>n</sub></td>
+					<td>B<sub>n</sub></td>
+					<td>Data</td>
+				</tr>
+			</table>
+
+		</div>
+
 	</div>
 
 </div> <!-- divMain -->
 
 
-<footer>
+<footer id="pageFooter">
 
 	<hr />
 

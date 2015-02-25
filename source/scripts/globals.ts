@@ -69,7 +69,7 @@ var _FileConstants: FileConstants = {NUM_TRACKS: 4, NUM_SECTORS: 8, NUM_BLOCKS: 
 // My Globals
 var _MONTH_NAMES: string[] = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-var _CANVAS_COLOR : string = "#DFDBC3";
+var _CANVAS_COLOR : string = "#FFFFFF";
 
 //
 // Global Variables
