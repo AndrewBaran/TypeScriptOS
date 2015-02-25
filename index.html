@@ -4,10 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<meta name="author"             content="Andrew J. Baran / Alan G. Labouseur" />
 
-<!-- Old CSS -->
-<!--
 	<link rel="stylesheet" href="dist/styles/tsos.css" type="text/css" media="screen" />
--->
 
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" type="text/css">
@@ -63,9 +60,9 @@
 
 <div class="container" id="divMain">
 
-	<div class="row">
+	<div class="row" id="divButtonBar">
 
-		<div class="col-sm-12" id="divButtonBar">
+		<div class="col-sm-12"> 
 
 			<input type="button"
 				id="btnStartOS"
@@ -120,83 +117,112 @@
 	<div class="row">
 
 		<div class="col-sm-6" id="divConsole">
-			<canvas id="display"
+
+			<canvas style="border: 1px solid black;" id="display"
 					width="500px"
-					height="450px"
-					tabindex="3">
+					height="350px">
 		  	</canvas>
+
 		</div>
 
-		<div class="col-sm-6" id="divMainMemory">
-			Main Memory
-			<table id="mainMemory">
-			</table>
-		</div>
+		<div class="col-sm-6" id="divMemCPU">
+
+			<div style="border: 1px solid black;" id="divCPUStatus">
+
+				<div class="text-center">
+					CPU Status Information
+				</div>
+
+				<table class="table table-condensed text-center" id="cpuStatus">
+					<tbody>
+						<tr>
+							<td>PC</td>
+							<td>Acc</td>
+							<td>Xreg</td>
+							<td>Yreg</td>
+							<td>Zflag</td>
+						</tr>
+						<!-- Row of CPU data goes here -->
+					</tbody>
+				</table>
+			</div>
+
+			<div style="border: 1px solid black;" id="divMainMemory">
+
+				<div class="text-center">
+					Main Memory
+				</div>
+
+				<hr />
+
+				<table id="mainMemory">
+				</table>
+
+			</div>
 
 
-		<div id="divCPUStatus">
-			CPU Status Information
-			<table id="cpuStatus">
-				<tbody>
+			<div style="border: 1px solid black;" id="divReadyQueue">
+				Ready Queue
+				<table class="table table-condensed" id="tableReadyQueue">
 					<tr>
+						<td>PID</td>
+						<td>Base</td>
+						<td>Limit</td>
 						<td>PC</td>
 						<td>Acc</td>
-						<td>Xreg</td>
-						<td>Yreg</td>
-						<td>Zflag</td>
+						<td>X</td>
+						<td>Y</td>
+						<td>Z</td>
+						<td>Status</td>
+						<td>Location</td>
+						<td>Priority</td>
 					</tr>
-					<!-- Row of CPU data goes here -->
-				</tbody>
-			</table>
-		</div>
+					<tr>
+						<td colspan="11" style="text-align: center;">No processes running</td>
+					</tr>
+				</table>
+			</div>
+
+
+		</div> <!-- Column -->
 
 	</div> <!-- Row -->
 
-	<div id="divLog">
-	  	<label>
-		Host Log:
-		<br />
+	<div class="row">
 
-		<span id="statusTimer">
-			<!-- Display date and time here via JavaScript-->
-		</span>
-		<br />
+		<div class="col-sm-6">
 
-		Status: 
-		<span id="statusDisplay">
-			N/A <!-- Status command arguments go here -->
-		</span>
-		<br />
+			<div id="divLog">
 
-		<textarea name="taHostLog"
-					id  ="taHostLog"
-				   	rows="7"
-				   	cols="48">
-		</textarea>
-	  	</label>
-	</div>
+			  	<label>
+				Host Log:
 
-	<div id="divReadyQueue">
-		Ready Queue
-		<table id="tableReadyQueue">
-			<tr>
-				<td>PID</td>
-				<td>Base</td>
-				<td>Limit</td>
-				<td>PC</td>
-				<td>Acc</td>
-				<td>X</td>
-				<td>Y</td>
-				<td>Z</td>
-				<td>Status</td>
-				<td>Location</td>
-				<td>Priority</td>
-			</tr>
-			<tr>
-				<td colspan="11" style="text-align: center;">No processes running</td>
-			</tr>
-		</table>
-	</div>
+				<span id="statusTimer">
+					<!-- Display date and time here via JavaScript-->
+				</span>
+
+				<br />
+
+				Status: 
+				<span id="statusDisplay">
+					N/A <!-- Status command arguments go here -->
+				</span>
+				<br />
+
+				<textarea name="taHostLog"
+							id  ="taHostLog"
+							class="form-control noResize"
+						   	rows="7"
+						   	cols="48">
+				</textarea>
+			  	</label>
+
+			</div>
+
+		</div>
+
+
+	</div> <!-- Row -->
 
 	<div id="divUserProgramInput">
 		<label>
