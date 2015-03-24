@@ -389,6 +389,7 @@ var TSOS;
         Shell.prototype.shellLoad = function () {
             // Get text from the User Program Input textbox
             var textInput = document.getElementById("taProgramInput").value;
+            textInput = textInput.trim();
 
             // Validate that the text input contains only hex characters and/or spaces
             var regExpPattern = /[a-f|A-F|0-9|\s]/;
@@ -404,7 +405,7 @@ var TSOS;
             // Valid hex
             if (validInput && textInput.length > 0) {
                 // Split input into bytes (2 hex digits each)
-                var byteList = textInput.split(" ");
+                var byteList = textInput.split(/\s/);
 
                 for (var j = 0; j < byteList.length; j++) {
                     if (byteList[j].length != 2) {

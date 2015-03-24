@@ -417,6 +417,7 @@ module TSOS {
 
             // Get text from the User Program Input textbox
             var textInput : string = (<HTMLInputElement>document.getElementById("taProgramInput")).value;
+            textInput = textInput.trim();
 
             // Validate that the text input contains only hex characters and/or spaces
             var regExpPattern = /[a-f|A-F|0-9|\s]/;
@@ -434,7 +435,7 @@ module TSOS {
             if(validInput && textInput.length > 0) {
 
                 // Split input into bytes (2 hex digits each)
-                var byteList: string[] = textInput.split(" ");
+                var byteList: string[] = textInput.split(/\s/);
 
                 // Check if they are nibble pairs
                 for(var j: number = 0; j < byteList.length; j++) {
