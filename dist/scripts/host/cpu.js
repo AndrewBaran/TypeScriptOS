@@ -275,11 +275,11 @@ var TSOS;
                         var hexValue = parseInt(hexString, 16);
 
                         // Add new value to PC
-                        this.PC = (this.PC + hexValue) % _MemoryConstants.PROCESS_SIZE;
+                        this.PC = (this.PC + hexValue + 1) % _MemoryConstants.PROCESS_SIZE;
+                    } else {
+                        // Move to next instruction
+                        this.PC++;
                     }
-
-                    // Move to next instruction
-                    this.PC++;
 
                     break;
 
